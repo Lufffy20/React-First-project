@@ -1,9 +1,13 @@
+import Header from "../../components/home/Header";
+import "./dashboard.css";
+
 
 function App() {
 
     return (
-        <div>
-            <h1>Dashboard</h1>
+
+        <div className="main-container">
+            <Header />
         </div>
     )
 }
