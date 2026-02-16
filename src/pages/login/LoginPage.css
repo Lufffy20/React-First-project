@@ -1,0 +1,227 @@
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 0;
+    z-index: 1000;
+}
+
+.card {
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border: 2px solid rgb(201, 193, 193);
+    margin-right: 400px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    position: relative;
+    z-index: 10;
+}
+
+.card h2 {
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 32px;
+}
+
+.card p {
+    text-align: left;
+    color: #777;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+.remember-forgot a,
+.remember-forgot .ant-checkbox-wrapper {
+    color: #010d2cea !important;
+}
+
+
+.btn {
+    width: 100%;
+    height: 50px;
+    background-color: #010d2cea;
+    border: none;
+    color: white;
+    font-weight: 500;
+    border-radius: 50px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.btn-small {
+    width: auto;
+    padding: 0 30px;
+    height: 45px;
+    color: #1677ff;
+    border: 1px solid #1677ff;
+    background-color: transparent;
+    border-radius: 50px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin-top: 50px;
+}
+
+
+.btn-small:hover,
+.btn-small:focus {
+    background-color: #1677ff !important;
+    color: #fff !important;
+    border-color: #1677ff !important;
+}
+
+
+.btn:hover {
+    background-color: #1677ff;
+    color: white;
+}
+
+.ant-form-item-explain-error {
+    text-align: left;
+}
+
+.signup-text {
+    text-align: left;
+    font-size: 16px;
+}
+
+h2 {
+    display: block;
+    font-size: 32px;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
+}
+
+.ellipse-1 {
+    position: absolute;
+    width: 861px;
+    height: 869px;
+    background: #F7A3B760;
+    top: 550px;
+    left: 472px;
+    opacity: 0.2;
+    backdrop-filter: blur(600px);
+    border-radius: 100%;
+    z-index: 0;
+}
+
+.ellipse-2 {
+    width: 1200px;
+    height: 1518.99px;
+    top: -740px;
+    left: 1014px;
+    opacity: 0.2;
+    position: absolute;
+    backdrop-filter: blur(600px);
+    background: linear-gradient(0deg, #B9A3F760, #B9A3F760);
+    border-radius: 120%;
+    z-index: 0;
+}
+
+.ellipse-3 {
+    position: absolute;
+    width: 1035px;
+    height: 1325.59px;
+    background: linear-gradient(0deg, #C5FCA360, #C5FCA360), #FFE07460;
+    top: -716px;
+    left: -130px;
+    opacity: 0.2;
+    backdrop-filter: blur(600px);
+    border-radius: 120%;
+    z-index: 0;
+}
+
+.group-1171274837-1 {
+    width: 100px;
+    height: 100px;
+    top: 859px;
+    left: 1423px;
+    background: linear-gradient(210.96deg, #A3D4F7 3.01%, #3AADFF 97.82%);
+    border-radius: 300px;
+    position: absolute;
+}
+
+.group-1171274837-2 {
+    width: 45px;
+    height: 45px;
+    top: 800px;
+    left: 1570px;
+    background: linear-gradient(210.96deg, #A3D4F7 3.01%, #3AADFF 97.82%);
+    border-radius: 300px;
+    position: absolute;
+}
+
+/* Responsive Styles */
+@media (max-width: 1700px) {
+    .card {
+        margin-right: 150px;
+    }
+}
+
+@media screen and (max-width: 1540px) {
+    .group-1171274837-2 {
+        top: 710px !important;
+        left: 1300px;
+    }
+}
+
+@media (max-width: 1350px) {
+    .card {
+        margin-right: 50px;
+    }
+}
+
+@media (max-width: 992px) {
+
+    /* Hide decorative background ellipses on smaller screens */
+    .ellipse-1,
+    .ellipse-2,
+    .ellipse-3 {
+        display: none;
+    }
+
+    /* Adjust Container for single column center layout */
+    .container {
+        justify-content: center;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    /* Hide Side Design Panel */
+    .side-design-container {
+        display: none;
+    }
+
+    /* Adjust Login Card */
+    .card {
+        margin-right: 0;
+        width: 100%;
+        max-width: 450px;
+        height: auto;
+        min-height: 600px;
+        padding: 40px;
+    }
+}

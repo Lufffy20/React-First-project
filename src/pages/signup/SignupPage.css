@@ -1,0 +1,104 @@
+/* ===== Container ===== */
+.signup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* ===== Card ===== */
+.signup-card {
+    width: 100%;
+    max-width: 500px;
+    /* consistent width */
+    padding: 30px;
+    height: 85vh;
+    /* consistent height */
+    overflow-y: auto;
+
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgb(220, 220, 220);
+    margin-right: 400px;
+    /* balanced with side design */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+}
+
+/* ===== Reduce Form Spacing ===== */
+.signup-card .ant-form-item {
+    margin-bottom: 8px !important;
+}
+
+.signup-card .ant-row .ant-form-item {
+    margin-bottom: 6px !important;
+}
+
+/* ===== Heading ===== */
+.signup-card h2 {
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: 25px;
+}
+
+.signup-card p {
+    text-align: left;
+    color: #777;
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+/* ===== Button ===== */
+.signup-btn {
+    height: 40px;
+    font-size: 14px;
+    border-radius: 30px;
+}
+
+/* ===== Checkbox ===== */
+.signup-card .ant-checkbox-wrapper {
+    font-size: 12px;
+}
+
+.ant-form-item-explain-error {
+    text-align: left;
+}
+
+
+/* ===== Responsive ===== */
+@media (max-width: 992px) {
+
+    .signup-container {
+        justify-content: center;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .signup-card {
+        margin-right: 0;
+        max-width: 340px;
+        padding: 20px;
+        max-height: none;
+    }
+
+    .signup-ellipse-1,
+    .signup-ellipse-2,
+    .signup-ellipse-3 {
+        display: none;
+    }
+
+    .side-design-container {
+        display: none;
+    }
+}
