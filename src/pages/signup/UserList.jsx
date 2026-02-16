@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
     Table,
     Button,
@@ -27,17 +27,17 @@ const UserList = () => {
     const [form] = Form.useForm();
 
     // ---------------- VIEW ----------------
-    const handleView = (record) => {
+    const handleView = useCallback((record) => {
         setSelectedUser(record);
         setModalType("view");
-    };
+    }, []);
 
     // ---------------- EDIT ----------------
-    const handleEdit = (record) => {
+    const handleEdit = useCallback((record) => {
         setSelectedUser(record);
         form.setFieldsValue(record);
         setModalType("edit");
-    };
+    }, [form]);
 
     const handleUpdate = async () => {
         try {
@@ -52,7 +52,9 @@ const UserList = () => {
 
             message.success("User updated successfully");
             setModalType(null);
-        } catch (error) { }
+        } catch {
+            // ignore
+        }
     };
 
     // ---------------- ADD ----------------
@@ -70,14 +72,16 @@ const UserList = () => {
             message.success("User added successfully");
             form.resetFields();
             setModalType(null);
-        } catch (error) { }
+        } catch {
+            // ignore
+        }
     };
 
     // ---------------- DELETE ----------------
-    const handleDelete = (id) => {
+    const handleDelete = useCallback((id) => {
         dispatch(deleteUser(id));
         message.success("User deleted");
-    };
+    }, [dispatch]);
 
     // ---------------- TABLE COLUMNS ----------------
     const columns = useMemo(
@@ -117,7 +121,7 @@ const UserList = () => {
                 ),
             },
         ],
-        [users]
+        [handleView, handleEdit, handleDelete]
     );
 
     return (
