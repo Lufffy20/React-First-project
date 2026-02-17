@@ -5,6 +5,7 @@ import sectionImage from "../../assets/img/section.jpg";
 import WhyChoose from "../../components/whychoose/WhyChoose";
 import TrendingDestinations from "../../components/home/TrendingDestinations";
 import FindPopularTours from "../../components/findpopulartours/FindPopularTours";
+import Popularthingstodo from "../Popularthingstodo/Popularthingstodo";
 
 function App() {
     return (
@@ -63,6 +64,9 @@ function App() {
 
             {/* Discount Section */}
             <Discount />
+
+            {/* Popular things to do */}
+            <Popularthingstodo />
         </div>
     );
 }
