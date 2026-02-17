@@ -1,4 +1,5 @@
 import Header from "../../components/home/Header";
+import Discount from "../others/discount";
 import "./dashboard.css";
 import sectionImage from "../../assets/img/section.jpg";
 import WhyChoose from "../../components/whychoose/WhyChoose";
@@ -59,6 +60,9 @@ function App() {
 
             {/* Find Popular Tours Section */}
             <FindPopularTours />
+
+            {/* Discount Section */}
+            <Discount />
         </div>
     );
 }
