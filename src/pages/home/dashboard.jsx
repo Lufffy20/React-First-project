@@ -1,6 +1,7 @@
 import Header from "../../components/home/Header";
 import "./dashboard.css";
 import sectionImage from "../../assets/img/section.jpg";
+import WhyChoose from "../../components/whychoose/WhyChoose";
 
 function App() {
     return (
@@ -48,6 +49,8 @@ function App() {
                     </div>
                 </div>
             </div>
+            {/* Why Choose Section */}
+            <WhyChoose />
         </div>
     );
 }
