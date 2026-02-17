@@ -2,6 +2,7 @@ import Header from "../../components/home/Header";
 import "./dashboard.css";
 import sectionImage from "../../assets/img/section.jpg";
 import WhyChoose from "../../components/whychoose/WhyChoose";
+import TrendingDestinations from "../../components/home/TrendingDestinations";
 
 function App() {
     return (
@@ -51,6 +52,9 @@ function App() {
             </div>
             {/* Why Choose Section */}
             <WhyChoose />
+
+            {/* Trending Destinations Section */}
+            <TrendingDestinations />
         </div>
     );
 }
