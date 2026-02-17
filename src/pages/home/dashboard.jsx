@@ -3,6 +3,7 @@ import "./dashboard.css";
 import sectionImage from "../../assets/img/section.jpg";
 import WhyChoose from "../../components/whychoose/WhyChoose";
 import TrendingDestinations from "../../components/home/TrendingDestinations";
+import FindPopularTours from "../../components/findpopulartours/FindPopularTours";
 
 function App() {
     return (
@@ -55,6 +56,9 @@ function App() {
 
             {/* Trending Destinations Section */}
             <TrendingDestinations />
+
+            {/* Find Popular Tours Section */}
+            <FindPopularTours />
         </div>
     );
 }

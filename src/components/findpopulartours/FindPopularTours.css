@@ -1,0 +1,169 @@
+.find-popular-tours-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+.find-popular-tours-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.find-popular-tours-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #05073C;
+    margin: 0;
+}
+
+.find-popular-tours-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.find-popular-tours-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+.find-popular-tours-card:hover {
+    transform: scale(1.05);
+}
+
+.find-popular-tours-image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.find-popular-tours-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.find-popular-tours-header .view-all {
+    color: #717171;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.find-popular-tours-content {
+    padding-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.find-popular-tours-content h5 {
+    text-align: left;
+    margin-left: 20px;
+    font-weight: 600;
+    color: #717171;
+    font-family: 'Inter';
+    margin-top: 5px;
+}
+
+.tour-desc {
+    font-size: 16px;
+    color: #05073C;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 15px 10px 20px;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.tour-rating {
+    font-size: 13px;
+    color: #05073C;
+    font-weight: 500;
+    margin-left: 20px;
+    margin-bottom: 5px;
+}
+
+.tour-days-from {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #777;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: auto;
+}
+
+.find-popular-tours-content hr {
+    width: 85%;
+    margin: 10px auto;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 1024px) {
+    .find-popular-tours-section {
+        padding: 40px 15px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .find-popular-tours-section {
+        margin-top: 10px;
+        padding: 30px 15px;
+    }
+
+    .find-popular-tours-header {
+        align-items: center;
+    }
+
+    .find-popular-tours-header h2 {
+        font-size: 20px;
+    }
+
+    .find-popular-tours-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .find-popular-tours-header {
+        margin-bottom: 20px;
+    }
+
+    .find-popular-tours-header h2 {
+        font-size: 18px;
+    }
+
+    .find-popular-tours-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .find-popular-tours-card {
+        height: auto;
+    }
+
+    .find-popular-tours-image-container {
+        height: 180px;
+    }
+}
