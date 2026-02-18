@@ -6,6 +6,7 @@ import WhyChoose from "../../components/whychoose/WhyChoose";
 import TrendingDestinations from "../../components/home/TrendingDestinations";
 import FindPopularTours from "../../components/findpopulartours/FindPopularTours";
 import Popularthingstodo from "../Popularthingstodo/Popularthingstodo";
+import TopTrending from "../toptrending/toptrending";
 
 function App() {
     return (
@@ -67,6 +68,9 @@ function App() {
 
             {/* Popular things to do */}
             <Popularthingstodo />
+
+            {/* Top Trending Tours */}
+            <TopTrending />
         </div>
     );
 }

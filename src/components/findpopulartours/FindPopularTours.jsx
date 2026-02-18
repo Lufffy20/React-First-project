@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./FindPopularTours.css";
+import TourCard from "./TourCard";
 
 const Tours = [
     {
@@ -85,24 +86,8 @@ const FindPopularTours = () => {
             </div>
 
             <div className="find-popular-tours-grid">
-                {Tours.map((item, index) => (
-                    <div className="find-popular-tours-card" key={index}>
-                        <div className="find-popular-tours-image-container">
-                            <img src={item.image} alt={item.name} />
-                        </div>
-                        <div className="find-popular-tours-content">
-                            <h5>{item.name}</h5>
-
-                            <p className="tour-desc">{item.description}</p>
-
-                            <p className="tour-rating">⭐ {item.rating}</p> <hr />
-                            <div className="tour-days-from">
-                                <p>{item.days}</p>
-                                <p>{item.from}</p>
-                            </div>
-                        </div>
-
-                    </div>
+                {Tours.map((item) => (
+                    <TourCard key={item.id} item={item} />
                 ))}
             </div>
         </div>

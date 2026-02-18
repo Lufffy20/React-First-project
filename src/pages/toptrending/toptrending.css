@@ -1,0 +1,177 @@
+.top-trending-section {
+    width: 100%;
+    max-width: 1520px;
+    margin: 0px auto;
+    padding: 50px;
+    background: #F5F5F5;
+    border-radius: 16px;
+    position: relative;
+}
+
+.custom-swiper-button-prev,
+.custom-swiper-button-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    color: black;
+    user-select: none;
+}
+
+.custom-swiper-button-prev {
+    left: 20px;
+}
+
+.custom-swiper-button-next {
+    right: 20px;
+}
+
+.top-trending-container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0px auto;
+    padding: 50px;
+}
+
+.top-trending-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.top-trending-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    font-family: 'Inter';
+    color: #05073C;
+}
+
+.top-trending-header .view-all {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+    text-decoration: none;
+}
+
+.swiper {
+    padding-bottom: 45px;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: black;
+}
+
+/* Responsive Styles */
+
+@media (max-width: 1200px) {
+    .top-trending-section {
+        padding: 40px 20px;
+    }
+
+    .top-trending-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 10px;
+        /* Add side padding to prevent clipping */
+    }
+}
+
+@media (max-width: 1024px) {
+    .custom-swiper-button-prev {
+        left: 0;
+        /* Align with edge */
+        width: 35px;
+        height: 35px;
+    }
+
+    .custom-swiper-button-next {
+        right: 0;
+        /* Align with edge */
+        width: 35px;
+        height: 35px;
+    }
+
+    .top-trending-container {
+        width: 90%;
+        /* Give space for arrows */
+        margin: 0 auto;
+        padding: 10px;
+        /* More padding for shadows */
+    }
+}
+
+@media (max-width: 768px) {
+    .top-trending-section {
+        padding: 30px 10px;
+    }
+
+    .top-trending-header {
+        flex-direction: row;
+        /* Keep row but maybe wrap if needed, or adjust sizes */
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .top-trending-header h2 {
+        font-size: 18px;
+    }
+
+    .top-trending-header .view-all {
+        font-size: 13px;
+        align-self: center;
+    }
+
+    /* Adjust arrows for smaller screens */
+    .custom-swiper-button-prev,
+    .custom-swiper-button-next {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+        display: flex;
+        /* Keep them visible as per request for professional look */
+    }
+
+    .top-trending-container {
+        width: 100%;
+        padding: 10px 0;
+        /* Vertical padding */
+    }
+}
+
+@media (max-width: 480px) {
+    .top-trending-section {
+        padding: 20px 5px;
+        width: 87%;
+        max-width: 100%;
+    }
+
+    .top-trending-header h2 {
+        font-size: 16px;
+    }
+
+    /* On very small screens, shadows might still clip if padding is 0.
+       Let's add some wrapper padding or margin to slides if needed,
+       but usually container padding fixes it. */
+
+    .swiper {
+        padding: 10px;
+        /* Ensure swiper itself has padding for shadows */
+    }
+
+    .custom-swiper-button-prev,
+    .custom-swiper-button-next {
+        display: none;
+    }
+}
