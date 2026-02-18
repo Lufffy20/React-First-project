@@ -8,6 +8,7 @@ import FindPopularTours from "../../components/findpopulartours/FindPopularTours
 import Popularthingstodo from "../Popularthingstodo/Popularthingstodo";
 import TopTrending from "../toptrending/toptrending";
 import CustomerReviews from "../customerreviews/customerreviews";
+import CustomerDiscount from "../others/customerdiscount";
 
 function App() {
     return (
@@ -75,6 +76,9 @@ function App() {
 
             {/* Customer Reviews */}
             <CustomerReviews />
+
+            {/* Customer Discount */}
+            <CustomerDiscount />
         </div>
     );
 }
