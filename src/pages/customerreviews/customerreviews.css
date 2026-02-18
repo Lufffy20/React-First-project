@@ -12,7 +12,6 @@
     align-items: center;
     color: white;
     text-align: center;
-    margin-bottom: 100px;
 }
 
 .customerreviews-header {
@@ -75,9 +74,30 @@
 }
 
 /* Pagination spacing */
-.swiper-pagination {
+/* Pagination spacing */
+.customerreviews-section .swiper-pagination {
     margin-top: 40px !important;
     position: relative !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.customerreviews-section .swiper-pagination-bullet {
+    width: 6px;
+    height: 6px;
+    background-color: #ccc;
+    border-radius: 50%;
+    opacity: 1;
+    transition: all 0.3s ease;
+    margin: 0 !important;
+}
+
+.customerreviews-section .swiper-pagination-bullet-active {
+    width: 12px;
+    border-radius: 10px;
+    background-color: #05073C;
 }
 
 .customerreviews-item-review {
