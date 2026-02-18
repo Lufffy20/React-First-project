@@ -7,6 +7,7 @@ import TrendingDestinations from "../../components/home/TrendingDestinations";
 import FindPopularTours from "../../components/findpopulartours/FindPopularTours";
 import Popularthingstodo from "../Popularthingstodo/Popularthingstodo";
 import TopTrending from "../toptrending/toptrending";
+import CustomerReviews from "../customerreviews/customerreviews";
 
 function App() {
     return (
@@ -71,6 +72,9 @@ function App() {
 
             {/* Top Trending Tours */}
             <TopTrending />
+
+            {/* Customer Reviews */}
+            <CustomerReviews />
         </div>
     );
 }
