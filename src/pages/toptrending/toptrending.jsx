@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import "./toptrending.css";
-import TourCard from "../../components/findpopulartours/TourCard";
+import TourCard from "../../components/Tourcard/TourCard";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
