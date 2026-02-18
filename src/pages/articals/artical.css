@@ -1,0 +1,148 @@
+.artical-section {
+    width: 100%;
+    max-width: 1240px;
+    height: 539px;
+    margin: 0 auto;
+}
+
+.artical-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 10px;
+    box-sizing: border-box;
+    color: #05073C;
+}
+
+.artical-header .see-all {
+    margin-right: 28px;
+    color: #717171;
+}
+
+.artical-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.artical-card {
+    flex: 1 1 calc(33.333% - 20px);
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+}
+
+.artical-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+
+.artical-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 409px;
+    height: 300px;
+    overflow: hidden;
+}
+
+.artical-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.artical-date {
+    font-size: 12px;
+    color: #717171;
+    font-family: 'Inter';
+    margin-left: 10px;
+}
+
+.artical-description {
+    width: 366px;
+    height: 51px;
+    font-size: 17px;
+    color: #05073C;
+    margin-left: 10px;
+    margin-top: 10px;
+    font-family: 'Inter';
+    font-weight: 500;
+}
+
+.artical-type {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    background: #EB662B;
+    color: white;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .artical-section {
+        height: auto;
+        padding-bottom: 40px;
+    }
+
+    .artical-container {
+        justify-content: center;
+    }
+
+    .artical-card {
+        flex: 1 1 calc(50% - 20px);
+        max-width: 500px;
+    }
+
+    .artical-image-container {
+        max-width: 100%;
+    }
+
+    .artical-description {
+        width: 100%;
+        /* Make description full width of card */
+        height: auto;
+        /* Allow height to adjust */
+    }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+    .artical-header {
+        /* Keep header in row for mobile, just adjust margins if needed */
+        margin-bottom: 20px;
+        padding-right: 10px;
+        /* Ensure some spacing on the right */
+    }
+
+    .artical-header h2 {
+        font-size: 20px;
+        /* Slightly smaller font for mobile */
+        margin-bottom: 0;
+    }
+
+    .artical-card {
+        flex: 1 1 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .artical-image-container {
+        height: 250px;
+        /* Adjust height for mobile */
+    }
+
+    /* Adjust font sizes for mobile */
+    .artical-description {
+        font-size: 16px;
+    }
+}

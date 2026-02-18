@@ -9,6 +9,7 @@ import Popularthingstodo from "../Popularthingstodo/Popularthingstodo";
 import TopTrending from "../toptrending/toptrending";
 import CustomerReviews from "../customerreviews/customerreviews";
 import CustomerDiscount from "../others/customerdiscount";
+import Artical from "../articals/artical";
 
 function App() {
     return (
@@ -79,6 +80,9 @@ function App() {
 
             {/* Customer Discount */}
             <CustomerDiscount />
+
+            {/* Artical */}
+            <Artical />
         </div>
     );
 }
