@@ -34,6 +34,7 @@
     flex-direction: column;
     justify-content: left;
     align-items: left;
+    box-sizing: border-box;
 }
 
 .artical-card:hover {
@@ -65,7 +66,10 @@
 }
 
 .artical-description {
-    width: 366px;
+    width: 100%;
+    /* Allow description to take full width of card */
+    padding-right: 10px;
+    box-sizing: border-box;
     height: 51px;
     font-size: 17px;
     color: #05073C;

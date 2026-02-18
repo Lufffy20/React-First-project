@@ -2,14 +2,15 @@ import Header from "../../components/home/Header";
 import Discount from "../others/discount";
 import "./dashboard.css";
 import sectionImage from "../../assets/img/section.jpg";
-import WhyChoose from "../../components/whychoose/WhyChoose";
-import TrendingDestinations from "../../components/home/TrendingDestinations";
-import FindPopularTours from "../../components/findpopulartours/FindPopularTours";
+import WhyChoose from "../whychoose/WhyChoose";
+import TrendingDestinations from "../TrendingDestinations/TrendingDestinations";
+import FindPopularTours from "../findpopulartours/FindPopularTours";
 import Popularthingstodo from "../Popularthingstodo/Popularthingstodo";
 import TopTrending from "../toptrending/toptrending";
 import CustomerReviews from "../customerreviews/customerreviews";
 import CustomerDiscount from "../others/customerdiscount";
 import Artical from "../articals/artical";
+import Footer from "../../components/home/footer";
 
 function App() {
     return (
@@ -83,6 +84,9 @@ function App() {
 
             {/* Artical */}
             <Artical />
+
+            {/* Footer */}
+            <Footer />
         </div>
     );
 }
