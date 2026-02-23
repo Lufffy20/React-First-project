@@ -1,13 +1,15 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../../redux/auth/authSlice';
 import './LoginPage.css';
 import SideDesign from '../../components/login/SideDesign';
 
 const App = () => {
 
     const users = useSelector((state) => state.user.users);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const onFinish = (values) => {
@@ -19,6 +21,7 @@ const App = () => {
         );
 
         if (foundUser) {
+            dispatch(login(foundUser)); // Dispatch login action to store Auth session
             message.success("Login Successful 🎉");
             navigate("/dashboard");
         } else {

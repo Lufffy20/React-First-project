@@ -3,10 +3,14 @@ import "./Header.css";
 import { Button, Drawer, Select } from "antd";
 import { MenuOutlined, GlobalOutlined, SearchOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../redux/auth/authSlice";
 
 const Header = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { isAuthenticated, user } = useSelector((state) => state.auth);
     const [visible, setVisible] = useState(false);
 
     const showDrawer = () => {
@@ -15,6 +19,11 @@ const Header = () => {
 
     const onClose = () => {
         setVisible(false);
+    };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate("/");
     };
 
     return (
@@ -82,22 +91,39 @@ const Header = () => {
                         />
 
                         {/* Sign Up Text Button */}
-                        <Button
-                            type="text"
-                            onClick={() => navigate("/signup")}
-                        >
-                            Sign up
-                        </Button>
-
-                        {/* Login Rectangle Button */}
-                        <Button
-                            type="primary"
-                            shape="round"
-                            onClick={() => navigate("/login")}
-                            className="login-btn"
-                        >
-                            Log in
-                        </Button>
+                        {!isAuthenticated ? (
+                            <>
+                                <Button
+                                    type="text"
+                                    onClick={() => navigate("/signup")}
+                                >
+                                    Sign up
+                                </Button>
+                                <Button
+                                    type="primary"
+                                    shape="round"
+                                    onClick={() => navigate("/login")}
+                                    className="login-btn"
+                                >
+                                    Log in
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <span style={{ marginRight: '15px', fontWeight: '500', color: '#101828' }}>
+                                    Hi, {user?.name || user?.email || 'User'}
+                                </span>
+                                <Button
+                                    type="primary"
+                                    shape="round"
+                                    onClick={handleLogout}
+                                    className="login-btn"
+                                    style={{ backgroundColor: '#dc2626', borderColor: '#dc2626' }}
+                                >
+                                    Log out
+                                </Button>
+                            </>
+                        )}
 
                     </nav>
                 </div>
@@ -157,26 +183,49 @@ const Header = () => {
                                     { value: 'JPY', label: 'JPY' },
                                 ]}
                             />
-                            <Button
-                                type="text"
-                                onClick={() => {
-                                    navigate("/signup");
-                                    onClose();
-                                }}
-                            >
-                                Sign up
-                            </Button>
-                            <Button
-                                type="primary"
-                                shape="round"
-                                onClick={() => {
-                                    navigate("/login");
-                                    onClose();
-                                }}
-                                className="login-btn"
-                            >
-                                Log in
-                            </Button>
+
+                            {!isAuthenticated ? (
+                                <>
+                                    <Button
+                                        type="text"
+                                        onClick={() => {
+                                            navigate("/signup");
+                                            onClose();
+                                        }}
+                                    >
+                                        Sign up
+                                    </Button>
+                                    <Button
+                                        type="primary"
+                                        shape="round"
+                                        onClick={() => {
+                                            navigate("/login");
+                                            onClose();
+                                        }}
+                                        className="login-btn"
+                                    >
+                                        Log in
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <div style={{ textAlign: 'center', marginBottom: '10px', fontWeight: '500', color: '#101828' }}>
+                                        Hi, {user?.name || user?.email || 'User'}
+                                    </div>
+                                    <Button
+                                        type="primary"
+                                        shape="round"
+                                        onClick={() => {
+                                            handleLogout();
+                                            onClose();
+                                        }}
+                                        className="login-btn"
+                                        style={{ backgroundColor: '#dc2626', borderColor: '#dc2626' }}
+                                    >
+                                        Log out
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     </Drawer>
                 </div>
