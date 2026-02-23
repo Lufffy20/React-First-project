@@ -75,29 +75,36 @@
 
 /* Pagination spacing */
 /* Pagination spacing */
-.customerreviews-section .swiper-pagination {
+.customerreviews-section .slick-dots {
     margin-top: 40px !important;
     position: relative !important;
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
     gap: 5px;
+    bottom: 0px !important;
 }
 
-.customerreviews-section .swiper-pagination-bullet {
-    width: 6px;
-    height: 6px;
-    background-color: #ccc;
-    border-radius: 50%;
-    opacity: 1;
-    transition: all 0.3s ease;
+.customerreviews-section .slick-dots li {
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.customerreviews-section .slick-dots li button {
+    width: 6px !important;
+    height: 6px !important;
+    background-color: #ccc !important;
+    border-radius: 50% !important;
+    opacity: 1 !important;
+    transition: all 0.3s ease !important;
     margin: 0 !important;
 }
 
-.customerreviews-section .swiper-pagination-bullet-active {
-    width: 12px;
-    border-radius: 10px;
-    background-color: #05073C;
+.customerreviews-section .slick-dots li.slick-active button {
+    width: 12px !important;
+    border-radius: 10px !important;
+    background-color: #05073C !important;
 }
 
 .customerreviews-item-review {
@@ -202,7 +209,7 @@
         margin-top: 15px;
     }
 
-    .swiper-pagination {
+    .customerreviews-section .slick-dots {
         margin-top: 20px !important;
     }
 }

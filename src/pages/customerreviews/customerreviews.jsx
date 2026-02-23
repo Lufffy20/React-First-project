@@ -1,12 +1,7 @@
 import React from "react";
 import "./customerreviews.css";
 import sectionImage from "../../assets/img/customerreviews.png";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/pagination";
+import { Carousel } from "antd";
 
 const customerreviews = [
     {
@@ -49,19 +44,9 @@ const CustomerReviews = () => {
             </div>
 
             <div className="customerreviews-container">
-                <Swiper
-                    modules={[Pagination, Autoplay]}
-                    slidesPerView={1}
-                    spaceBetween={30}
-                    loop={true}
-                    pagination={{ clickable: true }}
-                    autoplay={{
-                        delay: 5000,
-                        disableOnInteraction: false,
-                    }}
-                >
+                <Carousel autoplay autoplaySpeed={5000} dots draggable swipeToSlide>
                     {customerreviews.map((customerreview) => (
-                        <SwiperSlide key={customerreview.id}>
+                        <div key={customerreview.id}>
                             <div className="customerreviews-item">
 
                                 {/* Profile Image */}
@@ -87,9 +72,9 @@ const CustomerReviews = () => {
                                 <h5>{customerreview.name}</h5>
 
                             </div>
-                        </SwiperSlide>
+                        </div>
                     ))}
-                </Swiper>
+                </Carousel>
             </div>
         </div>
     );
