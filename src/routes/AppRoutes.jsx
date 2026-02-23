@@ -6,6 +6,8 @@ import ForgotPasswordPage from "../pages/forgotpassword/ForgotPasswordPage";
 import UserList from "../pages/signup/UserList";
 import Dashboard from "../pages/home/dashboard";
 import NotFoundPage from "../components/login/NotFoundPage";
+import AllToursDetails from "../pages/alltoursdetails/alltoursdetails";
+import AddTour from "../pages/addtour/AddTour";
 
 function AppRoutes() {
     return (
@@ -19,6 +21,8 @@ function AppRoutes() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 {/* 404 Route */}
                 <Route path="*" element={<NotFoundPage />} />
+                <Route path="/all-tours-details" element={<AllToursDetails />} />
+                <Route path="/add-tour" element={<AddTour />} />
             </Routes>
         </BrowserRouter>
     );

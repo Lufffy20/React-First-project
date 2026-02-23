@@ -10,7 +10,7 @@ import TopTrending from "../toptrending/toptrending";
 import CustomerReviews from "../customerreviews/customerreviews";
 import CustomerDiscount from "../others/customerdiscount";
 import Artical from "../articals/artical";
-import Footer from "../../components/home/footer";
+import Footer from "../../components/home/Footer";
 
 function App() {
     return (
