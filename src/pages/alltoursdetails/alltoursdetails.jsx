@@ -1,251 +1,232 @@
-/**
- * AllToursDetails Page Component
- *
- * Purpose:
- * This page displays the complete tours listing with:
- * - Filter sidebar
- * - Sorting options
- * - Paginated tour results
- *
- * Architecture:
- * - Uses a custom hook (useTourFilters) to manage all filtering,
- *   sorting, pagination, and dynamic options logic.
- * - FilterSidebar is a controlled component.
- * - TourListCard renders individual tour data.
- * - Ant Design Pagination handles page navigation.
- *
- * Notes:
- * - This component does not manage business logic directly.
- * - All filtering and sorting logic is abstracted inside the custom hook.
- */
-
-import React from "react";
+import React, { useState, useMemo } from "react";
+import { useSelector } from "react-redux";
 import "./alltoursdetails.css";
 import Header from "../../components/home/Header";
 import Footer from "../../components/home/Footer";
-import { Pagination } from 'antd';
-import { useTourFilters } from "./hooks/useTourFilters";
-import FilterSidebar from "./components/FilterSidebar";
-import TourListCard from "./components/TourListCard";
+import { Pagination, Drawer, Button } from 'antd';
+import { MenuOutlined } from '@ant-design/icons';
+import AllToursSidebar from "./components/AllToursSidebar";
+import AllToursListHeader from "./components/AllToursListHeader";
+import AllToursCard from "./components/AllToursCard";
 
 const AllToursDetails = () => {
+    const tours = useSelector(state => state.tours.tours || []);
 
-    /* ======================================================
-       Custom Hook: Centralized Filtering + Sorting + Paging
-    ====================================================== */
+    const dynamicLanguages = useMemo(() => {
+        const languages = new Set();
+        tours.forEach(tour => {
+            if (tour.language) {
+                if (Array.isArray(tour.language)) {
+                    tour.language.forEach(lang => languages.add(lang));
+                } else {
+                    languages.add(tour.language);
+                }
+            }
+        });
+        return Array.from(languages).sort();
+    }, [tours]);
 
-    const {
-        tours,
-        dynamicMaxPrice,
-        priceRange,
-        setPriceRange,
-        selectedTypes,
-        handleTypeChange,
-        selectedDays,
-        setSelectedDays,
-        selectedNights,
-        setSelectedNights,
-        selectedLanguages,
-        setSelectedLanguages,
-        selectedRating,
-        setSelectedRating,
-        selectedSpecials,
-        setSelectedSpecials,
-        sortBy,
-        setSortBy,
-        dynamicOptions,
-        handleCheckboxGroupChange,
-        currentPage,
-        pageSize,
-        handlePageChange
-    } = useTourFilters();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(5);
 
-    /* ======================================================
-       Pagination Calculation Logic
-    ====================================================== */
+    // Reponsive filter drawer
+    const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
-    // Calculate index boundaries for slicing tours array
+    const showFilterDrawer = () => setIsFilterDrawerOpen(true);
+    const closeFilterDrawer = () => setIsFilterDrawerOpen(false);
+
+    const initialFilters = {
+        tourTypes: [],
+        priceRange: [0, 1000],
+        days: [],
+        nights: [],
+        languages: [],
+        minRating: 0,
+        specials: []
+    };
+
+    const [filters, setFilters] = useState(initialFilters);
+
+    const handleFilterChange = (filterName, value) => {
+        setFilters(prev => ({
+            ...prev,
+            [filterName]: value
+        }));
+        setCurrentPage(1); // Reset to first page on filter change
+    };
+
+    const handleClearFilters = () => {
+        setFilters(initialFilters);
+        setCurrentPage(1);
+    };
+
+    const handlePageChange = (page, size) => {
+        setCurrentPage(page);
+        if (size !== pageSize) {
+            setPageSize(size);
+        }
+    };
+
+    const filteredTours = useMemo(() => {
+        return tours.filter(tour => {
+            // Tour Type
+            if (filters.tourTypes.length > 0 && !filters.tourTypes.includes(tour.type)) {
+                return false;
+            }
+
+            // Price Range
+            if (tour.price < filters.priceRange[0] || tour.price > filters.priceRange[1]) {
+                return false;
+            }
+
+            // Duration: days
+            if (filters.days.length > 0) {
+                const daysMatch = tour.duration?.match(/(\d+)\s*Days?/i);
+                const tourDays = daysMatch ? parseInt(daysMatch[1], 10) : -1;
+
+                const matchesDay = filters.days.some(day => {
+                    if (day === "5+ Days") return tourDays >= 5;
+                    const filterNumMatch = day.match(/(\d+)/);
+                    if (filterNumMatch) {
+                        return tourDays === parseInt(filterNumMatch[1], 10);
+                    }
+                    return false;
+                });
+                if (!matchesDay) return false;
+            }
+
+            // Duration: nights
+            if (filters.nights.length > 0) {
+                const nightsMatch = tour.duration?.match(/(\d+)\s*Nights?/i);
+                const tourNights = nightsMatch ? parseInt(nightsMatch[1], 10) : -1;
+
+                const matchesNight = filters.nights.some(night => {
+                    const filterNumMatch = night.match(/(\d+)/);
+                    if (filterNumMatch) {
+                        return tourNights === parseInt(filterNumMatch[1], 10);
+                    }
+                    return false;
+                });
+                if (!matchesNight) return false;
+            }
+
+            // Rating
+            if (filters.minRating > 0 && (tour.rating || 0) < filters.minRating) {
+                return false;
+            }
+
+            // Language
+            if (filters.languages.length > 0) {
+                if (!tour.language) return false;
+
+                // Check whether tour.language was saved as an Array (from updated form) or String (old format)
+                if (Array.isArray(tour.language)) {
+                    // Using `some` so if the tour is available in ANY of the selected languages, it will show up
+                    const hasSelectedLanguage = filters.languages.some(lang => tour.language.includes(lang));
+                    if (!hasSelectedLanguage) return false;
+                } else {
+                    if (!filters.languages.includes(tour.language)) return false;
+                }
+            }
+
+            // Specials
+            if (filters.specials.length > 0) {
+                if (filters.specials.includes("Best Price Guarantee") && !tour.bestPrice) return false;
+                if (filters.specials.includes("Free Cancellation") && !tour.freeCancel) return false;
+            }
+
+            return true;
+        });
+    }, [tours, filters]);
+
+    // Pagination logic
     const indexOfLastTour = currentPage * pageSize;
     const indexOfFirstTour = indexOfLastTour - pageSize;
-
-    // Get only tours for the current page
-    const currentTours = tours.slice(indexOfFirstTour, indexOfLastTour);
+    const currentTours = filteredTours.slice(indexOfFirstTour, indexOfLastTour);
 
     return (
         <>
-            {/* =========================
-                Global Header
-            ========================= */}
             <Header />
-
             <div className="all-tours-wrapper">
                 <div className="all-tours-container">
 
-                    {/* =========================
-                        Page Header Section
-                    ========================= */}
-
+                    {/* Header Section */}
                     <div className="details-header-section">
                         <div className="details-breadcrumbs">
-                            <span className="breadcrumb-links">
-                                Home&gt;Tours&gt;Phuket
-                            </span>
-                            <span className="breadcrumb-info">
-                                THE 10 BEST Phuket Tours & Excursions
-                            </span>
+                            <span className="breadcrumb-links">Home&gt;Tours&gt;Phuket</span>
+                            <span className="breadcrumb-info">THE 10 BEST Phuket Tours & Excursions</span>
                         </div>
-
-                        <h1 className="details-page-title">
-                            Explore all things to do in Phuket
-                        </h1>
+                        <h1 className="details-page-title">Explore all things to do in Phuket</h1>
                     </div>
 
-                    {/* =========================
-                        Main Layout
-                        Sidebar + Results
-                    ========================= */}
-
+                    {/* Main Content Layout */}
                     <div className="details-main-layout">
 
-                        {/* =========================
-                            Sidebar Filters
-                        ========================= */}
+                        {/* Sidebar Filters */}
+                        <div className="desktop-sidebar">
+                            <AllToursSidebar
+                                filters={filters}
+                                onFilterChange={handleFilterChange}
+                                onClearFilters={handleClearFilters}
+                                availableLanguages={dynamicLanguages}
+                            />
+                        </div>
 
-                        <FilterSidebar
-                            selectedTypes={selectedTypes}
-                            handleTypeChange={handleTypeChange}
-                            dynamicMaxPrice={dynamicMaxPrice}
-                            priceRange={priceRange}
-                            setPriceRange={setPriceRange}
-                            selectedDays={selectedDays}
-                            setSelectedDays={setSelectedDays}
-                            selectedNights={selectedNights}
-                            setSelectedNights={setSelectedNights}
-                            selectedLanguages={selectedLanguages}
-                            setSelectedLanguages={setSelectedLanguages}
-                            selectedRating={selectedRating}
-                            setSelectedRating={setSelectedRating}
-                            selectedSpecials={selectedSpecials}
-                            setSelectedSpecials={setSelectedSpecials}
-                            dynamicOptions={dynamicOptions}
-                            handleCheckboxGroupChange={handleCheckboxGroupChange}
-                        />
+                        {/* Mobile Drawer Filter */}
+                        <Drawer
+                            title="Filters"
+                            placement="left"
+                            onClose={closeFilterDrawer}
+                            open={isFilterDrawerOpen}
+                            className="mobile-filter-drawer"
+                            width={320}
+                        >
+                            <AllToursSidebar
+                                filters={filters}
+                                onFilterChange={handleFilterChange}
+                                onClearFilters={handleClearFilters}
+                                availableLanguages={dynamicLanguages}
+                            />
+                        </Drawer>
 
-                        {/* =========================
-                            Results Content Area
-                        ========================= */}
-
+                        {/* List/Results Area */}
                         <div className="details-content-area">
-
-                            {/* =========================
-                                Toolbar Section
-                                Results Count + Sorting
-                            ========================= */}
-
-                            <div className="results-toolbar">
-
-                                <span className="results-count">
-                                    Showing {tours.length === 0
-                                        ? 0
-                                        : indexOfFirstTour + 1}
-                                    -
-                                    {Math.min(indexOfLastTour, tours.length)}
-                                    {' '}of {tours.length} tours
-                                </span>
-
-                                <div
-                                    className="results-sort"
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px'
-                                    }}
-                                >
-                                    <span
-                                        style={{
-                                            fontSize: '14px',
-                                            color: '#666'
-                                        }}
-                                    >
-                                        Sort by:
-                                    </span>
-
-                                    <select
-                                        value={sortBy}
-                                        onChange={(e) =>
-                                            setSortBy(e.target.value)
-                                        }
-                                        style={{
-                                            padding: '6px 10px',
-                                            borderRadius: '6px',
-                                            border: '1px solid #ddd',
-                                            outline: 'none',
-                                            cursor: 'pointer',
-                                            fontSize: '14px'
-                                        }}
-                                    >
-                                        <option value="featured">
-                                            Featured
-                                        </option>
-                                        <option value="priceLowHigh">
-                                            Price: Low to High
-                                        </option>
-                                        <option value="priceHighLow">
-                                            Price: High to Low
-                                        </option>
-                                        <option value="rating">
-                                            Top Rated
-                                        </option>
-                                        <option value="reviews">
-                                            Most Reviewed
-                                        </option>
-                                    </select>
-                                </div>
+                            <div className="mobile-filter-btn-container">
+                                <Button type="primary" className="mobile-filter-btn" onClick={showFilterDrawer} icon={<MenuOutlined />}>
+                                    Filters
+                                </Button>
                             </div>
-
-                            {/* =========================
-                                Tours List Section
-                            ========================= */}
+                            <AllToursListHeader
+                                totalTours={filteredTours.length}
+                                indexOfFirstTour={indexOfFirstTour}
+                                indexOfLastTour={indexOfLastTour}
+                            />
 
                             <div className="tours-list-container">
                                 {currentTours.map((tour) => (
-                                    <TourListCard
-                                        key={tour.id}
-                                        tour={tour}
-                                    />
+                                    <AllToursCard key={tour.id} tour={tour} />
                                 ))}
                             </div>
 
-                            {/* =========================
-                                Pagination Section
-                            ========================= */}
-
-                            {tours.length > 0 && (
+                            {filteredTours.length > 0 && (
                                 <div className="custom-pagination-container">
                                     <Pagination
                                         current={currentPage}
-                                        total={tours.length}
+                                        total={filteredTours.length}
                                         pageSize={pageSize}
                                         onChange={handlePageChange}
-                                        showTotal={(total, range) =>
-                                            `${range[0]}-${range[1]} of ${total} items`
-                                        }
+                                        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
                                         className="tours-pagination"
                                         showSizeChanger={true}
                                         pageSizeOptions={['5', '10', '20']}
                                     />
                                 </div>
                             )}
-
                         </div>
 
                     </div>
                 </div>
             </div>
-
-            {/* =========================
-                Global Footer
-            ========================= */}
             <Footer />
         </>
     );

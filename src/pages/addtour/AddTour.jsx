@@ -102,7 +102,7 @@ const AddTour = () => {
             oldPrice: values.oldPrice ? Number(values.oldPrice) : null,
             price: Number(values.price),
             type: values.type,
-            language: values.language || "English", // Added language field
+            language: values.language || ["English"],
             badgeColor: values.badge ? "#eb6e34" : null
         };
 
@@ -272,9 +272,11 @@ const AddTour = () => {
                                 style={{ flex: 1 }}
                             >
                                 <Select
+                                    mode="multiple"
+                                    allowClear
                                     showSearch
                                     size="large"
-                                    placeholder="Select a language"
+                                    placeholder="Select languages"
                                     optionFilterProp="children"
                                     filterOption={(input, option) =>
                                         (option?.children ?? '').toLowerCase().includes(input.toLowerCase())

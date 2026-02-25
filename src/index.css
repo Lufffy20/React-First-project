@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Global Font Settings */
+:root {
+    --global-font: 'Inter';
+}
+
+body,
+* {
+    font-family: var(--global-font);
+}
