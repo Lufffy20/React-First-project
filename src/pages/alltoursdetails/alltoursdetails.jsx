@@ -28,6 +28,7 @@ const AllToursDetails = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
+    const [sortBy, setSortBy] = useState('featured');
 
     // Reponsive filter drawer
     const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
@@ -139,10 +140,32 @@ const AllToursDetails = () => {
         });
     }, [tours, filters]);
 
+    // Sorting logic based on sortBy dropdown
+    const sortedTours = useMemo(() => {
+        const sorted = [...filteredTours];
+
+        switch (sortBy) {
+            case 'priceLowHigh':
+                return sorted.sort((a, b) => a.price - b.price);
+            case 'priceHighLow':
+                return sorted.sort((a, b) => b.price - a.price);
+            case 'rating':
+                return sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            case 'reviews':
+                // Assuming you have a 'totalReviews' or similar field, using default 0 handling. 
+                // Adjust property name if it is different like 'reviewsCount' or 'numReviews'.
+                return sorted.sort((a, b) => (b.reviews || 0) - (a.reviews || 0));
+            case 'featured':
+            default:
+                // Keep original array order (assumed featured or default).
+                return sorted;
+        }
+    }, [filteredTours, sortBy]);
+
     // Pagination logic
     const indexOfLastTour = currentPage * pageSize;
     const indexOfFirstTour = indexOfLastTour - pageSize;
-    const currentTours = filteredTours.slice(indexOfFirstTour, indexOfLastTour);
+    const currentTours = sortedTours.slice(indexOfFirstTour, indexOfLastTour);
 
     return (
         <>
@@ -200,6 +223,8 @@ const AllToursDetails = () => {
                                 totalTours={filteredTours.length}
                                 indexOfFirstTour={indexOfFirstTour}
                                 indexOfLastTour={indexOfLastTour}
+                                sortBy={sortBy}
+                                onSortChange={setSortBy}
                             />
 
                             <div className="tours-list-container">
