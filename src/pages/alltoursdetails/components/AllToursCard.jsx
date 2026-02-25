@@ -1,11 +1,11 @@
 import React from "react";
 
-const TourListCard = ({ tour }) => {
+const AllToursCard = ({ tour }) => {
     return (
         <div className="tour-list-card">
             <div className="card-image-wrapper">
                 {tour.badge && (
-                    <div className="card-badge" style={{ backgroundColor: tour.badgeColor || '#ff6b35' }}>
+                    <div className="card-badge" style={tour.badgeColor ? { backgroundColor: tour.badgeColor } : {}}>
                         {tour.badge}
                     </div>
                 )}
@@ -48,4 +48,4 @@ const TourListCard = ({ tour }) => {
     );
 };
 
-export default TourListCard;
+export default AllToursCard;
