@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Popularthingstodo.css";
+import "./PopularThingsToDo.css";
 
 
 const Popularthingstodo = () => {

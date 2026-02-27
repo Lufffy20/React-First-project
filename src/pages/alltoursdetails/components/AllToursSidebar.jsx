@@ -88,15 +88,15 @@ const AllToursSidebar = ({ filters, onFilterChange, onClearFilters, availableLan
                 <div className="filter-price-slider">
                     <Slider
                         range
-                        max={1000}
+                        max={5000}
                         tooltip={{ formatter: (value) => `$${value}` }}
                         value={filters.priceRange}
                         onChange={(value) => onFilterChange('priceRange', value)}
-                        defaultValue={[0, 1000]}
+                        defaultValue={[0, 5000]}
                     />
                     <div className="filter-price-labels">
                         <span>$0</span>
-                        <span>$1000</span>
+                        <span>$5000</span>
                     </div>
                 </div>
             </div>

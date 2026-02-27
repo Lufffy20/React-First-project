@@ -8,6 +8,7 @@ import Dashboard from "../pages/home/dashboard";
 import NotFoundPage from "../components/login/NotFoundPage";
 import AllToursDetails from "../pages/alltoursdetails/alltoursdetails";
 import AddTour from "../pages/addtour/AddTour";
+import TourDetail from "../pages/tourdetailforone/tourdetail";
 
 function AppRoutes() {
     return (
@@ -23,6 +24,7 @@ function AppRoutes() {
                 <Route path="*" element={<NotFoundPage />} />
                 <Route path="/all-tours-details" element={<AllToursDetails />} />
                 <Route path="/add-tour" element={<AddTour />} />
+                <Route path="/tour-detail/:id" element={<TourDetail />} />
             </Routes>
         </BrowserRouter>
     );

@@ -49,10 +49,11 @@ const Header = () => {
                         <Select
                             defaultValue="Destinations"
                             style={{ width: 140 }}
-                            bordered={false}
+                            variant="borderless"
                             className="nav-select"
                             size="large"
-                            dropdownStyle={{ minWidth: 180 }}
+                            popupMatchSelectWidth={false}
+                            styles={{ popup: { minWidth: 180 } }}
                             options={[
                                 { value: 'destinations', label: 'Destinations' },
                                 { value: 'usa', label: 'USA' },
@@ -64,10 +65,11 @@ const Header = () => {
                         <Select
                             defaultValue="Activities"
                             style={{ width: 120 }}
-                            bordered={false}
+                            variant="borderless"
                             className="nav-select"
                             size="large"
-                            dropdownStyle={{ minWidth: 150 }}
+                            popupMatchSelectWidth={false}
+                            styles={{ popup: { minWidth: 150 } }}
                             options={[
                                 { value: 'activities', label: 'Activities' },
                                 { value: 'hiking', label: 'Hiking' },
@@ -79,7 +81,7 @@ const Header = () => {
                         <Select
                             defaultValue="USD"
                             style={{ width: 80 }}
-                            bordered={false}
+                            variant="borderless"
                             className="nav-select"
                             size="large"
                             options={[

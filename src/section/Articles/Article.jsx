@@ -1,4 +1,4 @@
-import "./artical.css";
+import "./Article.css";
 const articals = [
     {
         id: 1,
@@ -32,7 +32,7 @@ const Artical = () => {
             </div>
             <div className="artical-container">
                 {articals.map((artical) => (
-                    <div className="artical-card">
+                    <div className="artical-card" key={artical.id}>
                         <div className="artical-image-container">
                             <p className="artical-type">Trip</p>
                             <img src={artical.image} alt="article" />

@@ -1,5 +1,5 @@
 import React from 'react';
-import './customerdiscount.css';
+import "./CustomerDiscount.css";
 import customerdiscount from '../../assets/img/banner.jpg';
 
 function CustomerDiscount() {

@@ -1,4 +1,4 @@
-import "./discount.css";
+import "./Discount.css";
 
 function Discount() {
     return (
