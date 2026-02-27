@@ -7,9 +7,9 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    box-sizing: border-box;
+    overflow: hidden;
 }
-
-
 
 .footer-content {
     width: 100%;
@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
+    box-sizing: border-box;
 }
 
 .footer-header {
@@ -123,9 +124,8 @@
 
 @media (max-width: 768px) {
     .footer-container {
-        width: 89%;
-        margin-left: auto;
-        margin-right: auto;
+        width: 100%;
+        padding: 40px 20px;
     }
 
     .footer-links-container {

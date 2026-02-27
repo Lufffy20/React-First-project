@@ -11,9 +11,17 @@
 .tour-detail-content-section {
     width: 100%;
     max-width: 1200px;
-    height: 794px;
+    height: auto;
     margin: 0 auto;
     position: relative;
+    padding-bottom: 40px;
+}
+
+.tour-detail-top-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
 }
 
 .tour-detail-header1 {
@@ -21,11 +29,12 @@
     gap: 10px;
     margin-top: 20px;
     margin-left: 0;
+    flex-wrap: wrap;
 }
 
 .tour-detail-header1-section {
     max-width: 788px;
-    height: 250px;
+    height: auto;
     margin-top: 20px;
     margin-left: 0;
 }
@@ -58,22 +67,26 @@
     font-family: 'Inter';
 }
 
+.tour-detail-header1-title p {
+    margin: 0;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
 .tour-detail-info {
     display: flex;
-    margin-left: 110px;
+    margin-left: 0;
     gap: 20px;
     font-size: 14px;
     color: #05073C;
     font-family: 'Inter';
     font-weight: 400;
     align-items: center;
-    margin-top: -30px;
+    margin-top: 10px;
+    flex-wrap: wrap;
 }
 
 .tour-detail-tag {
-    position: absolute;
-    right: 0;
-    top: 199px;
     display: flex;
     gap: 20px;
     font-size: 14px;
@@ -81,6 +94,7 @@
     font-family: 'Inter';
     font-weight: 400;
     align-items: center;
+    margin-bottom: 15px;
 }
 
 .tour-detail-tag a {
@@ -91,17 +105,12 @@
     font-family: 'Inter';
 }
 
-.tour-detail-image-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
-    border-radius: 10px;
-}
-
 .tour-detail-image-section {
-    width: 100%;
-    height: 510px;
+    max-width: 1200px;
+    height: auto;
+    margin: 0 auto;
     border-radius: 10px;
+    position: relative;
     display: grid;
     grid-template-columns: 770px 1fr 1fr;
     grid-template-rows: 250px 250px;
@@ -441,12 +450,12 @@
 .tour-detail-right-column {
     display: flex;
     flex-direction: row;
-    gap: 34px;
+    gap: 50px;
 }
 
 .tour-detail-feature {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: 12px;
 }
@@ -456,7 +465,7 @@
 .tour-detail-ages,
 .tour-detail-languages {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 5px;
     flex-direction: column;
 }
@@ -491,7 +500,7 @@
     font-weight: 400;
     color: #717171;
     margin: 0;
-    text-align: center;
+    text-align: left;
 }
 
 .tour-detail-overview-section {
@@ -1307,6 +1316,13 @@ hr {
         flex-direction: column;
     }
 
+    .tour-detail-top-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        margin-bottom: 10px;
+    }
+
     .tour-detail-header1-section {
         height: auto;
         max-width: 100%;
@@ -1408,13 +1424,6 @@ hr {
         font-size: 28px;
     }
 
-    .tour-detail-image-wrapper {
-        margin: 0 auto;
-        width: 100%;
-        max-width: 500px;
-        position: relative;
-    }
-
     .tour-detail-image-section {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1423,7 +1432,10 @@ hr {
         height: auto;
         border-radius: 10px;
         overflow: hidden;
+        margin: 0 auto;
         width: 100%;
+        max-width: 500px;
+        /* Optional: Prevents it from being too wide on landscape phones */
     }
 
     .tour-detail-image {
@@ -1452,12 +1464,8 @@ hr {
     }
 
     .see-all-photos-btn {
-        bottom: 12px;
-        right: 12px;
-        padding: 5px 12px;
-        font-size: 13px;
-        z-index: 10;
-        /* Positioned absolute relative to .tour-detail-image-wrapper */
+        bottom: 10px;
+        right: 10px;
     }
 
     .review-grid {
@@ -1533,6 +1541,25 @@ hr {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
+    }
+
+    .tour-detail-feature {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tour-detail-duration,
+    .tour-detail-group-size,
+    .tour-detail-ages,
+    .tour-detail-languages {
+        align-items: center;
+    }
+
+    .tour-detail-duration span,
+    .tour-detail-group-size span,
+    .tour-detail-ages span,
+    .tour-detail-languages span {
+        text-align: center;
     }
 
     .tour-detail-ticket-row,
