@@ -1,5 +1,5 @@
 import React from "react";
-import "./customerreviews.css";
+import "./CustomerReviews.css";
 import sectionImage from "../../assets/img/customerreviews.png";
 import { Carousel } from "antd";
 

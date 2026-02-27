@@ -95,12 +95,12 @@ export const toursSlice = createSlice({
     initialState,
     reducers: {
         addTour: (state, action) => {
-            // Give the new tour a unique ID and push it nicely
+            const maxId = state.tours.reduce((max, tour) => Math.max(max, tour.id), 0);
             const newTour = {
                 ...action.payload,
-                id: state.tours.length ? state.tours[state.tours.length - 1].id + 1 : 1,
+                id: maxId + 1,
             };
-            state.tours.push(newTour);
+            state.tours.unshift(newTour);
         },
     },
 });

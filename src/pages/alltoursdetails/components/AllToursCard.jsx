@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const AllToursCard = ({ tour }) => {
+    const navigate = useNavigate();
     return (
         <div className="tour-list-card">
             <div className="card-image-wrapper">
@@ -42,7 +44,7 @@ const AllToursCard = ({ tour }) => {
                     <p className="current-price">From <strong>${tour.price}</strong></p>
                 </div>
 
-                <button className="view-details-btn">View Details</button>
+                <button className="view-details-btn" onClick={() => navigate(`/tour-detail/${tour.id}`)}>View Details</button>
             </div>
         </div>
     );

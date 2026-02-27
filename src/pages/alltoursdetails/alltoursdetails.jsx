@@ -28,6 +28,7 @@ const AllToursDetails = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
+    const [sortBy, setSortBy] = useState('featured');
 
     // Reponsive filter drawer
     const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
@@ -37,7 +38,7 @@ const AllToursDetails = () => {
 
     const initialFilters = {
         tourTypes: [],
-        priceRange: [0, 1000],
+        priceRange: [0, 5000],
         days: [],
         nights: [],
         languages: [],
@@ -57,6 +58,7 @@ const AllToursDetails = () => {
 
     const handleClearFilters = () => {
         setFilters(initialFilters);
+        setSortBy('featured');
         setCurrentPage(1);
     };
 
@@ -68,7 +70,7 @@ const AllToursDetails = () => {
     };
 
     const filteredTours = useMemo(() => {
-        return tours.filter(tour => {
+        const result = tours.filter(tour => {
             // Tour Type
             if (filters.tourTypes.length > 0 && !filters.tourTypes.includes(tour.type)) {
                 return false;
@@ -137,7 +139,25 @@ const AllToursDetails = () => {
 
             return true;
         });
-    }, [tours, filters]);
+
+        // Sort the result
+        return result.sort((a, b) => {
+            switch (sortBy) {
+                case 'priceLowHigh':
+                    return a.price - b.price;
+                case 'priceHighLow':
+                    return b.price - a.price;
+                case 'rating':
+                    return (b.rating || 0) - (a.rating || 0);
+                case 'reviews':
+                    return (b.reviews || 0) - (a.reviews || 0);
+                case 'featured':
+                default:
+                    // Preserve original order or implement specific "featured" logic if you want
+                    return 0;
+            }
+        });
+    }, [tours, filters, sortBy]);
 
     // Pagination logic
     const indexOfLastTour = currentPage * pageSize;
@@ -200,6 +220,8 @@ const AllToursDetails = () => {
                                 totalTours={filteredTours.length}
                                 indexOfFirstTour={indexOfFirstTour}
                                 indexOfLastTour={indexOfLastTour}
+                                sortBy={sortBy}
+                                onSortChange={(val) => setSortBy(val)}
                             />
 
                             <div className="tours-list-container">

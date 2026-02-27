@@ -1,15 +1,15 @@
 import Header from "../../components/home/Header";
-import Discount from "../others/discount";
+import Discount from "../../section/Others/Discount";
 import "./dashboard.css";
 import sectionImage from "../../assets/img/section.jpg";
-import WhyChoose from "../whychoose/WhyChoose";
-import TrendingDestinations from "../TrendingDestinations/TrendingDestinations";
-import FindPopularTours from "../findpopulartours/FindPopularTours";
-import Popularthingstodo from "../Popularthingstodo/Popularthingstodo";
-import TopTrending from "../toptrending/toptrending";
-import CustomerReviews from "../customerreviews/customerreviews";
-import CustomerDiscount from "../others/customerdiscount";
-import Artical from "../articals/artical";
+import WhyChoose from "../../section/WhyChoose/WhyChoose";
+import TrendingDestinations from "../../section/TrendingDestinations/TrendingDestinations";
+import FindPopularTours from "../../section/FindPopularTours/FindPopularTours";
+import Popularthingstodo from "../../section/PopularThingsToDo/PopularThingsToDo";
+import TopTrending from "../../section/TopTrending/TopTrending";
+import CustomerReviews from "../../section/CustomerReviews/CustomerReviews";
+import CustomerDiscount from "../../section/Others/CustomerDiscount";
+import Artical from "../../section/Articles/Article";
 import Footer from "../../components/home/Footer";
 
 function App() {

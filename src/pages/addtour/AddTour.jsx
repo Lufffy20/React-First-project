@@ -28,6 +28,7 @@ const SubmitButton = ({ form, children }) => {
 
     return (
         <Button
+            className="custom-submit-btn"
             type="primary"
             htmlType="submit"
             disabled={!submittable}

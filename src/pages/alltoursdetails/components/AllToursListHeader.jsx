@@ -13,7 +13,7 @@ const AllToursListHeader = ({ totalTours, indexOfFirstTour, indexOfLastTour, sor
                     value={sortBy}
                     onChange={onSortChange}
                     className="results-sort-select"
-                    bordered={false}
+                    variant="borderless"
                     suffixIcon={null}
                     options={[
                         { value: 'featured', label: 'Featured' },
