@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Rate, Upload } from 'antd';
+import { Button, Input, Rate, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import ReviewNode from './ReviewNode';
@@ -33,45 +33,59 @@ const CustomerReviewsSection = () => {
         ratings: { Location: 0, Amenities: 0, Food: 0, Room: 0, Price: 0, TourOperator: 0 }
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const handleRatingChange = (key, value) => {
         setReviewForm(prev => ({ ...prev, ratings: { ...prev.ratings, [key]: value } }));
     };
 
     const handleFormSubmit = async () => {
         if (!reviewForm.name || !reviewForm.email || !reviewForm.comment) {
-            alert("Please fill in the required fields (Name, Email, Comment).");
+            message.error("Please fill in the required fields (Name, Email, Comment).");
             return;
         }
 
-        const base64Images = await Promise.all(
-            reviewForm.images.map(file => {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file.originFileObj || file);
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = error => reject(error);
+        setIsSubmitting(true);
+
+        // Simulated API call delay
+        setTimeout(async () => {
+            try {
+                const base64Images = await Promise.all(
+                    reviewForm.images.map(file => {
+                        return new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(file.originFileObj || file);
+                            reader.onload = () => resolve(reader.result);
+                            reader.onerror = error => reject(error);
+                        });
+                    })
+                );
+
+                const newReview = {
+                    id: Date.now(),
+                    initials: reviewForm.name.substring(0, 2).toUpperCase(),
+                    name: reviewForm.name,
+                    date: dayjs().format("MMMM YYYY"),
+                    title: reviewForm.title || "Review",
+                    desc: reviewForm.comment,
+                    images: base64Images,
+                    helpful: "Helpful",
+                    notHelpful: "Not helpful",
+                    replies: []
+                };
+
+                setReviewsList([newReview, ...reviewsList]);
+                setReviewForm({
+                    name: '', email: '', title: '', comment: '', images: [],
+                    ratings: { Location: 0, Amenities: 0, Food: 0, Room: 0, Price: 0, TourOperator: 0 }
                 });
-            })
-        );
-
-        const newReview = {
-            id: Date.now(),
-            initials: reviewForm.name.substring(0, 2).toUpperCase(),
-            name: reviewForm.name,
-            date: dayjs().format("MMMM YYYY"),
-            title: reviewForm.title || "Review",
-            desc: reviewForm.comment,
-            images: base64Images,
-            helpful: "Helpful",
-            notHelpful: "Not helpful",
-            replies: []
-        };
-
-        setReviewsList([newReview, ...reviewsList]);
-        setReviewForm({
-            name: '', email: '', title: '', comment: '', images: [],
-            ratings: { Location: 0, Amenities: 0, Food: 0, Room: 0, Price: 0, TourOperator: 0 }
-        });
+                message.success("Review submitted successfully!");
+            } catch (error) {
+                message.error("Failed to submit review.");
+            } finally {
+                setIsSubmitting(false);
+            }
+        }, 1500);
     };
 
     const handleInlineReplySubmit = (parentId) => {
@@ -240,15 +254,43 @@ const CustomerReviewsSection = () => {
                     <Upload
                         multiple
                         listType="picture"
-                        beforeUpload={() => false}
+                        accept=".png,.jpg,.jpeg"
+                        beforeUpload={(file) => {
+                            const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+                            if (!isJpgOrPng) {
+                                message.error('You can only upload JPG/PNG file!');
+                            }
+                            return false; // Always return false to stop auto-uploading
+                        }}
+                        maxCount={4}
                         fileList={reviewForm.images}
-                        onChange={({ fileList }) => setReviewForm({ ...reviewForm, images: fileList })}
+                        onChange={({ fileList }) => {
+                            // Filter out any non JPG/PNG files that might have slipped through
+                            const validFiles = fileList.filter(file => {
+                                // If the file object doesn't have a type (e.g. some edge cases or already uploaded files), just check extension or allow
+                                if (file.type) {
+                                    return file.type === 'image/jpeg' || file.type === 'image/png';
+                                }
+                                return true;
+                            });
+
+                            if (validFiles.length > 4) {
+                                message.warning("You can only upload a maximum of 4 images.");
+                                setReviewForm({ ...reviewForm, images: validFiles.slice(0, 4) });
+                            } else {
+                                setReviewForm({ ...reviewForm, images: validFiles });
+                            }
+                        }}
                     >
-                        <Button icon={<UploadOutlined />}>Upload Images</Button>
+                        {reviewForm.images.length < 4 && (
+                            <Button icon={<UploadOutlined />}>Upload Images (Max 4)</Button>
+                        )}
                     </Upload>
 
                     <Input.TextArea placeholder="Comment *" rows={4} className="reply-textarea" value={reviewForm.comment} onChange={e => setReviewForm({ ...reviewForm, comment: e.target.value })} />
-                    <Button type="primary" className="reply-submit-btn" onClick={handleFormSubmit}>Post Comment</Button>
+                    <Button type="primary" className="reply-submit-btn" loading={isSubmitting} onClick={handleFormSubmit}>
+                        {isSubmitting ? 'Posting...' : 'Post Comment'}
+                    </Button>
                 </div>
             </div>
         </div>

@@ -1,11 +1,25 @@
 import React, { useState } from 'react';
-import { Button, Input } from 'antd';
+import { Button, Input, Modal } from 'antd';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const ReviewNode = ({ review, depth = 0, replyingTo, setReplyingTo, replyText, setReplyText, handleInlineReplySubmit }) => {
     const [visibleReplies, setVisibleReplies] = useState(3);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [initialSlide, setInitialSlide] = useState(0);
+
     const marginLeft = depth === 1 ? '40px' : '0px';
     const borderLeft = depth === 1 ? '2px solid #eaeaea' : 'none';
     const paddingLeft = depth === 1 ? '20px' : '0px';
+
+    const openImageModal = (index) => {
+        setInitialSlide(index);
+        setIsImageModalOpen(true);
+    };
 
     return (
         <div className="tour-detail-single-review" style={{ marginLeft, borderLeft, paddingLeft }}>
@@ -28,9 +42,42 @@ const ReviewNode = ({ review, depth = 0, replyingTo, setReplyingTo, replyText, s
 
                 {review.images && review.images.length > 0 && (
                     <div className="tour-detail-review-images">
-                        {review.images.map((img, index) => (
-                            <img key={index} src={img} alt={`review-img-${index}`} />
-                        ))}
+                        {review.images.slice(0, 2).map((img, index) => {
+                            const isLastVisible = index === 1;
+                            const remainingCount = review.images.length - 2;
+                            return (
+                                <div
+                                    key={index}
+                                    style={{ position: 'relative', cursor: 'pointer', width: '130px', height: '130px' }}
+                                    onClick={() => openImageModal(index)}
+                                >
+                                    <img
+                                        src={img}
+                                        alt={`review-img-${index}`}
+                                        style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
+                                    />
+                                    {isLastVisible && remainingCount > 0 && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            width: '100%',
+                                            height: '100%',
+                                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                            borderRadius: '12px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            color: 'white',
+                                            fontSize: '20px',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            +{remainingCount}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 )}
 
@@ -108,6 +155,50 @@ const ReviewNode = ({ review, depth = 0, replyingTo, setReplyingTo, replyText, s
                     )}
                 </div>
             )}
+
+            <Modal
+                title="Review Photos"
+                centered
+                open={isImageModalOpen}
+                onOk={() => setIsImageModalOpen(false)}
+                onCancel={() => setIsImageModalOpen(false)}
+                footer={null}
+                destroyOnClose
+                width={{
+                    xs: '90%',
+                    sm: '80%',
+                    md: '70%',
+                    lg: '60%',
+                    xl: '50%',
+                    xxl: '40%',
+                }}
+            >
+                <div style={{ padding: '20px 0' }}>
+                    <Swiper
+                        modules={[Navigation, Pagination]}
+                        spaceBetween={20}
+                        slidesPerView={1}
+                        initialSlide={initialSlide}
+                        navigation
+                        pagination={{ clickable: true }}
+                    >
+                        {review.images?.map((img, index) => (
+                            <SwiperSlide key={index}>
+                                <img
+                                    src={img}
+                                    alt={`review-image-${index}`}
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '70vh',
+                                        objectFit: 'contain',
+                                        borderRadius: '8px'
+                                    }}
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </div>
+            </Modal>
         </div>
     );
 };
