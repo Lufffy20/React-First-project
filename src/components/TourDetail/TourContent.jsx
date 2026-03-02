@@ -1,15 +1,8 @@
 import React from 'react';
-import { Flex, Steps, Calendar } from 'antd';
+import { Flex, Steps } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-
-const onPanelChange = (value, mode) => {
-    console.log(value, mode);
-};
-
-const disabledDate = (current) => {
-    return current && current < dayjs().startOf('day');
-};
+import DualMonthCalendar from './DualMonthCalendar';
 
 const steps = [
     { title: 'Day 1: Airport pickup' },
@@ -128,11 +121,7 @@ const TourContent = ({ tour }) => {
             <div className="tour-detail-availability-calendar-section">
                 <h2>Availability Calendar</h2>
                 <div className="tour-detail-availability-calendar-content">
-                    <Calendar
-                        fullscreen={false}
-                        onPanelChange={onPanelChange}
-                        disabledDate={disabledDate}
-                    />
+                    <DualMonthCalendar />
                 </div>
             </div>
 
