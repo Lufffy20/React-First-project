@@ -5,13 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: [
-      "toursworld-w4wh.onrender.com"
-    ]
+    allowedHosts: true
   },
   preview: {
-    allowedHosts: [
-      "toursworld-w4wh.onrender.com"
-    ]
+    allowedHosts: true
   }
 })
