@@ -7,7 +7,7 @@ import DualMonthCalendar from './DualMonthCalendar';
 const steps = [
     { title: 'Day 1: Airport pickup' },
     { title: 'Day 2: Temples & River Cruise' },
-    { title: 'Day 3: Massage & Overnight Train', description: 'Like on all of our trips, we can collect you from the airport when you land and take you directly to your hotel.The first Day is just a check-in Day so you have this freedom to explore the city and get settled in.' },
+    { title: 'Day 3: Massage & Overnight Train', content: 'Like on all of our trips, we can collect you from the airport when you land and take you directly to your hotel.The first Day is just a check-in Day so you have this freedom to explore the city and get settled in.' },
     { title: 'Day 4: Khao Sok National Park' },
     { title: 'Day 5: Travel to Koh Phangan' },
     { title: 'Day 6: Morning Chill & Muay Thai Lesson' },

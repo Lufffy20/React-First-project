@@ -163,7 +163,7 @@ const ReviewNode = ({ review, depth = 0, replyingTo, setReplyingTo, replyText, s
                 onOk={() => setIsImageModalOpen(false)}
                 onCancel={() => setIsImageModalOpen(false)}
                 footer={null}
-                destroyOnClose
+                destroyOnHidden
                 width={{
                     xs: '90%',
                     sm: '80%',

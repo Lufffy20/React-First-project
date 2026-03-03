@@ -236,7 +236,7 @@ const AllToursDetails = () => {
                             onClose={closeFilterDrawer}
                             open={isFilterDrawerOpen}
                             className="mobile-filter-drawer"
-                            width={320}
+                            size="default"
                         >
                             <AllToursSidebar
                                 filters={filters}
