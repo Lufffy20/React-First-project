@@ -100,6 +100,7 @@
     font-weight: 500;
     margin-left: 20px;
     margin-bottom: 5px;
+    margin-top: auto;
 }
 
 .tour-days-from {
@@ -109,7 +110,7 @@
     color: #777;
     margin-left: 20px;
     margin-right: 20px;
-    margin-top: auto;
+    margin-top: 5px;
 }
 
 .find-popular-tours-content hr {
