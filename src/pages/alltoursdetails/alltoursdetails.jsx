@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import "./alltoursdetails.css";
 import Header from "../../components/home/Header";
 import Footer from "../../components/home/Footer";
@@ -26,7 +27,9 @@ const AllToursDetails = () => {
         return Array.from(languages).sort();
     }, [tours]);
 
-    const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const initialPage = parseInt(searchParams.get('page')) || 1;
+    const [currentPage, setCurrentPage] = useState(initialPage);
     const [pageSize, setPageSize] = useState(5);
     const [sortBy, setSortBy] = useState('featured');
 
@@ -54,16 +57,28 @@ const AllToursDetails = () => {
             [filterName]: value
         }));
         setCurrentPage(1); // Reset to first page on filter change
+        setSearchParams(prev => {
+            prev.set('page', '1');
+            return prev;
+        });
     };
 
     const handleClearFilters = () => {
         setFilters(initialFilters);
         setSortBy('featured');
         setCurrentPage(1);
+        setSearchParams(prev => {
+            prev.set('page', '1');
+            return prev;
+        });
     };
 
     const handlePageChange = (page, size) => {
         setCurrentPage(page);
+        setSearchParams(prev => {
+            prev.set('page', page);
+            return prev;
+        });
         if (size !== pageSize) {
             setPageSize(size);
         }

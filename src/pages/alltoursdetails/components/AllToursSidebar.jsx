@@ -55,7 +55,7 @@ const AllToursSidebar = ({ filters, onFilterChange, onClearFilters, availableLan
         <aside className="details-sidebar">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 'bold' }}>Filters</h3>
-                <Button type="link" onClick={onClearFilters} style={{ padding: 0, color: '#eb6e34' }}>
+                <Button type="link" onClick={onClearFilters} style={{ padding: 0, color: '#1f2937' }}>
                     Clear All
                 </Button>
             </div>
