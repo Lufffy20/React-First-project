@@ -1,32 +1,11 @@
 .side-design-container {
-    top: 0;
-    left: 0;
     width: 100%;
-    min-height: 100vh;
+    height: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: flex-end;
+    /* Align card content properly within the Col */
     align-items: center;
-    padding-right: 0;
-    z-index: 1000;
-    padding-left: 400px;
-}
-
-@media (max-width: 1700px) {
-    .side-design-container {
-        padding-left: 150px;
-    }
-}
-
-@media (max-width: 1350px) {
-    .side-design-container {
-        padding-left: 50px;
-    }
-}
-
-@media (max-width: 992px) {
-    .side-design-container {
-        display: none;
-    }
+    z-index: 10;
 }
 
 
@@ -62,6 +41,7 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    text-align: center;
 }
 
 .slide-image {

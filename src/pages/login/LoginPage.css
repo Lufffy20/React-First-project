@@ -1,14 +1,13 @@
 .container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100vh;
+    background-color: transparent;
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    padding-right: 0;
     z-index: 1000;
+    overflow: hidden;
+    position: relative;
 }
 
 .card {
@@ -20,12 +19,10 @@
     border-radius: 25px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
     border: 2px solid rgb(201, 193, 193);
-    margin-right: 400px;
     height: 85vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow-y: auto;
     position: relative;
     z-index: 10;
 }
@@ -37,9 +34,8 @@
 }
 
 .card p {
-    text-align: left;
     color: #777;
-    margin-bottom: 30px;
+    margin-bottom: 19px;
     font-size: 16px;
 }
 
@@ -78,7 +74,8 @@
     border-radius: 50px;
     font-size: 16px;
     transition: all 0.3s ease;
-    margin-top: 50px;
+    margin: 25px auto 0 auto;
+    display: block;
 }
 
 
@@ -175,22 +172,10 @@ h2 {
 }
 
 /* Responsive Styles */
-@media (max-width: 1700px) {
-    .card {
-        margin-right: 150px;
-    }
-}
-
 @media screen and (max-width: 1540px) {
     .group-1171274837-2 {
         top: 710px !important;
         left: 1300px;
-    }
-}
-
-@media (max-width: 1350px) {
-    .card {
-        margin-right: 50px;
     }
 }
 
@@ -203,25 +188,8 @@ h2 {
         display: none;
     }
 
-    /* Adjust Container for single column center layout */
-    .container {
-        justify-content: center;
-        flex-direction: column;
-        padding: 20px;
-    }
-
-    /* Hide Side Design Panel */
-    .side-design-container {
-        display: none;
-    }
-
     /* Adjust Login Card */
     .card {
-        margin-right: 0;
-        width: 100%;
-        max-width: 450px;
-        height: auto;
-        min-height: 600px;
         padding: 40px;
     }
 }

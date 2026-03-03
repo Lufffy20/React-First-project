@@ -1,34 +1,29 @@
 /* ===== Container ===== */
 .signup-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100vh;
+    background-color: transparent;
+    width: 100vw;
+    height: 100vh;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     z-index: 1000;
+    overflow: hidden;
+    position: relative;
 }
 
 /* ===== Card ===== */
 .signup-card {
     width: 100%;
     max-width: 500px;
-    /* consistent width */
     padding: 30px;
     height: 85vh;
-    /* consistent height */
-    overflow-y: auto;
-
+    overflow: auto;
+    /* Allow form to scroll if needed internally */
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 25px;
     box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
     border: 1px solid rgb(220, 220, 220);
-    margin-right: 400px;
-    /* balanced with side design */
-
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -79,26 +74,13 @@
 /* ===== Responsive ===== */
 @media (max-width: 992px) {
 
-    .signup-container {
-        justify-content: center;
-        flex-direction: column;
-        padding: 20px;
-    }
-
-    .signup-card {
-        margin-right: 0;
-        max-width: 340px;
-        padding: 20px;
-        max-height: none;
-    }
-
     .signup-ellipse-1,
     .signup-ellipse-2,
     .signup-ellipse-3 {
         display: none;
     }
 
-    .side-design-container {
-        display: none;
+    .signup-card {
+        padding: 20px;
     }
 }
