@@ -8,5 +8,10 @@ export default defineConfig({
     allowedHosts: [
       "toursworld-w4wh.onrender.com"
     ]
+  },
+  preview: {
+    allowedHosts: [
+      "toursworld-w4wh.onrender.com"
+    ]
   }
 })
