@@ -1204,7 +1204,14 @@ hr {
 
 .tour-detail-swiper-container .swiper {
     padding: 20px 15px;
-    /* Adds extra internal padding inside Swiper to prevent hover cutoff */
+}
+
+.tour-detail-swiper-container .swiper-wrapper {
+    align-items: stretch;
+}
+
+.tour-detail-swiper-container .swiper-slide {
+    height: auto;
 }
 
 .tour-detail-swiper-button-prev,
