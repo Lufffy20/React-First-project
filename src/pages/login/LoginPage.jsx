@@ -44,16 +44,15 @@ const App = () => {
             <Row
                 justify="center"
                 align="middle"
-                gutter={[40, 40]} // Gap between columns
-                style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', zIndex: 10 }}
+                gutter={[40, 40]}
+                className='login-row'
             >
-                {/* Side Design Column */}
                 <Col xs={0} sm={0} md={0} lg={12} xl={10}>
                     <SideDesign />
                 </Col>
 
-                {/* Login Form Column */}
-                <Col xs={24} sm={24} md={18} lg={12} xl={10} style={{ display: 'flex', justifyContent: 'center' }}>
+
+                <Col xs={24} sm={24} md={18} lg={12} xl={10} className='login-col'>
                     <div className="card">
                         <div className="content">
                             <Form

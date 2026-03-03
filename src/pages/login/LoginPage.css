@@ -171,6 +171,18 @@ h2 {
     position: absolute;
 }
 
+.login-row {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    z-index: 10;
+}
+
+.login-col {
+    display: flex;
+    justify-content: center;
+}
+
 /* Responsive Styles */
 @media screen and (max-width: 1540px) {
     .group-1171274837-2 {
@@ -186,10 +198,5 @@ h2 {
     .ellipse-2,
     .ellipse-3 {
         display: none;
-    }
-
-    /* Adjust Login Card */
-    .card {
-        padding: 40px;
     }
 }

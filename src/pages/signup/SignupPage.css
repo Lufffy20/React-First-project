@@ -31,6 +31,18 @@
     z-index: 10;
 }
 
+.signup-row {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    z-index: 10;
+}
+
+.signup-col {
+    display: flex;
+    justify-content: center;
+}
+
 /* ===== Reduce Form Spacing ===== */
 .signup-card .ant-form-item {
     margin-bottom: 8px !important;

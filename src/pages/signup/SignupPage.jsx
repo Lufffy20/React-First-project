@@ -38,13 +38,13 @@ const App = () => {
                 justify="center"
                 align="middle"
                 gutter={[40, 40]}
-                style={{ width: '100%', maxWidth: '1200px', margin: '0 auto', zIndex: 10 }}
+                className='signup-row'
             >
                 <Col xs={0} sm={0} md={0} lg={12} xl={10}>
                     <SideDesign />
                 </Col>
 
-                <Col xs={24} sm={24} md={18} lg={12} xl={10} style={{ display: 'flex', justifyContent: 'center' }}>
+                <Col xs={24} sm={24} md={18} lg={12} xl={10} className='signup-col'>
                     <div className="signup-card">
                         <div className="signup-content">
                             <Form
