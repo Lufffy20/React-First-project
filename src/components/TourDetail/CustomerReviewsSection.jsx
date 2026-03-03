@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Rate, Upload, message } from 'antd';
+import { Button, Input, Rate, Upload, message, Form } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import ReviewNode from './ReviewNode';
@@ -24,6 +24,7 @@ const userReviews = [
 ];
 
 const CustomerReviewsSection = () => {
+    const [form] = Form.useForm();
     const [reviewsList, setReviewsList] = useState(userReviews);
     const [visibleCount, setVisibleCount] = useState(3);
     const [replyingTo, setReplyingTo] = useState(null);
@@ -40,11 +41,6 @@ const CustomerReviewsSection = () => {
     };
 
     const handleFormSubmit = async () => {
-        if (!reviewForm.name || !reviewForm.email || !reviewForm.comment) {
-            message.error("Please fill in the required fields (Name, Email, Comment).");
-            return;
-        }
-
         setIsSubmitting(true);
 
         // Simulated API call delay
@@ -79,6 +75,7 @@ const CustomerReviewsSection = () => {
                     name: '', email: '', title: '', comment: '', images: [],
                     ratings: { Location: 0, Amenities: 0, Food: 0, Room: 0, Price: 0, TourOperator: 0 }
                 });
+                form.resetFields();
                 message.success("Review submitted successfully!");
             } catch (error) {
                 message.error("Failed to submit review.");
@@ -244,12 +241,24 @@ const CustomerReviewsSection = () => {
                     </div>
                 </div>
 
-                <div className="tour-detail-reply-form">
+                <Form
+                    form={form}
+                    className="tour-detail-reply-form"
+                    onFinish={handleFormSubmit}
+                    initialValues={{ name: reviewForm.name, email: reviewForm.email, title: reviewForm.title, comment: reviewForm.comment }}
+                    onValuesChange={(changedValues) => setReviewForm(prev => ({ ...prev, ...changedValues }))}
+                >
                     <div className="reply-form-row">
-                        <Input placeholder="Name *" className="reply-input" value={reviewForm.name} onChange={e => setReviewForm({ ...reviewForm, name: e.target.value })} />
-                        <Input placeholder="Email *" className="reply-input" value={reviewForm.email} onChange={e => setReviewForm({ ...reviewForm, email: e.target.value })} />
+                        <Form.Item name="name" rules={[{ required: true, message: 'Please enter your name!' }]} style={{ width: '100%', marginBottom: 0 }}>
+                            <Input placeholder="Name *" className="reply-input" style={{ width: '100%', marginBottom: 0 }} />
+                        </Form.Item>
+                        <Form.Item name="email" rules={[{ required: true, type: 'email', message: 'Please enter a valid email!' }]} style={{ width: '100%', marginBottom: 0 }}>
+                            <Input placeholder="Email *" className="reply-input" style={{ width: '100%', marginBottom: 0 }} />
+                        </Form.Item>
                     </div>
-                    <Input placeholder="Title" className="reply-input-full" value={reviewForm.title} onChange={e => setReviewForm({ ...reviewForm, title: e.target.value })} />
+                    <Form.Item name="title" style={{ marginBottom: '16px', marginTop: '16px' }}>
+                        <Input placeholder="Title" className="reply-input-full" style={{ marginBottom: 0 }} />
+                    </Form.Item>
 
                     <Upload
                         multiple
@@ -287,11 +296,15 @@ const CustomerReviewsSection = () => {
                         )}
                     </Upload>
 
-                    <Input.TextArea placeholder="Comment *" rows={4} className="reply-textarea" value={reviewForm.comment} onChange={e => setReviewForm({ ...reviewForm, comment: e.target.value })} />
-                    <Button type="primary" className="reply-submit-btn" loading={isSubmitting} onClick={handleFormSubmit}>
-                        {isSubmitting ? 'Posting...' : 'Post Comment'}
-                    </Button>
-                </div>
+                    <Form.Item name="comment" rules={[{ required: true, message: 'Please enter your comment!' }]} style={{ marginBottom: '16px' }}>
+                        <Input.TextArea placeholder="Comment *" rows={4} className="reply-textarea" style={{ marginBottom: 0 }} />
+                    </Form.Item>
+                    <Form.Item style={{ marginBottom: 0 }}>
+                        <Button type="primary" htmlType="submit" className="reply-submit-btn" loading={isSubmitting}>
+                            {isSubmitting ? 'Posting...' : 'Post Comment'}
+                        </Button>
+                    </Form.Item>
+                </Form>
             </div>
         </div>
     );
