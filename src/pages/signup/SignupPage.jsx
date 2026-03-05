@@ -80,13 +80,13 @@ const App = () => {
                                     </Col>
                                 </Row>
 
-                                <Form.Item
+                                {/* <Form.Item
                                     label="Company Name"
                                     name="companyName"
                                     rules={[{ required: true, message: 'Please enter your company name!' }]}
                                 >
                                     <Input placeholder="Search Company" />
-                                </Form.Item>
+                                </Form.Item> */}
 
                                 <Form.Item
                                     label="Phone Number"
