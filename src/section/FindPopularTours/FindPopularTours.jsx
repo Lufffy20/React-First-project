@@ -27,11 +27,7 @@ const FindPopularTours = () => {
     }));
 
     if (tours.length === 0) {
-        return (
-            <div className="find-popular-tours-section" style={{ textAlign: 'center', padding: '50px' }}>
-                <Spin size="large" description="Finding Popular Tours..." />
-            </div>
-        );
+        return null;
     }
 
     return (

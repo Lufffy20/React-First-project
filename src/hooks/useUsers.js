@@ -10,13 +10,19 @@ export const useUsers = () => {
         setLoading(true);
         try {
             const response = await getUsersApi();
-            setUsers(response.data);
+            // Handle paginated response: { data, total, page, limit }
+            const usersData = response.data?.data || response.data || [];
+            if (response.data?.total !== undefined) {
+                // You might want to add setTotalUsers(response.data.total) if needed in UI
+            }
+            setUsers(usersData);
         } catch (error) {
             console.error('Fetch Users Error:', error);
         } finally {
             setLoading(false);
         }
     };
+
 
     const handleCreateUser = async (values) => {
         try {
