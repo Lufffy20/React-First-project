@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 import "./FindPopularTours.css";
 import TourCard from "../../components/Tourcard/TourCard";
 import { Link } from "react-router-dom";
+import { Spin } from "antd";
+
 const FindPopularTours = () => {
-    // Fetch tours from Redux store
-    const tours = useSelector((state) => state.tours.tours) || [];
+    // Get tours from Redux store (populated by useTours in dashboard)
+    const { tours } = useSelector((state) => state.tours);
 
     // Sort by reviews to get "popular" ones, take top 8
     const popularTours = [...tours]
@@ -15,13 +17,22 @@ const FindPopularTours = () => {
     // Map Redux tour model to what TourCard expects
     const mappedTours = popularTours.map((tour) => ({
         id: tour.id,
-        name: tour.location || tour.title,
+        name: tour.title,
+        location: tour.location,
         description: tour.description,
         rating: `${tour.rating}(${tour.reviews}+)`,
         days: tour.duration,
         from: `$${tour.price}`,
         image: tour.image
     }));
+
+    if (tours.length === 0) {
+        return (
+            <div className="find-popular-tours-section" style={{ textAlign: 'center', padding: '50px' }}>
+                <Spin size="large" description="Finding Popular Tours..." />
+            </div>
+        );
+    }
 
     return (
         <div className="find-popular-tours-section">
@@ -38,6 +49,5 @@ const FindPopularTours = () => {
         </div>
     );
 };
-
 
 export default FindPopularTours;

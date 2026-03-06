@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { store, persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App } from 'antd';
 import { antdThemeConfig } from './themeConfig';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,7 +15,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
       <PersistGate loading={<div>Loading Redux...</div>} persistor={persistor}>
         <ConfigProvider theme={antdThemeConfig}>
-          <AppRoutes />
+          <App>
+            <AppRoutes />
+          </App>
         </ConfigProvider>
       </PersistGate>
     </Provider>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import App from "../App";
 import LoginPage from "../pages/login/LoginPage";
 import SignupPage from "../pages/signup/SignupPage";
@@ -7,8 +7,15 @@ import UserList from "../pages/signup/UserList";
 import Dashboard from "../pages/home/dashboard";
 import NotFoundPage from "../components/login/NotFoundPage";
 import AllToursDetails from "../pages/alltoursdetails/alltoursdetails";
-import AddTour from "../pages/addtour/AddTour";
 import TourDetail from "../pages/tourdetailforone/tourdetail";
+import ResetPasswordPage from "../pages/resetpassword/ResetPasswordPage";
+import AdminLayout from "../pages/admin/AdminLayout";
+import AdminHome from "../pages/admin/AdminHome";
+import AdminUsers from "../pages/admin/AdminUsers";
+import AdminTours from "../pages/admin/AdminTours";
+import AddTour from "../pages/admin/AddTour";
+import EditTour from "../pages/admin/EditTour";
+import ProtectedRoute from "../components/common/ProtectedRoute";
 
 function AppRoutes() {
     return (
@@ -17,14 +24,27 @@ function AppRoutes() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/user-list" element={<UserList />} />
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                {/* 404 Route */}
+                <Route path="/user-list" element={<ProtectedRoute><UserList /></ProtectedRoute>} />
+
+                {/* Protected Dashboard Routes */}
+                <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
+                {/* Protected Admin Routes with Nested Layout */}
+                <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+                    <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                    <Route path="dashboard" element={<AdminHome />} />
+                    <Route path="users" element={<AdminUsers />} />
+                    <Route path="tours" element={<AdminTours />} />
+                    <Route path="tours/add" element={<AddTour />} />
+                    <Route path="tours/edit/:id" element={<EditTour />} />
+                    {/* Future Admin Pages: settings */}
+                </Route>
+
                 <Route path="*" element={<NotFoundPage />} />
-                <Route path="/all-tours-details" element={<AllToursDetails />} />
-                <Route path="/add-tour" element={<AddTour />} />
-                <Route path="/tour-detail/:id" element={<TourDetail />} />
+                <Route path="/all-tours-details" element={<ProtectedRoute><AllToursDetails /></ProtectedRoute>} />
+                <Route path="/tour-detail/:id" element={<ProtectedRoute><TourDetail /></ProtectedRoute>} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Routes>
         </BrowserRouter>
     );

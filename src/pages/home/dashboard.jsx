@@ -10,9 +10,13 @@ import TopTrending from "../../section/TopTrending/TopTrending";
 import CustomerReviews from "../../section/CustomerReviews/CustomerReviews";
 import CustomerDiscount from "../../section/Others/CustomerDiscount";
 import Artical from "../../section/Articles/Article";
+import { useTours } from "../../hooks/useTours";
 import Footer from "../../components/home/Footer";
 
 function App() {
+    // Trigger initial tours fetch
+    useTours();
+
     return (
         <div className="main-container">
             <Header />

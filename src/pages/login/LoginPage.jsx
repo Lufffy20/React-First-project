@@ -1,37 +1,24 @@
 import React from 'react';
 import { Button, Checkbox, Form, Input, message, Row, Col } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { login } from '../../redux/auth/authSlice';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useLogin } from '../../hooks/useAuth';
 import './LoginPage.css';
 import SideDesign from '../../components/login/SideDesign';
 
 const App = () => {
 
-    const users = useSelector((state) => state.user.users);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { loading, handleLogin } = useLogin();
 
-    const onFinish = (values) => {
-
-        const foundUser = users.find(
-            (user) =>
-                user.email === values.email &&
-                user.password === values.password
-        );
-
-        if (foundUser) {
-            dispatch(login(foundUser)); // Dispatch login action to store Auth session
-            message.success("Login Successful 🎉");
-            navigate("/dashboard");
-        } else {
-            message.error("Invalid email or password");
+    // Check if user just verified their email
+    React.useEffect(() => {
+        if (searchParams.get('verified') === 'true') {
+            message.success("Email verified successfully! You can now login. 🎉");
+            // URL se verified parameter hata dete hain taaki refresh hone par message wapas na aaye
+            searchParams.delete('verified');
+            setSearchParams(searchParams);
         }
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+    }, [searchParams, setSearchParams]);
 
     return (
         <div className="container">
@@ -60,8 +47,7 @@ const App = () => {
                                 layout="vertical"
                                 style={{ width: '100%' }}
                                 initialValues={{ remember: true }}
-                                onFinish={onFinish}
-                                onFinishFailed={onFinishFailed}
+                                onFinish={handleLogin}
                                 autoComplete="off"
                             >
 
@@ -98,6 +84,7 @@ const App = () => {
                                         htmlType="submit"
                                         size="large"
                                         style={{ width: '100%' }}
+                                        loading={loading}
                                     >
                                         Sign In
                                     </Button>
