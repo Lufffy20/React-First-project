@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "./alltoursdetails.css";
 import Header from "../../components/home/Header";
@@ -9,9 +8,12 @@ import { MenuOutlined } from '@ant-design/icons';
 import AllToursSidebar from "./components/AllToursSidebar";
 import AllToursListHeader from "./components/AllToursListHeader";
 import AllToursCard from "./components/AllToursCard";
+import { useTours } from "../../hooks/useTours";
+import { Spin } from "antd";
 
 const AllToursDetails = () => {
-    const tours = useSelector(state => state.tours.tours || []);
+    // We now extract totalTours and fetchTours as well
+    const { tours, totalTours, loading, fetchTours } = useTours();
 
     const dynamicLanguages = useMemo(() => {
         const languages = new Set();
@@ -51,6 +53,44 @@ const AllToursDetails = () => {
 
     const [filters, setFilters] = useState(initialFilters);
 
+    // Fetch tours from backend whenever filters, sort, or pagination changes
+    React.useEffect(() => {
+        const params = {
+            page: currentPage,
+            limit: pageSize,
+            sortBy: sortBy
+        };
+
+        if (filters.tourTypes.length > 0) params.tourType = filters.tourTypes.join(',');
+        if (filters.priceRange) {
+            params.minPrice = filters.priceRange[0];
+            params.maxPrice = filters.priceRange[1];
+        }
+
+        // Map days filter (e.g. "3 Days", "5+ Days") to minDays
+        if (filters.days.length > 0) {
+            // Simplified: just taking the minimum selected day for the backend query
+            let minDays = 1000;
+            filters.days.forEach(day => {
+                if (day === "5+ Days") minDays = Math.min(minDays, 5);
+                else {
+                    const match = day.match(/(\d+)/);
+                    if (match) minDays = Math.min(minDays, parseInt(match[1], 10));
+                }
+            });
+            if (minDays !== 1000) params.minDays = minDays;
+        }
+
+        if (filters.minRating > 0) params.minRating = filters.minRating;
+        if (filters.languages.length > 0) params.languages = filters.languages.join(',');
+        if (filters.specials.length > 0) params.specials = filters.specials.join(',');
+
+        // Note: The nights filter is omitted from backend payload for simplicity, 
+        // usually days is enough, but can be added if backend supports it.
+
+        fetchTours({ params });
+    }, [filters, sortBy, currentPage, pageSize]);
+
     const handleFilterChange = (filterName, value) => {
         setFilters(prev => ({
             ...prev,
@@ -81,125 +121,12 @@ const AllToursDetails = () => {
         });
         if (size !== pageSize) {
             setPageSize(size);
+            setCurrentPage(1);
         }
     };
 
-    const filteredTours = useMemo(() => {
-        const result = tours.filter(tour => {
-            // Tour Type
-            if (filters.tourTypes.length > 0 && !filters.tourTypes.includes(tour.type)) {
-                return false;
-            }
-
-            // Price Range
-            if (tour.price < filters.priceRange[0] || tour.price > filters.priceRange[1]) {
-                return false;
-            }
-
-            // Duration: days
-            if (filters.days.length > 0) {
-                const daysMatch = tour.duration?.match(/(\d+)\s*Days?/i);
-                const tourDays = daysMatch ? parseInt(daysMatch[1], 10) : -1;
-
-                const matchesDay = filters.days.some(day => {
-                    if (day === "5+ Days") return tourDays >= 5;
-                    const filterNumMatch = day.match(/(\d+)/);
-                    if (filterNumMatch) {
-                        return tourDays === parseInt(filterNumMatch[1], 10);
-                    }
-                    return false;
-                });
-                if (!matchesDay) return false;
-            }
-
-            // Duration: nights
-            if (filters.nights.length > 0) {
-                const nightsMatch = tour.duration?.match(/(\d+)\s*Nights?/i);
-                const tourNights = nightsMatch ? parseInt(nightsMatch[1], 10) : -1;
-
-                const matchesNight = filters.nights.some(night => {
-                    const filterNumMatch = night.match(/(\d+)/);
-                    if (filterNumMatch) {
-                        return tourNights === parseInt(filterNumMatch[1], 10);
-                    }
-                    return false;
-                });
-                if (!matchesNight) return false;
-            }
-
-            // Rating
-            if (filters.minRating > 0 && (tour.rating || 0) < filters.minRating) {
-                return false;
-            }
-
-            // Language
-            if (filters.languages.length > 0) {
-                if (!tour.language) return false;
-
-                // Check whether tour.language was saved as an Array (from updated form) or String (old format)
-                if (Array.isArray(tour.language)) {
-                    // Using `some` so if the tour is available in ANY of the selected languages, it will show up
-                    const hasSelectedLanguage = filters.languages.some(lang => tour.language.includes(lang));
-                    if (!hasSelectedLanguage) return false;
-                } else {
-                    if (!filters.languages.includes(tour.language)) return false;
-                }
-            }
-
-            // Specials
-            if (filters.specials.length > 0) {
-                if (filters.specials.includes("Best Price Guarantee") && !tour.bestPrice) return false;
-                if (filters.specials.includes("Free Cancellation") && !tour.freeCancel) return false;
-            }
-
-            return true;
-        });
-
-        // Sort the result
-        return result.sort((a, b) => {
-            switch (sortBy) {
-                case 'priceLowHigh':
-                    return a.price - b.price;
-                case 'priceHighLow':
-                    return b.price - a.price;
-                case 'rating':
-                    return (b.rating || 0) - (a.rating || 0);
-                case 'reviews':
-                    return (b.reviews || 0) - (a.reviews || 0);
-                case 'featured':
-                default:
-                    // Preserve original order or implement specific "featured" logic if you want
-                    return 0;
-            }
-        });
-    }, [tours, filters, sortBy]);
-
-    // Sorting logic based on sortBy dropdown
-    const sortedTours = useMemo(() => {
-        const sorted = [...filteredTours];
-
-        switch (sortBy) {
-            case 'priceLowHigh':
-                return sorted.sort((a, b) => a.price - b.price);
-            case 'priceHighLow':
-                return sorted.sort((a, b) => b.price - a.price);
-            case 'rating':
-                return sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-            case 'reviews':
-                // Assuming you have a 'totalReviews' or similar field, using default 0 handling. 
-                // Adjust property name if it is different like 'reviewsCount' or 'numReviews'.
-                return sorted.sort((a, b) => (b.reviews || 0) - (a.reviews || 0));
-            case 'featured':
-            default:
-                // Keep original array order (assumed featured or default).
-                return sorted;
-        }
-    }, [filteredTours, sortBy]);
-
-    // Pagination logic
-    const indexOfLastTour = currentPage * pageSize;
-    const indexOfFirstTour = indexOfLastTour - pageSize;
-    const currentTours = sortedTours.slice(indexOfFirstTour, indexOfLastTour);
+    // The backend now returns exactly the current page's tours
+    const currentTours = tours;
 
     return (
         <>
@@ -254,24 +181,30 @@ const AllToursDetails = () => {
                                 </Button>
                             </div>
                             <AllToursListHeader
-                                totalTours={filteredTours.length}
-                                indexOfFirstTour={indexOfFirstTour}
-                                indexOfLastTour={indexOfLastTour}
+                                totalTours={totalTours}
+                                indexOfFirstTour={(currentPage - 1) * pageSize}
+                                indexOfLastTour={Math.min(currentPage * pageSize, totalTours)}
                                 sortBy={sortBy}
                                 onSortChange={(val) => setSortBy(val)}
                             />
 
                             <div className="tours-list-container">
-                                {currentTours.map((tour) => (
-                                    <AllToursCard key={tour.id} tour={tour} />
-                                ))}
+                                {loading ? (
+                                    <div style={{ textAlign: 'center', padding: '50px' }}>
+                                        <Spin size="large" description="Loading Tours..." />
+                                    </div>
+                                ) : (
+                                    currentTours.map((tour) => (
+                                        <AllToursCard key={tour.id} tour={tour} />
+                                    ))
+                                )}
                             </div>
 
-                            {filteredTours.length > 0 && (
+                            {totalTours > 0 && (
                                 <div className="custom-pagination-container">
                                     <Pagination
                                         current={currentPage}
-                                        total={filteredTours.length}
+                                        total={totalTours}
                                         pageSize={pageSize}
                                         onChange={handlePageChange}
                                         showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}

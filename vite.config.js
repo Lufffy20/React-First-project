@@ -5,7 +5,14 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: true
+    allowedHosts: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:1337',
+        changeOrigin: true,
+        // rewrite: (path) => path.replace(/^\/api/, '') // use if sails doesn't need /api
+      }
+    }
   },
   preview: {
     allowedHosts: true

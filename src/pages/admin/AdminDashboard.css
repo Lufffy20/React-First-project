@@ -1,0 +1,73 @@
+.admin-layout {
+    min-height: 100vh;
+}
+
+.admin-sider {
+    background: #001529;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+}
+
+.logo-container {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 16px;
+    border-radius: 8px;
+}
+
+.logo-text {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.admin-header {
+    background: #fff !important;
+    padding: 0 24px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.admin-content {
+    margin: 24px;
+    padding: 24px;
+    background: transparent;
+    min-height: 280px;
+}
+
+.stat-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-title {
+    margin-bottom: 24px;
+}
+
+.recent-activities-card {
+    margin-top: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.admin-footer {
+    text-align: center;
+    color: #8c8c8c;
+}
+
+/* Custom Centering for Table Pagination */
+.centered-pagination {
+    width: 100%;
+    display: flex !important;
+    justify-content: center !important;
+}

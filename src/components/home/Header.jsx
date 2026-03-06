@@ -5,11 +5,12 @@ import { MenuOutlined, GlobalOutlined, SearchOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/authSlice";
+import { useLogout } from "../../hooks/useAuth";
 
 const Header = () => {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const { handleLogout } = useLogout();
     const { isAuthenticated, user } = useSelector((state) => state.auth);
     const [visible, setVisible] = useState(false);
 
@@ -19,11 +20,6 @@ const Header = () => {
 
     const onClose = () => {
         setVisible(false);
-    };
-
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate("/");
     };
 
     return (
@@ -113,7 +109,7 @@ const Header = () => {
                         ) : (
                             <>
                                 <span style={{ marginRight: '15px', fontWeight: '500', color: '#101828' }}>
-                                    Hi, {user?.name || user?.email || 'User'}
+                                    {user?.firstName}
                                 </span>
                                 <Button
                                     type="primary"
@@ -212,7 +208,7 @@ const Header = () => {
                             ) : (
                                 <>
                                     <div style={{ textAlign: 'center', marginBottom: '10px', fontWeight: '500', color: '#101828' }}>
-                                        Hi, {user?.name || user?.email || 'User'}
+                                        {user?.firstName}
                                     </div>
                                     <Button
                                         type="primary"
