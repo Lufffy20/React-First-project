@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Form, Row, Col, Input, InputNumber, Switch, Select, Upload, message, Radio } from 'antd';
-import { UploadOutlined, LinkOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { Card, Button, Form, Row, Col, Input, InputNumber, Switch, Select, Upload, message, Radio, Table, Space, Popconfirm, Modal, Divider, Typography } from 'antd';
+import { UploadOutlined, LinkOutlined, ArrowLeftOutlined, PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+const { Title } = Typography;
 import { useAdminTours } from '../../hooks/useAdminTours';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,6 +45,28 @@ const AddTour = () => {
     const [imageFile, setImageFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
 
+    // --- Nested States (Local Lists) ---
+    const [itineraries, setItineraries] = useState([]);
+    const [faqs, setFaqs] = useState([]);
+    const [gallery, setGallery] = useState([]);
+    const [inclusions, setInclusions] = useState([]);
+    const [exclusions, setExclusions] = useState([]);
+
+    // Modals
+    const [isItineraryModalVisible, setIsItineraryModalVisible] = useState(false);
+    const [editingIndex, setEditingIndex] = useState(null); // Used for local editing
+    const [itineraryForm] = Form.useForm();
+
+    const [isFaqModalVisible, setIsFaqModalVisible] = useState(false);
+    const [faqForm] = Form.useForm();
+
+    const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+    const [imageForm] = Form.useForm();
+
+    const [isFeatureModalVisible, setIsFeatureModalVisible] = useState(false);
+    const [featureModalType, setFeatureModalType] = useState('inclusion'); // 'inclusion' or 'exclusion'
+    const [featureForm] = Form.useForm();
+
     useEffect(() => {
         form.setFieldsValue({
             tour_type: 'Nature Tours',
@@ -65,6 +88,55 @@ const AddTour = () => {
         };
         reader.readAsDataURL(file);
         return false;
+    };
+
+    // --- Local Nested Handlers ---
+
+    // Itinerary
+    const handleItineraryOk = async () => {
+        const values = await itineraryForm.validateFields();
+        if (editingIndex !== null) {
+            const updated = [...itineraries];
+            updated[editingIndex] = values;
+            setItineraries(updated);
+        } else {
+            setItineraries([...itineraries, values]);
+        }
+        setIsItineraryModalVisible(false);
+        setEditingIndex(null);
+        itineraryForm.resetFields();
+    };
+
+    const handleFaqOk = async () => {
+        const values = await faqForm.validateFields();
+        if (editingIndex !== null) {
+            const updated = [...faqs];
+            updated[editingIndex] = values;
+            setFaqs(updated);
+        } else {
+            setFaqs([...faqs, values]);
+        }
+        setIsFaqModalVisible(false);
+        setEditingIndex(null);
+        faqForm.resetFields();
+    };
+
+    const handleImageOk = async () => {
+        const values = await imageForm.validateFields();
+        setGallery([...gallery, values]);
+        setIsImageModalVisible(false);
+        imageForm.resetFields();
+    };
+
+    const handleFeatureOk = async () => {
+        const values = await featureForm.validateFields();
+        if (featureModalType === 'inclusion') {
+            setInclusions([...inclusions, values]);
+        } else {
+            setExclusions([...exclusions, values]);
+        }
+        setIsFeatureModalVisible(false);
+        featureForm.resetFields();
     };
 
     const handleOk = async () => {
@@ -102,6 +174,13 @@ const AddTour = () => {
                 free_cancel: false,
                 is_featured: false
             }));
+
+            // Nested Data
+            formData.append('itineraries', JSON.stringify(itineraries));
+            formData.append('faqs', JSON.stringify(faqs));
+            formData.append('gallery', JSON.stringify(gallery));
+            formData.append('inclusions', JSON.stringify(inclusions));
+            formData.append('exclusions', JSON.stringify(exclusions));
 
             // APPEND FILE AT THE END
             formData.append('image', imageFile.originFileObj || imageFile);
@@ -238,6 +317,182 @@ const AddTour = () => {
                     </SubmitButton>
                 </div>
             </Form>
+
+            <Divider />
+
+            {/* --- Nested Resources UI --- */}
+            <div style={{ paddingBottom: 50 }}>
+                {/* Itinerary */}
+                <div style={{ marginBottom: 40 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                        <Title level={4}>Tour Itinerary</Title>
+                        <Button type="primary" icon={<PlusOutlined />} onClick={() => { setEditingIndex(null); itineraryForm.resetFields(); setIsItineraryModalVisible(true); }}>
+                            Add Day
+                        </Button>
+                    </div>
+                    <Table
+                        dataSource={itineraries}
+                        rowKey={(record, index) => index}
+                        pagination={false}
+                        columns={[
+                            { title: 'Day', dataIndex: 'day_number', key: 'day_number', width: 80 },
+                            { title: 'Title', dataIndex: 'title', key: 'title' },
+                            { title: 'Description', dataIndex: 'description', key: 'description' },
+                            {
+                                title: 'Actions',
+                                key: 'actions',
+                                width: 100,
+                                render: (_, record, index) => (
+                                    <Space>
+                                        <Button icon={<EditOutlined />} onClick={() => { setEditingIndex(index); itineraryForm.setFieldsValue(record); setIsItineraryModalVisible(true); }} />
+                                        <Button danger icon={<DeleteOutlined />} onClick={() => setItineraries(itineraries.filter((_, i) => i !== index))} />
+                                    </Space>
+                                )
+                            }
+                        ]}
+                    />
+                </div>
+
+                {/* FAQ */}
+                <div style={{ marginBottom: 40 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                        <Title level={4}>FAQs</Title>
+                        <Button type="primary" icon={<PlusOutlined />} onClick={() => { setEditingIndex(null); faqForm.resetFields(); setIsFaqModalVisible(true); }}>
+                            Add FAQ
+                        </Button>
+                    </div>
+                    <Table
+                        dataSource={faqs}
+                        rowKey={(record, index) => index}
+                        pagination={false}
+                        columns={[
+                            { title: 'Question', dataIndex: 'question', key: 'question' },
+                            { title: 'Answer', dataIndex: 'answer', key: 'answer' },
+                            {
+                                title: 'Actions',
+                                key: 'actions',
+                                width: 100,
+                                render: (_, record, index) => (
+                                    <Space>
+                                        <Button icon={<EditOutlined />} onClick={() => { setEditingIndex(index); faqForm.setFieldsValue(record); setIsFaqModalVisible(true); }} />
+                                        <Button danger icon={<DeleteOutlined />} onClick={() => setFaqs(faqs.filter((_, i) => i !== index))} />
+                                    </Space>
+                                )
+                            }
+                        ]}
+                    />
+                </div>
+
+                {/* Image Gallery */}
+                <div style={{ marginBottom: 40 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                        <Title level={4}>Image Gallery</Title>
+                        <Button type="primary" icon={<PlusOutlined />} onClick={() => { imageForm.resetFields(); setIsImageModalVisible(true); }}>
+                            Add Image URL
+                        </Button>
+                    </div>
+                    <Table
+                        dataSource={gallery}
+                        rowKey={(record, index) => index}
+                        pagination={false}
+                        columns={[
+                            {
+                                title: 'Image',
+                                dataIndex: 'image_url',
+                                render: (url) => <img src={url} alt="Gallery" style={{ width: 60, height: 40, objectFit: 'cover' }} />
+                            },
+                            { title: 'URL', dataIndex: 'image_url', key: 'image_url' },
+                            {
+                                title: 'Actions',
+                                key: 'actions',
+                                width: 80,
+                                render: (_, record, index) => (
+                                    <Button danger icon={<DeleteOutlined />} onClick={() => setGallery(gallery.filter((_, i) => i !== index))} />
+                                )
+                            }
+                        ]}
+                    />
+                </div>
+
+                <Row gutter={24}>
+                    <Col span={12}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                            <Title level={4}>Inclusions</Title>
+                            <Button size="small" icon={<PlusOutlined />} onClick={() => { setFeatureModalType('inclusion'); featureForm.resetFields(); setIsFeatureModalVisible(true); }}>
+                                Add
+                            </Button>
+                        </div>
+                        <Table
+                            dataSource={inclusions}
+                            rowKey={(record, index) => index}
+                            size="small"
+                            pagination={false}
+                            columns={[
+                                { title: 'Item', dataIndex: 'item', key: 'item' },
+                                {
+                                    title: '',
+                                    key: 'actions',
+                                    render: (_, record, index) => (
+                                        <Button type="text" danger icon={<DeleteOutlined />} onClick={() => setInclusions(inclusions.filter((_, i) => i !== index))} />
+                                    )
+                                }
+                            ]}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                            <Title level={4}>Exclusions</Title>
+                            <Button size="small" icon={<PlusOutlined />} onClick={() => { setFeatureModalType('exclusion'); featureForm.resetFields(); setIsFeatureModalVisible(true); }}>
+                                Add
+                            </Button>
+                        </div>
+                        <Table
+                            dataSource={exclusions}
+                            rowKey={(record, index) => index}
+                            size="small"
+                            pagination={false}
+                            columns={[
+                                { title: 'Item', dataIndex: 'item', key: 'item' },
+                                {
+                                    title: '',
+                                    key: 'actions',
+                                    render: (_, record, index) => (
+                                        <Button type="text" danger icon={<DeleteOutlined />} onClick={() => setExclusions(exclusions.filter((_, i) => i !== index))} />
+                                    )
+                                }
+                            ]}
+                        />
+                    </Col>
+                </Row>
+            </div>
+
+            {/* --- Modals --- */}
+            <Modal title={editingIndex !== null ? "Edit Day" : "Add Day"} open={isItineraryModalVisible} onOk={handleItineraryOk} onCancel={() => setIsItineraryModalVisible(false)}>
+                <Form form={itineraryForm} layout="vertical">
+                    <Form.Item name="day_number" label="Day Number" rules={[{ required: true }]}><InputNumber min={1} style={{ width: '100%' }} /></Form.Item>
+                    <Form.Item name="title" label="Title" rules={[{ required: true }]}><Input /></Form.Item>
+                    <Form.Item name="description" label="Description"><Input.TextArea rows={4} /></Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal title={editingIndex !== null ? "Edit FAQ" : "Add FAQ"} open={isFaqModalVisible} onOk={handleFaqOk} onCancel={() => setIsFaqModalVisible(false)}>
+                <Form form={faqForm} layout="vertical">
+                    <Form.Item name="question" label="Question" rules={[{ required: true }]}><Input /></Form.Item>
+                    <Form.Item name="answer" label="Answer" rules={[{ required: true }]}><Input.TextArea rows={4} /></Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal title="Add Gallery Image" open={isImageModalVisible} onOk={handleImageOk} onCancel={() => setIsImageModalVisible(false)}>
+                <Form form={imageForm} layout="vertical">
+                    <Form.Item name="image_url" label="Image URL" rules={[{ required: true, type: 'url' }]}><Input /></Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal title={featureModalType === 'inclusion' ? "Add Inclusion" : "Add Exclusion"} open={isFeatureModalVisible} onOk={handleFeatureOk} onCancel={() => setIsFeatureModalVisible(false)}>
+                <Form form={featureForm} layout="vertical">
+                    <Form.Item name="item" label="Item Name" rules={[{ required: true }]}><Input /></Form.Item>
+                </Form>
+            </Modal>
         </Card>
     );
 };

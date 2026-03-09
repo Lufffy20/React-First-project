@@ -5,7 +5,7 @@ import { MinusOutlined, PlusOutlined, CalendarOutlined, ClockCircleOutlined } fr
 const BookingSidebar = ({ tour }) => {
     return (
         <div className="tour-detail-right-container">
-            <p className="tour-detail-price">From <span className="tour-detail-price-amount">${tour.price}</span></p>
+            <p className="tour-detail-price">From <span className="tour-detail-price-amount">${tour.current_price}</span></p>
 
             <div className="tour-detail-search-container">
                 <div className="tour-detail-search-item">
@@ -93,7 +93,7 @@ const BookingSidebar = ({ tour }) => {
 
             <div className="tour-detail-total-section">
                 <span className="tour-detail-total-label">Total:</span>
-                <span className="tour-detail-total-amount">${tour.price}</span>
+                <span className="tour-detail-total-amount">${tour.current_price}</span>
             </div>
 
             <Button type="primary" block className="tour-detail-book-btn">Book Now</Button>

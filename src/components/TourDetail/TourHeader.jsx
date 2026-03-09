@@ -21,8 +21,9 @@ const TourHeader = ({ tour, displayImages }) => {
                 <div className="tour-detail-top-wrapper">
                     <div className="tour-detail-header1-section">
                         <div className="tour-detail-header1">
-                            {tour.bestPrice && <Button type="primary">Bestseller</Button>}
-                            {tour.freeCancel && <Button type="primary">Free cancellation</Button>}
+                            {tour.features?.is_featured && <Button type="primary">Featured</Button>}
+                            {tour.features?.best_price && <Button type="primary">Best Price</Button>}
+                            {tour.features?.free_cancel && <Button type="primary">Free cancellation</Button>}
                         </div>
 
                         <div className="tour-detail-header1-title">
@@ -30,7 +31,7 @@ const TourHeader = ({ tour, displayImages }) => {
                             <div className="tour-detail-info">
                                 <p>{tour.rating || "New"}/5</p>
                                 <p>{tour.location}</p>
-                                <p>{tour.reviews || 0} reviews</p>
+                                <p>{tour.reviews_count || 0} reviews</p>
                             </div>
                         </div>
                     </div>

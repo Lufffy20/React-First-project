@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Checkbox, Slider, Rate, DatePicker, Button } from 'antd';
 import dayjs from 'dayjs';
 
@@ -51,6 +51,27 @@ const ExpandableCheckboxGroup = ({ options, value, onChange, className }) => {
 };
 
 const AllToursSidebar = ({ filters, onFilterChange, onClearFilters, availableLanguages = [] }) => {
+    const [localPriceRange, setLocalPriceRange] = useState(filters.priceRange);
+
+    // Sync local state when filters.priceRange changes from parent (e.g. Clear All)
+    useEffect(() => {
+        setLocalPriceRange(filters.priceRange);
+    }, [filters.priceRange]);
+
+    // Debounce the price filter change
+    useEffect(() => {
+        // Only trigger if localPriceRange is different from the actual filters
+        if (localPriceRange[0] === filters.priceRange[0] && localPriceRange[1] === filters.priceRange[1]) {
+            return;
+        }
+
+        const handler = setTimeout(() => {
+            onFilterChange('priceRange', localPriceRange);
+        }, 3000); // 3 seconds debounce
+
+        return () => clearTimeout(handler);
+    }, [localPriceRange, onFilterChange, filters.priceRange]);
+
     return (
         <aside className="details-sidebar">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -90,8 +111,8 @@ const AllToursSidebar = ({ filters, onFilterChange, onClearFilters, availableLan
                         range
                         max={5000}
                         tooltip={{ formatter: (value) => `$${value}` }}
-                        value={filters.priceRange}
-                        onChange={(value) => onFilterChange('priceRange', value)}
+                        value={localPriceRange}
+                        onChange={(value) => setLocalPriceRange(value)}
                         defaultValue={[0, 5000]}
                     />
                     <div className="filter-price-labels">

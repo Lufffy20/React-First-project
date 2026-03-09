@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { getAdminToursApi, createAdminTourApi, updateAdminTourApi, deleteAdminTourApi } from '../helper/functionapi';
+import {
+    getAdminToursApi, createAdminTourApi, updateAdminTourApi, deleteAdminTourApi,
+    createItineraryApi, updateItineraryApi, deleteItineraryApi,
+    createFaqApi, updateFaqApi, deleteFaqApi,
+    createImageApi, deleteImageApi,
+    createInclusionApi, deleteInclusionApi,
+    createExclusionApi, deleteExclusionApi
+} from '../helper/functionapi';
 import { message } from 'antd';
 
 export const useAdminTours = () => {
@@ -111,6 +118,181 @@ export const useAdminTours = () => {
         }
     };
 
+    // --- Nested Resources Handlers ---
+
+    // Itinerary Handlers
+    const handleAddItinerary = async (tourId, data) => {
+        try {
+            setLoading(true);
+            const response = await createItineraryApi(tourId, data);
+            message.success('Itinerary day added');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to add itinerary');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateItinerary = async (id, data) => {
+        try {
+            setLoading(true);
+            const response = await updateItineraryApi(id, data);
+            message.success('Itinerary updated');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to update itinerary');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteItinerary = async (id) => {
+        try {
+            setLoading(true);
+            await deleteItineraryApi(id);
+            message.success('Itinerary day removed');
+            return true;
+        } catch (err) {
+            message.error('Failed to delete itinerary');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // FAQ Handlers
+    const handleAddFaq = async (tourId, data) => {
+        try {
+            setLoading(true);
+            const response = await createFaqApi(tourId, data);
+            message.success('FAQ added');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to add FAQ');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateFaq = async (id, data) => {
+        try {
+            setLoading(true);
+            const response = await updateFaqApi(id, data);
+            message.success('FAQ updated');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to update FAQ');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteFaq = async (id) => {
+        try {
+            setLoading(true);
+            await deleteFaqApi(id);
+            message.success('FAQ removed');
+            return true;
+        } catch (err) {
+            message.error('Failed to delete FAQ');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Image Handlers
+    const handleAddImage = async (tourId, data) => {
+        try {
+            setLoading(true);
+            const response = await createImageApi(tourId, data);
+            message.success('Image added to gallery');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to add image');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteImage = async (id) => {
+        try {
+            setLoading(true);
+            await deleteImageApi(id);
+            message.success('Image removed');
+            return true;
+        } catch (err) {
+            message.error('Failed to delete image');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Feature Items Handlers (Inclusions/Exclusions)
+    const handleAddInclusion = async (tourId, data) => {
+        try {
+            setLoading(true);
+            const response = await createInclusionApi(tourId, data);
+            message.success('Inclusion added');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to add inclusion');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteInclusion = async (id) => {
+        try {
+            setLoading(true);
+            await deleteInclusionApi(id);
+            message.success('Inclusion removed');
+            return true;
+        } catch (err) {
+            message.error('Failed to delete inclusion');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleAddExclusion = async (tourId, data) => {
+        try {
+            setLoading(true);
+            const response = await createExclusionApi(tourId, data);
+            message.success('Exclusion added');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to add exclusion');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteExclusion = async (id) => {
+        try {
+            setLoading(true);
+            await deleteExclusionApi(id);
+            message.success('Exclusion removed');
+            return true;
+        } catch (err) {
+            message.error('Failed to delete exclusion');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     return {
         tours,
         totalTours,
@@ -120,6 +302,19 @@ export const useAdminTours = () => {
         refreshTours: fetchTours,
         handleCreateTour,
         handleUpdateTour,
-        handleDeleteTour
+        handleDeleteTour,
+        // Nested Resource Handlers
+        handleAddItinerary,
+        handleUpdateItinerary,
+        handleDeleteItinerary,
+        handleAddFaq,
+        handleUpdateFaq,
+        handleDeleteFaq,
+        handleAddImage,
+        handleDeleteImage,
+        handleAddInclusion,
+        handleDeleteInclusion,
+        handleAddExclusion,
+        handleDeleteExclusion
     };
 };

@@ -1,21 +1,10 @@
 import React from 'react';
-import { Flex, Steps } from 'antd';
+import { Flex, Steps, Row, Col } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import DualMonthCalendar from './DualMonthCalendar';
 
-const steps = [
-    { title: 'Day 1: Airport pickup' },
-    { title: 'Day 2: Temples & River Cruise' },
-    { title: 'Day 3: Massage & Overnight Train', content: 'Like on all of our trips, we can collect you from the airport when you land and take you directly to your hotel.The first Day is just a check-in Day so you have this freedom to explore the city and get settled in.' },
-    { title: 'Day 4: Khao Sok National Park' },
-    { title: 'Day 5: Travel to Koh Phangan' },
-    { title: 'Day 6: Morning Chill & Muay Thai Lesson' },
-    { title: 'Day 7: Island Boat Trip' },
-];
-
-const sharedProps = { type: 'dot', current: 0, items: steps };
-const sharedVerticalProps = { ...sharedProps, orientation: 'vertical', style: { flex: 'auto' } };
+// Steps removed as they are now dynamic
 
 const TourContent = ({ tour }) => {
     return (
@@ -25,7 +14,7 @@ const TourContent = ({ tour }) => {
                     <div className="tour-detail-search-icon1"><CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} /></div>
                     <div className="tour-detail-duration">
                         <p>Duration</p>
-                        <span>{tour.duration}</span>
+                        <span>{tour.days || 0} Days {tour.nights || 0} Nights</span>
                     </div>
                 </div>
 
@@ -49,46 +38,41 @@ const TourContent = ({ tour }) => {
                     <div className="tour-detail-search-icon1"><CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} /></div>
                     <div className="tour-detail-languages">
                         <p>Languages</p>
-                        <span>{Array.isArray(tour.language) ? tour.language.join(', ') : tour.language || 'English'}</span>
+                        <span>{Array.isArray(tour.tour_language) ? tour.tour_language.join(', ') : tour.tour_language || 'English'}</span>
                     </div>
                 </div>
             </div>
 
             <div className="tour-detail-overview-section">
                 <h2>Tour Overview</h2>
-                <p>{tour.description || 'The Phi Phi archipelago is a must-visit while in Phuket, and this speedboat trip whisks you around the islands in one day. Swim over the coral reefs of Pileh Lagoon, have lunch at Phi Phi Leh, snorkel at Bamboo Island, and visit Monkey Beach and Maya Bay, immortalized in "The Beach." Boat transfers, snacks, buffet lunch, snorkeling equipment, and Phuket hotel pickup and drop-off all included.'}</p>
+                <p>{tour.description}</p>
             </div>
 
-            <div className="tour-detail-highlights-section">
-                <h2>Tour Highlights</h2>
-                <ul>
-                    <li>Experience the thrill of a speedboat to the stunning Phi Phi Islands</li>
-                    <li>Be amazed by the variety of marine life in the archepelago</li>
-                    <li>Enjoy relaxing in paradise with white sand beaches and azure turquoise water</li>
-                    <li>Feel the comfort of a tour limited to 35 passengers</li>
-                    <li>Catch a glimpse of the wild monkeys around Monkey Beach</li>
-                </ul>
-            </div>
-
+            {/* Inclusions and Exclusions */}
             <hr />
-
             <div className="tour-detail-included-section">
-                <h2>What's included</h2>
-                <div className="tour-detail-included-list-wrapper">
-                    <ul className="tour-detail-included-list-left-column">
-                        <li>Beverages, drinking water, morning tea and buffet lunch</li>
-                        <li>Local taxes</li>
-                        <li>Hotel pickup and drop-off by air-conditioned minivan</li>
-                        <li>InsuranceTransfer to a private pier</li>
-                        <li>Soft drinks</li>
-                        <li>Tour Guide</li>
-                    </ul>
-                    <ul className="tour-detail-included-list-right-column">
-                        <li>Towels</li>
-                        <li>Tips</li>
-                        <li>Alcoholic Beverages</li>
-                    </ul>
-                </div>
+                <Row gutter={32}>
+                    <Col xs={24} md={12}>
+                        <h2>What's included</h2>
+                        <ul className="tour-detail-included-list-left-column" style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                            {tour.inclusions && tour.inclusions.length > 0 ? (
+                                tour.inclusions.map((inc, i) => <li key={inc.id || i}>{inc.item}</li>)
+                            ) : (
+                                <li>Standard Inclusions</li>
+                            )}
+                        </ul>
+                    </Col>
+                    <Col xs={24} md={12}>
+                        <h2>What's excluded</h2>
+                        <ul className="tour-detail-included-list-right-column" style={{ listStyleType: 'circle', paddingLeft: '20px', color: '#666' }}>
+                            {tour.exclusions && tour.exclusions.length > 0 ? (
+                                tour.exclusions.map((exc, i) => <li key={exc.id || i}>{exc.item}</li>)
+                            ) : (
+                                <li>Standard Exclusions</li>
+                            )}
+                        </ul>
+                    </Col>
+                </Row>
             </div>
 
             <hr />
@@ -96,11 +80,23 @@ const TourContent = ({ tour }) => {
             <div className="tour-detail-itinerary-section">
                 <h2>Tour Itinerary</h2>
                 <div className="tour-detail-itinerary-content">
-                    <Flex vertical gap="middle">
-                        <Flex gap="middle">
-                            <Steps {...sharedVerticalProps} />
+                    {tour.itineraries && tour.itineraries.length > 0 ? (
+                        <Flex vertical gap="middle">
+                            <Steps
+                                direction="vertical"
+                                current={-1}
+                                items={tour.itineraries
+                                    .sort((a, b) => a.day_number - b.day_number)
+                                    .map(item => ({
+                                        title: `Day ${item.day_number}: ${item.title}`,
+                                        description: item.description
+                                    }))
+                                }
+                            />
                         </Flex>
-                    </Flex>
+                    ) : (
+                        <p>Itinerary details coming soon.</p>
+                    )}
                 </div>
             </div>
 
