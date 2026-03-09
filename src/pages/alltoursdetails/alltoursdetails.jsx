@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./alltoursdetails.css";
 import Header from "../../components/home/Header";
@@ -10,6 +10,16 @@ import AllToursListHeader from "./components/AllToursListHeader";
 import AllToursCard from "./components/AllToursCard";
 import { useTours } from "../../hooks/useTours";
 import { Spin } from "antd";
+
+const initialFilters = {
+    tourTypes: [],
+    priceRange: [0, 5000],
+    days: [],
+    nights: [],
+    languages: [],
+    minRating: 0,
+    specials: []
+};
 
 const AllToursDetails = () => {
     // We now extract totalTours and fetchTours as well
@@ -41,15 +51,7 @@ const AllToursDetails = () => {
     const showFilterDrawer = () => setIsFilterDrawerOpen(true);
     const closeFilterDrawer = () => setIsFilterDrawerOpen(false);
 
-    const initialFilters = {
-        tourTypes: [],
-        priceRange: [0, 5000],
-        days: [],
-        nights: [],
-        languages: [],
-        minRating: 0,
-        specials: []
-    };
+
 
     const [filters, setFilters] = useState(initialFilters);
 
@@ -91,27 +93,29 @@ const AllToursDetails = () => {
         fetchTours({ params });
     }, [filters, sortBy, currentPage, pageSize]);
 
-    const handleFilterChange = (filterName, value) => {
+    const handleFilterChange = useCallback((filterName, value) => {
         setFilters(prev => ({
             ...prev,
             [filterName]: value
         }));
         setCurrentPage(1); // Reset to first page on filter change
         setSearchParams(prev => {
-            prev.set('page', '1');
-            return prev;
+            const newParams = new URLSearchParams(prev);
+            newParams.set('page', '1');
+            return newParams;
         });
-    };
+    }, [setSearchParams]);
 
-    const handleClearFilters = () => {
+    const handleClearFilters = useCallback(() => {
         setFilters(initialFilters);
         setSortBy('featured');
         setCurrentPage(1);
         setSearchParams(prev => {
-            prev.set('page', '1');
-            return prev;
+            const newParams = new URLSearchParams(prev);
+            newParams.set('page', '1');
+            return newParams;
         });
-    };
+    }, [initialFilters, setSearchParams]);
 
     const handlePageChange = (page, size) => {
         setCurrentPage(page);

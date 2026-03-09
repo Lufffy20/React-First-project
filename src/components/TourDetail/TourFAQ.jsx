@@ -1,47 +1,26 @@
 import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
 
-const TourFAQ = () => {
+const TourFAQ = ({ faqs }) => {
     return (
         <div className="tour-detail-faq-section">
             <h2>FAQ</h2>
             <div className="tour-detail-faq-item">
-                <div className="tour-detail-faq-refund">
-                    <div>
-                        <p style={{ fontWeight: 500 }}>Can I get the refund?</p>
-                        <p>Phang Nga Bay Sea Cave Canoeing & James Bond Island w/ Buffet Lunch by Big Boat cancellation policy: For a full refund, cancel at least 24 hours in advance of the start date of the experience. Discover and book Phang Nga Bay Sea Cave Canoeing & James Bond Island w/ Buffet Lunch by Big Boat</p>
-                    </div>
-                    <div className="tour-detail-faq-icon">
-                        <UserOutlined style={{ fontSize: '24px', color: '#EB662B' }} />
-                    </div>
-                </div>
-
-                <div className="tour-detail-faq-change-date">
-                    <div>
-                        <p style={{ fontWeight: 500 }}>Can I change the travel date?</p>
-                    </div>
-                    <div className="tour-detail-faq-icon">
-                        <UserOutlined style={{ fontSize: '24px', color: '#EB662B' }} />
-                    </div>
-                </div>
-
-                <div className="tour-detail-faq-end">
-                    <div>
-                        <p style={{ fontWeight: 500 }}>When and where does the tour end?</p>
-                    </div>
-                    <div className="tour-detail-faq-icon">
-                        <UserOutlined style={{ fontSize: '24px', color: '#EB662B' }} />
-                    </div>
-                </div>
-
-                <div className="tour-detail-faq-airport">
-                    <div>
-                        <p style={{ fontWeight: 500 }}>Do you arrange airport transfers?</p>
-                    </div>
-                    <div className="tour-detail-faq-icon">
-                        <UserOutlined style={{ fontSize: '24px', color: '#EB662B' }} />
-                    </div>
-                </div>
+                {faqs && faqs.length > 0 ? (
+                    faqs.map((faq, index) => (
+                        <div key={faq.id || index} style={{ marginBottom: '20px', display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #eee', paddingBottom: '15px' }}>
+                            <div style={{ flex: 1 }}>
+                                <p style={{ fontWeight: 600, fontSize: '16px', marginBottom: '8px' }}>{faq.question}</p>
+                                <p style={{ color: '#666', lineHeight: '1.6' }}>{faq.answer}</p>
+                            </div>
+                            <div className="tour-detail-faq-icon" style={{ marginLeft: '20px' }}>
+                                <UserOutlined style={{ fontSize: '24px', color: '#EB662B' }} />
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p>No FAQs available for this tour.</p>
+                )}
             </div>
         </div>
     );

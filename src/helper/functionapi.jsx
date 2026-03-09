@@ -1,4 +1,14 @@
-import { signupAxiosCall, loginAxiosCall, forgotPasswordAxiosCall, resetPasswordAxiosCall, fetchToursAxiosCall, fetchAdminToursAxiosCall, createTourAxiosCall, createAdminTourAxiosCall, fetchTourAxiosCall, updateTourAxiosCall, updateAdminTourAxiosCall, deleteTourAxiosCall, deleteAdminTourAxiosCall, fetchUsersAxiosCall, createUserAxiosCall, updateUserAxiosCall, deleteUserAxiosCall } from './helperapi';
+import {
+    signupAxiosCall, loginAxiosCall, forgotPasswordAxiosCall, resetPasswordAxiosCall,
+    fetchToursAxiosCall, fetchAdminToursAxiosCall, createTourAxiosCall, createAdminTourAxiosCall,
+    fetchTourAxiosCall, updateTourAxiosCall, updateAdminTourAxiosCall, deleteTourAxiosCall, deleteAdminTourAxiosCall,
+    fetchUsersAxiosCall, createUserAxiosCall, updateUserAxiosCall, deleteUserAxiosCall,
+    createItineraryAxiosCall, updateItineraryAxiosCall, deleteItineraryAxiosCall,
+    createFaqAxiosCall, updateFaqAxiosCall, deleteFaqAxiosCall,
+    createImageAxiosCall, deleteImageAxiosCall,
+    createInclusionAxiosCall, deleteInclusionAxiosCall,
+    createExclusionAxiosCall, deleteExclusionAxiosCall
+} from './helperapi';
 
 // Yahan se aap UI Component (LoginPage, SignupPage) mei functions import karenge
 
@@ -87,3 +97,52 @@ export const updateUserApi = async (id, userData) => {
 export const deleteUserApi = async (id) => {
     return await deleteUserAxiosCall(id);
 };
+
+export const createItineraryApi = async (tourId, data) => {
+    return await createItineraryAxiosCall(tourId, data);
+};
+
+export const updateItineraryApi = async (id, data) => {
+    return await updateItineraryAxiosCall(id, data);
+};
+
+export const deleteItineraryApi = async (id) => {
+    return await deleteItineraryAxiosCall(id);
+};
+
+export const createFaqApi = async (tourId, data) => {
+    return await createFaqAxiosCall(tourId, data);
+};
+
+export const updateFaqApi = async (id, data) => {
+    return await updateFaqAxiosCall(id, data);
+};
+
+export const deleteFaqApi = async (id) => {
+    return await deleteFaqAxiosCall(id);
+};
+
+export const createImageApi = async (tourId, data) => {
+    return await createImageAxiosCall(tourId, data);
+};
+
+export const deleteImageApi = async (id) => {
+    return await deleteImageAxiosCall(id);
+};
+
+export const createInclusionApi = async (tourId, data) => {
+    return await createInclusionAxiosCall(tourId, data);
+};
+
+export const deleteInclusionApi = async (id) => {
+    return await deleteInclusionAxiosCall(id);
+};
+
+export const createExclusionApi = async (tourId, data) => {
+    return await createExclusionAxiosCall(tourId, data);
+};
+
+export const deleteExclusionApi = async (id) => {
+    return await deleteExclusionAxiosCall(id);
+};
+
