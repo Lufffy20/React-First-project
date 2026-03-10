@@ -12,9 +12,10 @@ const ReviewNode = ({ review, depth = 0, replyingTo, setReplyingTo, replyText, s
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [initialSlide, setInitialSlide] = useState(0);
 
-    const marginLeft = depth === 1 ? '40px' : '0px';
-    const borderLeft = depth === 1 ? '2px solid #eaeaea' : 'none';
-    const paddingLeft = depth === 1 ? '20px' : '0px';
+    const marginLeft = depth > 0 ? '20px' : '0px';
+    const borderLeft = depth > 0 ? '2px solid #efefef' : 'none';
+    const paddingLeft = depth > 0 ? '15px' : '0px';
+    const marginTop = depth > 0 ? '10px' : '0px';
 
     const openImageModal = (index) => {
         setInitialSlide(index);
@@ -22,7 +23,7 @@ const ReviewNode = ({ review, depth = 0, replyingTo, setReplyingTo, replyText, s
     };
 
     return (
-        <div className="tour-detail-single-review" style={{ marginLeft, borderLeft, paddingLeft }}>
+        <div className="tour-detail-single-review" style={{ marginLeft, borderLeft, paddingLeft, marginTop }}>
             <div className="tour-detail-review-header">
                 <div className="tour-detail-review-author">
                     <div className="tour-detail-review-avatar">

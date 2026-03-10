@@ -8,8 +8,11 @@ import {
     createImageAxiosCall, deleteImageAxiosCall, patchPrimaryImageAxiosCall,
     createInclusionAxiosCall, fetchInclusionAxiosCall, updateInclusionAxiosCall, deleteInclusionAxiosCall,
     createExclusionAxiosCall, fetchExclusionAxiosCall, updateExclusionAxiosCall, deleteExclusionAxiosCall,
-    fetchItineraryAxiosCall
+    fetchItineraryAxiosCall,
+    createReviewAxiosCall, fetchReviewAxiosCall, updateReviewAxiosCall, deleteReviewAxiosCall,
+    fetchPublicReviewsAxiosCall, submitPublicReviewAxiosCall, submitReviewReplyAxiosCall
 } from './helperapi';
+
 
 // Yahan se aap UI Component (LoginPage, SignupPage) mei functions import karenge
 
@@ -173,5 +176,35 @@ export const updateExclusionApi = async (id, data) => {
 
 export const deleteExclusionApi = async (id) => {
     return await deleteExclusionAxiosCall(id);
+};
+
+// Review APIs (Admin)
+export const createReviewApi = async (tourId, data) => {
+    return await createReviewAxiosCall(tourId, data);
+};
+
+export const getReviewApi = async (id) => {
+    return await fetchReviewAxiosCall(id);
+};
+
+export const updateReviewApi = async (id, data) => {
+    return await updateReviewAxiosCall(id, data);
+};
+
+export const deleteReviewApi = async (id) => {
+    return await deleteReviewAxiosCall(id);
+};
+
+// Review APIs (Public)
+export const getPublicReviewsApi = async (tourId) => {
+    return await fetchPublicReviewsAxiosCall(tourId);
+};
+
+export const submitPublicReviewApi = async (tourId, data) => {
+    return await submitPublicReviewAxiosCall(tourId, data);
+};
+
+export const submitReviewReplyApi = async (reviewId, data) => {
+    return await submitReviewReplyAxiosCall(reviewId, data);
 };
 

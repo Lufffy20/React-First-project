@@ -1,121 +1,155 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Input, Rate, Upload, message, Form } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import ReviewNode from './ReviewNode';
+import { getPublicReviewsApi, submitPublicReviewApi, submitReviewReplyApi } from '../../helper/functionapi';
 
-const userReviews = [
-    {
-        id: 1,
-        initials: "A.T",
-        name: "Ali Tufan",
-        date: "April 2023",
-        title: "Take this tour! Its fantastic!",
-        desc: "Great for 4-5 hours to explore. Really a lot to see and tons of photo spots. Even have a passport for you to collect all the stamps as a souvenir. Must see for a Harry Potter fan.",
-        images: [
-            "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?q=80&w=2001"
-        ],
-        helpful: "Helpful",
-        notHelpful: "Not helpful",
-        replies: []
-    }
-];
-
-const CustomerReviewsSection = () => {
+const CustomerReviewsSection = ({ tourId }) => {
     const [form] = Form.useForm();
-    const [reviewsList, setReviewsList] = useState(userReviews);
+    const [reviewsList, setReviewsList] = useState([]);
+    const [averages, setAverages] = useState({
+        overall: 0,
+        rating_location: 0,
+        rating_amenities: 0,
+        rating_food: 0,
+        rating_room: 0,
+        rating_price: 0,
+        rating_tour_operator: 0
+    });
     const [visibleCount, setVisibleCount] = useState(3);
     const [replyingTo, setReplyingTo] = useState(null);
     const [replyText, setReplyText] = useState('');
-    const [reviewForm, setReviewForm] = useState({
-        name: '', email: '', title: '', comment: '', images: [],
-        ratings: { Location: 0, Amenities: 0, Food: 0, Room: 0, Price: 0, TourOperator: 0 }
+    const [ratings, setRatings] = useState({
+        rating_location: 0,
+        rating_amenities: 0,
+        rating_food: 0,
+        rating_room: 0,
+        rating_price: 0,
+        rating_tour_operator: 0
     });
 
+    const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleRatingChange = (key, value) => {
-        setReviewForm(prev => ({ ...prev, ratings: { ...prev.ratings, [key]: value } }));
-    };
+    // Helper to normalize backend review data to frontend format
+    const normalizeReview = (rev) => ({
+        id: rev.id,
+        initials: rev.reviewer_name?.substring(0, 2).toUpperCase() || 'U',
+        name: rev.reviewer_name,
+        date: dayjs(rev.createdAt).format("MMMM YYYY"),
+        title: rev.title,
+        desc: rev.comment,
+        images: [],
+        helpful: "Helpful",
+        notHelpful: "Not helpful",
+        replies: rev.replies ? rev.replies.map(normalizeReview) : []
+    });
 
-    const handleFormSubmit = async () => {
-        setIsSubmitting(true);
-
-        // Simulated API call delay
-        setTimeout(async () => {
-            try {
-                const base64Images = await Promise.all(
-                    reviewForm.images.map(file => {
-                        return new Promise((resolve, reject) => {
-                            const reader = new FileReader();
-                            reader.readAsDataURL(file.originFileObj || file);
-                            reader.onload = () => resolve(reader.result);
-                            reader.onerror = error => reject(error);
-                        });
-                    })
-                );
-
-                const newReview = {
-                    id: Date.now(),
-                    initials: reviewForm.name.substring(0, 2).toUpperCase(),
-                    name: reviewForm.name,
-                    date: dayjs().format("MMMM YYYY"),
-                    title: reviewForm.title || "Review",
-                    desc: reviewForm.comment,
-                    images: base64Images,
-                    helpful: "Helpful",
-                    notHelpful: "Not helpful",
-                    replies: []
-                };
-
-                setReviewsList([newReview, ...reviewsList]);
-                setReviewForm({
-                    name: '', email: '', title: '', comment: '', images: [],
-                    ratings: { Location: 0, Amenities: 0, Food: 0, Room: 0, Price: 0, TourOperator: 0 }
-                });
-                form.resetFields();
-                message.success("Review submitted successfully!");
-            } catch (error) {
-                message.error("Failed to submit review.");
-            } finally {
-                setIsSubmitting(false);
+    const fetchReviews = async () => {
+        if (!tourId) return;
+        setIsLoading(true);
+        try {
+            const response = await getPublicReviewsApi(tourId);
+            if (response.data && response.data.success) {
+                const normalizedReviews = response.data.data.map(normalizeReview);
+                setReviewsList(normalizedReviews);
+                if (response.data.averages) {
+                    setAverages(response.data.averages);
+                }
             }
-        }, 1500);
+        } catch (error) {
+            console.error("Error fetching reviews:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    const handleInlineReplySubmit = (parentId) => {
-        if (!replyText.trim()) return;
+    useEffect(() => {
+        fetchReviews();
+    }, [tourId]);
 
-        const newReply = {
-            id: Date.now(),
-            initials: "GU",
-            name: "Guest",
-            date: dayjs().format("MMMM YYYY"),
-            title: "",
-            desc: replyText,
-            images: [],
-            helpful: "Helpful",
-            notHelpful: "Not helpful",
-            replies: []
-        };
+    const handleRatingChange = (key, value) => {
+        setRatings(prev => ({ ...prev, [key]: value }));
+    };
 
-        const addReplyRecursively = (reviews, targetId, reply) => {
-            return reviews.map(rev => {
-                if (rev.id === targetId) {
-                    return { ...rev, replies: [...(rev.replies || []), reply] };
-                }
-                if (rev.replies && rev.replies.length > 0) {
-                    return { ...rev, replies: addReplyRecursively(rev.replies, targetId, reply) };
-                }
-                return rev;
-            });
-        };
+    const handleFormSubmit = async (values) => {
+        // ... (existing validation remains same)
+        const missingRatings = [];
+        if (ratings.rating_location === 0) missingRatings.push('Location');
+        if (ratings.rating_amenities === 0) missingRatings.push('Amenities');
+        if (ratings.rating_food === 0) missingRatings.push('Food');
+        if (ratings.rating_room === 0) missingRatings.push('Room');
+        if (ratings.rating_price === 0) missingRatings.push('Price');
+        if (ratings.rating_tour_operator === 0) missingRatings.push('Tour Operator');
 
-        setReviewsList(addReplyRecursively(reviewsList, parentId, newReply));
-        setReplyingTo(null);
-        setReplyText('');
+        if (missingRatings.length > 0) {
+            message.warning(`Please provide a rating for: ${missingRatings.join(', ')}`);
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const submitData = {
+                ...values,
+                ...ratings
+            };
+
+            const response = await submitPublicReviewApi(tourId, submitData);
+            if (response.data && response.data.success) {
+                message.success("Review submitted successfully!");
+                form.resetFields();
+                setRatings({
+                    rating_location: 0,
+                    rating_amenities: 0,
+                    rating_food: 0,
+                    rating_room: 0,
+                    rating_price: 0,
+                    rating_tour_operator: 0
+                });
+                fetchReviews(); // Reload reviews
+            } else {
+                message.error(response.data?.message || "Failed to submit review.");
+            }
+        } catch (error) {
+            console.error("Error submitting review:", error);
+            const errMsg = error.response?.data?.message || "Failed to submit review.";
+            message.error(errMsg);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleInlineReplySubmit = async (parentId) => {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            message.warning("Please login to reply to reviews.");
+            return;
+        }
+
+        if (!replyText.trim()) {
+            message.warning("Please enter your reply.");
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const response = await submitReviewReplyApi(parentId, { comment: replyText });
+            if (response.data && response.data.success) {
+                message.success("Reply posted successfully!");
+                setReplyingTo(null);
+                setReplyText('');
+                fetchReviews(); // Reload to see the new reply
+            } else {
+                message.error(response.data?.message || "Failed to post reply.");
+            }
+        } catch (error) {
+            console.error("Error posting reply:", error);
+            const errMsg = error.response?.data?.message || "Failed to post reply.";
+            message.error(errMsg);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -127,69 +161,75 @@ const CustomerReviewsSection = () => {
                         <div className="review-item overall-rating">
                             <div className="review-text">
                                 <span className="review-label">Overall Rating</span>
-                                <span className="review-desc">Excellent</span>
+                                <span className="review-desc">{averages.overall >= 4.5 ? 'Excellent' : averages.overall >= 3.5 ? 'Good' : 'Average'}</span>
                             </div>
-                            <span className="review-score">5.0</span>
+                            <span className="review-score">{averages.overall}</span>
                         </div>
                         <div className="review-item">
                             <div className="review-text">
                                 <span className="review-label">Location</span>
-                                <span className="review-desc">Excellent</span>
+                                <span className="review-desc">{averages.rating_location >= 4 ? 'Excellent' : 'Good'}</span>
                             </div>
-                            <span className="review-score">5.0</span>
+                            <span className="review-score">{averages.rating_location}</span>
                         </div>
                         <div className="review-item">
                             <div className="review-text">
                                 <span className="review-label">Amenities</span>
-                                <span className="review-desc">Excellent</span>
+                                <span className="review-desc">{averages.rating_amenities >= 4 ? 'Excellent' : 'Good'}</span>
                             </div>
-                            <span className="review-score">5.0</span>
+                            <span className="review-score">{averages.rating_amenities}</span>
                         </div>
                         <div className="review-item">
                             <div className="review-text">
                                 <span className="review-label">Food</span>
-                                <span className="review-desc">Excellent</span>
+                                <span className="review-desc">{averages.rating_food >= 4 ? 'Excellent' : 'Good'}</span>
                             </div>
-                            <span className="review-score">5.0</span>
+                            <span className="review-score">{averages.rating_food}</span>
                         </div>
                         <div className="review-item">
                             <div className="review-text">
                                 <span className="review-label">Price</span>
-                                <span className="review-desc">Excellent</span>
+                                <span className="review-desc">{averages.rating_price >= 4 ? 'Excellent' : 'Good'}</span>
                             </div>
-                            <span className="review-score">5.0</span>
+                            <span className="review-score">{averages.rating_price}</span>
                         </div>
                         <div className="review-item">
                             <div className="review-text">
                                 <span className="review-label">Rooms</span>
-                                <span className="review-desc">Excellent</span>
+                                <span className="review-desc">{averages.rating_room >= 4 ? 'Excellent' : 'Good'}</span>
                             </div>
-                            <span className="review-score">5.0</span>
+                            <span className="review-score">{averages.rating_room}</span>
                         </div>
                         <div className="review-item">
                             <div className="review-text">
                                 <span className="review-label">Tour Operator</span>
-                                <span className="review-desc">Excellent</span>
+                                <span className="review-desc">{averages.rating_tour_operator >= 4 ? 'Excellent' : 'Good'}</span>
                             </div>
-                            <span className="review-score">5.0</span>
+                            <span className="review-score">{averages.rating_tour_operator}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div className="tour-detail-reviews-list">
-                {reviewsList.slice(0, visibleCount).map((review) => (
-                    <ReviewNode
-                        key={review.id}
-                        review={review}
-                        depth={0}
-                        replyingTo={replyingTo}
-                        setReplyingTo={setReplyingTo}
-                        replyText={replyText}
-                        setReplyText={setReplyText}
-                        handleInlineReplySubmit={handleInlineReplySubmit}
-                    />
-                ))}
+                {isLoading ? (
+                    <p>Loading reviews...</p>
+                ) : reviewsList.length === 0 ? (
+                    <p>No reviews yet. Be the first to review!</p>
+                ) : (
+                    reviewsList.slice(0, visibleCount).map((review) => (
+                        <ReviewNode
+                            key={review.id}
+                            review={review}
+                            depth={0}
+                            replyingTo={replyingTo}
+                            setReplyingTo={setReplyingTo}
+                            replyText={replyText}
+                            setReplyText={setReplyText}
+                            handleInlineReplySubmit={handleInlineReplySubmit}
+                        />
+                    ))
+                )}
             </div>
 
             {reviewsList.length > 3 && (
@@ -217,27 +257,27 @@ const CustomerReviewsSection = () => {
                 <div className="tour-detail-review-ratings">
                     <div className="rating-item">
                         <span className="rating-label">Location</span>
-                        <Rate className="custom-rate" value={reviewForm.ratings.Location} onChange={(val) => handleRatingChange('Location', val)} />
+                        <Rate className="custom-rate" value={ratings.rating_location} onChange={(val) => handleRatingChange('rating_location', val)} />
                     </div>
                     <div className="rating-item">
                         <span className="rating-label">Amenities</span>
-                        <Rate className="custom-rate" value={reviewForm.ratings.Amenities} onChange={(val) => handleRatingChange('Amenities', val)} />
+                        <Rate className="custom-rate" value={ratings.rating_amenities} onChange={(val) => handleRatingChange('rating_amenities', val)} />
                     </div>
                     <div className="rating-item">
                         <span className="rating-label">Food</span>
-                        <Rate className="custom-rate" value={reviewForm.ratings.Food} onChange={(val) => handleRatingChange('Food', val)} />
+                        <Rate className="custom-rate" value={ratings.rating_food} onChange={(val) => handleRatingChange('rating_food', val)} />
                     </div>
                     <div className="rating-item">
                         <span className="rating-label">Room</span>
-                        <Rate className="custom-rate" value={reviewForm.ratings.Room} onChange={(val) => handleRatingChange('Room', val)} />
+                        <Rate className="custom-rate" value={ratings.rating_room} onChange={(val) => handleRatingChange('rating_room', val)} />
                     </div>
                     <div className="rating-item">
                         <span className="rating-label">Price</span>
-                        <Rate className="custom-rate" value={reviewForm.ratings.Price} onChange={(val) => handleRatingChange('Price', val)} />
+                        <Rate className="custom-rate" value={ratings.rating_price} onChange={(val) => handleRatingChange('rating_price', val)} />
                     </div>
                     <div className="rating-item">
                         <span className="rating-label">Tour Operator</span>
-                        <Rate className="custom-rate" value={reviewForm.ratings.TourOperator} onChange={(val) => handleRatingChange('TourOperator', val)} />
+                        <Rate className="custom-rate" value={ratings.rating_tour_operator} onChange={(val) => handleRatingChange('rating_tour_operator', val)} />
                     </div>
                 </div>
 
@@ -245,56 +285,18 @@ const CustomerReviewsSection = () => {
                     form={form}
                     className="tour-detail-reply-form"
                     onFinish={handleFormSubmit}
-                    initialValues={{ name: reviewForm.name, email: reviewForm.email, title: reviewForm.title, comment: reviewForm.comment }}
-                    onValuesChange={(changedValues) => setReviewForm(prev => ({ ...prev, ...changedValues }))}
                 >
                     <div className="reply-form-row">
-                        <Form.Item name="name" rules={[{ required: true, message: 'Please enter your name!' }]} style={{ width: '100%', marginBottom: 0 }}>
+                        <Form.Item name="reviewer_name" rules={[{ required: true, message: 'Please enter your name!' }]} style={{ width: '100%', marginBottom: 0 }}>
                             <Input placeholder="Name *" className="reply-input" style={{ width: '100%', marginBottom: 0 }} />
                         </Form.Item>
-                        <Form.Item name="email" rules={[{ required: true, type: 'email', message: 'Please enter a valid email!' }]} style={{ width: '100%', marginBottom: 0 }}>
+                        <Form.Item name="reviewer_email" rules={[{ required: true, type: 'email', message: 'Please enter a valid email!' }]} style={{ width: '100%', marginBottom: 0 }}>
                             <Input placeholder="Email *" className="reply-input" style={{ width: '100%', marginBottom: 0 }} />
                         </Form.Item>
                     </div>
                     <Form.Item name="title" style={{ marginBottom: '16px', marginTop: '16px' }}>
                         <Input placeholder="Title" className="reply-input-full" style={{ marginBottom: 0 }} />
                     </Form.Item>
-
-                    <Upload
-                        multiple
-                        listType="picture"
-                        accept=".png,.jpg,.jpeg"
-                        beforeUpload={(file) => {
-                            const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-                            if (!isJpgOrPng) {
-                                message.error('You can only upload JPG/PNG file!');
-                            }
-                            return false; // Always return false to stop auto-uploading
-                        }}
-                        maxCount={4}
-                        fileList={reviewForm.images}
-                        onChange={({ fileList }) => {
-                            // Filter out any non JPG/PNG files that might have slipped through
-                            const validFiles = fileList.filter(file => {
-                                // If the file object doesn't have a type (e.g. some edge cases or already uploaded files), just check extension or allow
-                                if (file.type) {
-                                    return file.type === 'image/jpeg' || file.type === 'image/png';
-                                }
-                                return true;
-                            });
-
-                            if (validFiles.length > 4) {
-                                message.warning("You can only upload a maximum of 4 images.");
-                                setReviewForm({ ...reviewForm, images: validFiles.slice(0, 4) });
-                            } else {
-                                setReviewForm({ ...reviewForm, images: validFiles });
-                            }
-                        }}
-                    >
-                        {reviewForm.images.length < 4 && (
-                            <Button icon={<UploadOutlined />}>Upload Images (Max 4)</Button>
-                        )}
-                    </Upload>
 
                     <Form.Item name="comment" rules={[{ required: true, message: 'Please enter your comment!' }]} style={{ marginBottom: '16px' }}>
                         <Input.TextArea placeholder="Comment *" rows={4} className="reply-textarea" style={{ marginBottom: 0 }} />

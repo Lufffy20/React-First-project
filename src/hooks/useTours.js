@@ -35,6 +35,7 @@ export const useTours = () => {
                     title: tour.title,
                     rating: tour.rating || 0,
                     reviews: tour.reviews_count || 0,
+                    reviews_count: tour.reviews_count || 0,
                     description: tour.description,
                     bestPrice: tour.features?.best_price,
                     freeCancel: tour.features?.free_cancel,

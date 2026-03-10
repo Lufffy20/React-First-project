@@ -147,3 +147,34 @@ export const deleteExclusionAxiosCall = (id) => {
 export const fetchItineraryAxiosCall = (id) => {
     return apiClient.get(`/admin/itinerary/${id}`);
 };
+
+// Review APIs (Admin)
+export const createReviewAxiosCall = (tourId, data) => {
+    return apiClient.post(`/admin/tours/${tourId}/review`, data);
+};
+
+export const fetchReviewAxiosCall = (id) => {
+    return apiClient.get(`/admin/review/${id}`);
+};
+
+export const updateReviewAxiosCall = (id, data) => {
+    return apiClient.patch(`/admin/review/${id}`, data);
+};
+
+export const deleteReviewAxiosCall = (id) => {
+    return apiClient.delete(`/admin/review/${id}`);
+};
+
+// Review APIs (Public)
+export const fetchPublicReviewsAxiosCall = (tourId) => {
+    return apiClient.get(`/tour/${tourId}/reviews`);
+};
+
+export const submitPublicReviewAxiosCall = (tourId, data) => {
+    return apiClient.post(`/tour/${tourId}/submit-review`, data);
+};
+
+export const submitReviewReplyAxiosCall = (reviewId, data) => {
+    return apiClient.post(`/review/${reviewId}/reply`, data);
+};
+

@@ -15,11 +15,15 @@ const RelatedTours = ({ tours, id }) => {
             id: t.id,
             name: t.title || t.location,
             description: t.description,
-            rating: `${t.rating || 0}(${t.reviews || 0}+)`,
+            rating: t.rating > 0 ? `${t.rating} (${t.reviews_count || 0}+)` : "New",
             days: t.duration,
             from: `$${t.price}`,
             image: t.image
         }));
+
+    if (relatedTours.length === 0) {
+        return null;
+    }
 
     return (
         <div className="tour-detail-related-section">

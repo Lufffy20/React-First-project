@@ -24,8 +24,8 @@ const AllToursCard = ({ tour }) => {
                 <h3 className="card-title">{tour.title}</h3>
 
                 <div className="card-rating-row">
-                    <span className="rating-star">★ {tour.rating}</span>
-                    <span className="rating-reviews">({tour.reviews})</span>
+                    <span className="rating-star">★ {tour.rating > 0 ? tour.rating : "New"}</span>
+                    <span className="rating-reviews">({tour.reviews_count || 0})</span>
                 </div>
 
                 <p className="card-description">{tour.description}</p>

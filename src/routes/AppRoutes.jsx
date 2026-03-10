@@ -21,6 +21,7 @@ import ManageExclusions from "../pages/admin/exclusions/ManageExclusions";
 import ManageFAQs from "../pages/admin/faq/ManageFAQs";
 import ManageItineraries from "../pages/admin/itineraries/ManageItineraries";
 import ManageGallery from "../pages/admin/gallery/ManageGallery";
+import ManageReviews from "../pages/admin/reviews/ManageReviews";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 
 function AppRoutes() {
@@ -50,6 +51,7 @@ function AppRoutes() {
                     <Route path="faqs" element={<ManageFAQs />} />
                     <Route path="itinerary" element={<ManageItineraries />} />
                     <Route path="gallery" element={<ManageGallery />} />
+                    <Route path="reviews" element={<ManageReviews />} />
                     {/* Future Admin Pages: settings */}
                 </Route>
 
