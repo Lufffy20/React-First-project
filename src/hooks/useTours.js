@@ -22,23 +22,31 @@ export const useTours = () => {
                 setTotalTours(response.data.total);
             }
 
-            const normalizedTours = toursData.map(tour => ({
-                id: tour.id,
-                badge: tour.badge_text,
-                image: tour.image ? `http://localhost:1337${tour.image}` : null,
-                location: tour.location,
-                title: tour.title,
-                rating: tour.rating || 0,
-                reviews: tour.reviews_count || 0,
-                description: tour.description,
-                bestPrice: tour.features?.best_price,
-                freeCancel: tour.features?.free_cancel,
-                duration: `${tour.days || 0} Days ${tour.nights || 0} Nights`,
-                oldPrice: tour.old_price,
-                price: tour.current_price,
-                language: tour.tour_language,
-                type: tour.tour_type
-            }));
+            const normalizedTours = toursData.map(tour => {
+                const gallery = tour.images || [];
+                const primaryImage = gallery.find(img => img.is_primary) || gallery[0];
+                const imagePath = primaryImage ? primaryImage.image_url : null;
+
+                return {
+                    id: tour.id,
+                    badge: tour.badge_text,
+                    image: imagePath ? `http://localhost:1337${imagePath}` : null,
+                    location: tour.location,
+                    title: tour.title,
+                    rating: tour.rating || 0,
+                    reviews: tour.reviews_count || 0,
+                    description: tour.description,
+                    bestPrice: tour.features?.best_price,
+                    freeCancel: tour.features?.free_cancel,
+                    duration: `${tour.days || 0} Days ${tour.nights || 0} Nights`,
+                    oldPrice: tour.old_price,
+                    price: tour.current_price,
+                    language: tour.tour_language,
+                    type: tour.tour_type,
+                    group_size: tour.group_size,
+                    ages: tour.ages
+                };
+            });
 
             dispatch(setReduxTours(normalizedTours));
             setError(null);

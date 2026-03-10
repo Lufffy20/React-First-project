@@ -72,10 +72,11 @@ const TourDetail = () => {
 
     // Build image gallery
     const displayImages = [];
-    if (tour.image) displayImages.push({ image: tour.image });
-    if (tour.gallery && tour.gallery.length > 0) {
-        tour.gallery.forEach(img => {
-            displayImages.push({ image: img.image_url });
+    if (tour.images && tour.images.length > 0) {
+        // Sort to put primary image first
+        const sortedImages = [...tour.images].sort((a, b) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0));
+        sortedImages.forEach(img => {
+            displayImages.push({ image: `http://localhost:1337${img.image_url}` });
         });
     }
 

@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import {
     getAdminToursApi, createAdminTourApi, updateAdminTourApi, deleteAdminTourApi,
     createItineraryApi, updateItineraryApi, deleteItineraryApi,
-    createFaqApi, updateFaqApi, deleteFaqApi,
-    createImageApi, deleteImageApi,
-    createInclusionApi, deleteInclusionApi,
-    createExclusionApi, deleteExclusionApi
+    createFaqApi, updateFaqApi, deleteFaqApi, getFaqApi,
+    createInclusionApi, getInclusionApi, updateInclusionApi, deleteInclusionApi,
+    createExclusionApi, getExclusionApi, updateExclusionApi, deleteExclusionApi,
+    setPrimaryImageApi
 } from '../helper/functionapi';
 import { message } from 'antd';
 
@@ -27,30 +27,42 @@ export const useAdminTours = () => {
                 setTotalTours(response.data.total);
             }
 
-            const normalizedTours = toursData.map(tour => ({
-                id: tour.id,
-                badge: tour.badge_text,
-                image: tour.image ? `http://localhost:1337${tour.image}` : null,
-                location: tour.location,
-                title: tour.title,
-                rating: tour.rating,
-                reviews: tour.reviews_count,
-                description: tour.description,
-                bestPrice: tour.features?.best_price,
-                freeCancel: tour.features?.free_cancel,
-                duration: `${tour.days || 0} Days ${tour.nights || 0} Nights`,
-                oldPrice: tour.old_price,
-                price: tour.current_price,
-                language: tour.tour_language,
-                type: tour.tour_type
-            }));
+            const normalizedTours = toursData.map(tour => {
+                // Deriving main thumbnail: search for primary, or fallback to first
+                const gallery = tour.images || tour.gallery || [];
+                const primaryRecord = gallery.find(img => img.is_primary) || gallery[0];
+                const mainImage = primaryRecord ? primaryRecord.image_url : null;
+
+                return {
+                    id: tour.id,
+                    badge: tour.badge_text,
+                    image: mainImage ? `http://localhost:1337${mainImage}` : null,
+                    location: tour.location,
+                    title: tour.title,
+                    rating: tour.rating,
+                    reviews: tour.reviews_count,
+                    description: tour.description,
+                    bestPrice: tour.features?.best_price,
+                    freeCancel: tour.features?.free_cancel,
+                    duration: `${tour.days || 0} Days ${tour.nights || 0} Nights`,
+                    oldPrice: tour.old_price,
+                    price: tour.current_price,
+                    language: tour.tour_language,
+                    type: tour.tour_type,
+                    group_size: tour.group_size,
+                    ages: tour.ages,
+                    inclusions: tour.inclusions || [],
+                    exclusions: tour.exclusions || [],
+                    faqs: tour.faqs || [],
+                    itineraries: tour.itineraries || [],
+                    gallery: gallery
+                };
+            });
             setTours(normalizedTours);
             setError(null);
         } catch (err) {
             console.error('Fetch Tours Error:', err);
             setError(err);
-            // Error is handled by Axios Interceptor with an AntD message,
-            // but we keep the state for UI flexibility.
         } finally {
             setLoading(false);
         }
@@ -62,7 +74,7 @@ export const useAdminTours = () => {
             const response = await createAdminTourApi(tourData);
             if (response.data) {
                 message.success('Tour created successfully');
-                await fetchTours(); // Refresh list automatically
+                await fetchTours();
                 return true;
             }
         } catch (err) {
@@ -163,6 +175,19 @@ export const useAdminTours = () => {
         }
     };
 
+    const handleGetItinerary = async (id) => {
+        try {
+            setLoading(true);
+            const response = await getItineraryApi(id);
+            return response.data;
+        } catch (err) {
+            message.error('Failed to fetch itinerary');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // FAQ Handlers
     const handleAddFaq = async (tourId, data) => {
         try {
@@ -206,30 +231,14 @@ export const useAdminTours = () => {
         }
     };
 
-    // Image Handlers
-    const handleAddImage = async (tourId, data) => {
+    const handleGetFaq = async (id) => {
         try {
             setLoading(true);
-            const response = await createImageApi(tourId, data);
-            message.success('Image added to gallery');
+            const response = await getFaqApi(id);
             return response.data;
         } catch (err) {
-            message.error('Failed to add image');
+            message.error('Failed to fetch FAQ details');
             return null;
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleDeleteImage = async (id) => {
-        try {
-            setLoading(true);
-            await deleteImageApi(id);
-            message.success('Image removed');
-            return true;
-        } catch (err) {
-            message.error('Failed to delete image');
-            return false;
         } finally {
             setLoading(false);
         }
@@ -264,6 +273,33 @@ export const useAdminTours = () => {
         }
     };
 
+    const handleGetInclusion = async (id) => {
+        try {
+            setLoading(true);
+            const response = await getInclusionApi(id);
+            return response.data;
+        } catch (err) {
+            message.error('Failed to fetch inclusion');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateInclusion = async (id, data) => {
+        try {
+            setLoading(true);
+            const response = await updateInclusionApi(id, data);
+            message.success('Inclusion updated');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to update inclusion');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleAddExclusion = async (tourId, data) => {
         try {
             setLoading(true);
@@ -292,6 +328,78 @@ export const useAdminTours = () => {
         }
     };
 
+    const handleGetExclusion = async (id) => {
+        try {
+            setLoading(true);
+            const response = await getExclusionApi(id);
+            return response.data;
+        } catch (err) {
+            message.error('Failed to fetch exclusion');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleUpdateExclusion = async (id, data) => {
+        try {
+            setLoading(true);
+            const response = await updateExclusionApi(id, data);
+            message.success('Exclusion updated');
+            return response.data;
+        } catch (err) {
+            message.error('Failed to update exclusion');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Gallery Image Handlers
+    const handleAddImage = async (tourId, formData) => {
+        try {
+            setLoading(true);
+            const response = await createImageApi(tourId, formData);
+            message.success('Image added to gallery');
+            return response.data;
+        } catch (err) {
+            console.error('Add image error:', err);
+            message.error('Failed to upload image');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteImage = async (id) => {
+        try {
+            setLoading(true);
+            await deleteImageApi(id);
+            message.success('Image removed from gallery');
+            return true;
+        } catch (err) {
+            console.error('Delete image error:', err);
+            message.error('Failed to remove image');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSetPrimaryImage = async (id) => {
+        try {
+            setLoading(true);
+            await setPrimaryImageApi(id);
+            message.success('Main photo updated');
+            return true;
+        } catch (err) {
+            console.error('Set primary image error:', err);
+            message.error('Failed to update main photo');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return {
         tours,
@@ -307,14 +415,22 @@ export const useAdminTours = () => {
         handleAddItinerary,
         handleUpdateItinerary,
         handleDeleteItinerary,
+        handleGetItinerary,
         handleAddFaq,
         handleUpdateFaq,
         handleDeleteFaq,
-        handleAddImage,
-        handleDeleteImage,
+        handleGetFaq,
         handleAddInclusion,
+        handleGetInclusion,
+        handleUpdateInclusion,
         handleDeleteInclusion,
         handleAddExclusion,
-        handleDeleteExclusion
+        handleGetExclusion,
+        handleUpdateExclusion,
+        handleDeleteExclusion,
+        // Gallery Image Handlers
+        handleAddImage,
+        handleDeleteImage,
+        handleSetPrimaryImage
     };
 };

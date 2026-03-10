@@ -12,9 +12,15 @@ import ResetPasswordPage from "../pages/resetpassword/ResetPasswordPage";
 import AdminLayout from "../pages/admin/AdminLayout";
 import AdminHome from "../pages/admin/AdminHome";
 import AdminUsers from "../pages/admin/AdminUsers";
-import AdminTours from "../pages/admin/AdminTours";
-import AddTour from "../pages/admin/AddTour";
-import EditTour from "../pages/admin/EditTour";
+import AdminTours from "../pages/admin/tours/AdminTours";
+import AddTour from "../pages/admin/tours/AddTour";
+import EditTour from "../pages/admin/tours/EditTour";
+import AdminTourDetails from "../pages/admin/tours/AdminTourDetails";
+import ManageInclusions from "../pages/admin/inclusions/ManageInclusions";
+import ManageExclusions from "../pages/admin/exclusions/ManageExclusions";
+import ManageFAQs from "../pages/admin/faq/ManageFAQs";
+import ManageItineraries from "../pages/admin/itineraries/ManageItineraries";
+import ManageGallery from "../pages/admin/gallery/ManageGallery";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 
 function AppRoutes() {
@@ -38,6 +44,12 @@ function AppRoutes() {
                     <Route path="tours" element={<AdminTours />} />
                     <Route path="tours/add" element={<AddTour />} />
                     <Route path="tours/edit/:id" element={<EditTour />} />
+                    <Route path="tours/view/:id" element={<AdminTourDetails />} />
+                    <Route path="inclusions" element={<ManageInclusions />} />
+                    <Route path="exclusions" element={<ManageExclusions />} />
+                    <Route path="faqs" element={<ManageFAQs />} />
+                    <Route path="itinerary" element={<ManageItineraries />} />
+                    <Route path="gallery" element={<ManageGallery />} />
                     {/* Future Admin Pages: settings */}
                 </Route>
 

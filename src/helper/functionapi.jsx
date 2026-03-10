@@ -4,10 +4,11 @@ import {
     fetchTourAxiosCall, updateTourAxiosCall, updateAdminTourAxiosCall, deleteTourAxiosCall, deleteAdminTourAxiosCall,
     fetchUsersAxiosCall, createUserAxiosCall, updateUserAxiosCall, deleteUserAxiosCall,
     createItineraryAxiosCall, updateItineraryAxiosCall, deleteItineraryAxiosCall,
-    createFaqAxiosCall, updateFaqAxiosCall, deleteFaqAxiosCall,
-    createImageAxiosCall, deleteImageAxiosCall,
-    createInclusionAxiosCall, deleteInclusionAxiosCall,
-    createExclusionAxiosCall, deleteExclusionAxiosCall
+    createFaqAxiosCall, updateFaqAxiosCall, deleteFaqAxiosCall, fetchFaqAxiosCall,
+    createImageAxiosCall, deleteImageAxiosCall, patchPrimaryImageAxiosCall,
+    createInclusionAxiosCall, fetchInclusionAxiosCall, updateInclusionAxiosCall, deleteInclusionAxiosCall,
+    createExclusionAxiosCall, fetchExclusionAxiosCall, updateExclusionAxiosCall, deleteExclusionAxiosCall,
+    fetchItineraryAxiosCall
 } from './helperapi';
 
 // Yahan se aap UI Component (LoginPage, SignupPage) mei functions import karenge
@@ -106,6 +107,10 @@ export const updateItineraryApi = async (id, data) => {
     return await updateItineraryAxiosCall(id, data);
 };
 
+export const getItineraryApi = async (id) => {
+    return await fetchItineraryAxiosCall(id);
+};
+
 export const deleteItineraryApi = async (id) => {
     return await deleteItineraryAxiosCall(id);
 };
@@ -122,6 +127,10 @@ export const deleteFaqApi = async (id) => {
     return await deleteFaqAxiosCall(id);
 };
 
+export const getFaqApi = async (id) => {
+    return await fetchFaqAxiosCall(id);
+};
+
 export const createImageApi = async (tourId, data) => {
     return await createImageAxiosCall(tourId, data);
 };
@@ -130,8 +139,20 @@ export const deleteImageApi = async (id) => {
     return await deleteImageAxiosCall(id);
 };
 
+export const setPrimaryImageApi = async (id) => {
+    return await patchPrimaryImageAxiosCall(id);
+};
+
 export const createInclusionApi = async (tourId, data) => {
     return await createInclusionAxiosCall(tourId, data);
+};
+
+export const getInclusionApi = async (id) => {
+    return await fetchInclusionAxiosCall(id);
+};
+
+export const updateInclusionApi = async (id, data) => {
+    return await updateInclusionAxiosCall(id, data);
 };
 
 export const deleteInclusionApi = async (id) => {
@@ -140,6 +161,14 @@ export const deleteInclusionApi = async (id) => {
 
 export const createExclusionApi = async (tourId, data) => {
     return await createExclusionAxiosCall(tourId, data);
+};
+
+export const getExclusionApi = async (id) => {
+    return await fetchExclusionAxiosCall(id);
+};
+
+export const updateExclusionApi = async (id, data) => {
+    return await updateExclusionAxiosCall(id, data);
 };
 
 export const deleteExclusionApi = async (id) => {
