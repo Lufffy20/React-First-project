@@ -94,6 +94,10 @@ export const deleteFaqAxiosCall = (id) => {
     return apiClient.delete(`/admin/faq/${id}`);
 };
 
+export const fetchFaqAxiosCall = (id) => {
+    return apiClient.get(`/admin/faq/${id}`);
+};
+
 // Image Gallery APIs
 export const createImageAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/image`, data);
@@ -103,9 +107,21 @@ export const deleteImageAxiosCall = (id) => {
     return apiClient.delete(`/admin/image/${id}`);
 };
 
+export const patchPrimaryImageAxiosCall = (id) => {
+    return apiClient.patch(`/admin/image/${id}/primary`);
+};
+
 // Inclusions/Exclusions APIs
 export const createInclusionAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/inclusion`, data);
+};
+
+export const fetchInclusionAxiosCall = (id) => {
+    return apiClient.get(`/admin/inclusion/${id}`);
+};
+
+export const updateInclusionAxiosCall = (id, data) => {
+    return apiClient.patch(`/admin/inclusion/${id}`, data);
 };
 
 export const deleteInclusionAxiosCall = (id) => {
@@ -116,6 +132,18 @@ export const createExclusionAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/exclusion`, data);
 };
 
+export const fetchExclusionAxiosCall = (id) => {
+    return apiClient.get(`/admin/exclusion/${id}`);
+};
+
+export const updateExclusionAxiosCall = (id, data) => {
+    return apiClient.patch(`/admin/exclusion/${id}`, data);
+};
+
 export const deleteExclusionAxiosCall = (id) => {
     return apiClient.delete(`/admin/exclusion/${id}`);
+};
+
+export const fetchItineraryAxiosCall = (id) => {
+    return apiClient.get(`/admin/itinerary/${id}`);
 };

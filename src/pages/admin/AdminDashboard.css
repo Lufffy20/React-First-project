@@ -71,3 +71,11 @@
     display: flex !important;
     justify-content: center !important;
 }
+
+/* Centered container for Add/Edit/View pages */
+.admin-form-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+}

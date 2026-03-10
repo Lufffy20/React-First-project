@@ -22,7 +22,7 @@ const TourContent = ({ tour }) => {
                     <div className="tour-detail-search-icon1"><CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} /></div>
                     <div className="tour-detail-group-size">
                         <p>Group Size</p>
-                        <span>10 people</span>
+                        <span>{tour.group_size || '10 people'}</span>
                     </div>
                 </div>
 
@@ -30,7 +30,7 @@ const TourContent = ({ tour }) => {
                     <div className="tour-detail-search-icon1"><CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} /></div>
                     <div className="tour-detail-ages">
                         <p>Ages</p>
-                        <span>18-99 yrs</span>
+                        <span>{tour.ages || '18-99 yrs'}</span>
                     </div>
                 </div>
 
