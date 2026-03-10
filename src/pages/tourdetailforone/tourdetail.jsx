@@ -102,7 +102,7 @@ const TourDetail = () => {
                     <TourContent tour={tour} />
                     {tour.faqs && tour.faqs.length > 0 && <TourFAQ faqs={tour.faqs} />}
                     <hr />
-                    <CustomerReviewsSection />
+                    <CustomerReviewsSection tourId={tour.id} />
                 </div>
 
                 {/* Right Column Booking Sidebar */}

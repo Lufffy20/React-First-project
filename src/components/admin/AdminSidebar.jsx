@@ -10,7 +10,8 @@ import {
     QuestionCircleOutlined,
     ClockCircleOutlined,
     DollarCircleOutlined,
-    PictureOutlined
+    PictureOutlined,
+    StarOutlined
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -30,6 +31,7 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
         if (path === '/admin/faqs') return '6';
         if (path === '/admin/itinerary') return '7';
         if (path === '/admin/gallery') return '8';
+        if (path === '/admin/reviews') return '10';
         if (path === '/admin/settings') return '9';
         return '1';
     };
@@ -45,6 +47,7 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
         else if (e.key === '6') navigate('/admin/faqs');
         else if (e.key === '7') navigate('/admin/itinerary');
         else if (e.key === '8') navigate('/admin/gallery');
+        else if (e.key === '10') navigate('/admin/reviews');
         else if (e.key === '9') navigate('/admin/settings');
     };
 
@@ -57,6 +60,7 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
         { key: '6', icon: <QuestionCircleOutlined />, label: 'FAQs' },
         { key: '7', icon: <ClockCircleOutlined />, label: 'Itinerary' },
         { key: '8', icon: <PictureOutlined />, label: 'Manage Gallery' },
+        { key: '10', icon: <StarOutlined />, label: 'Reviews' },
         { key: '9', icon: <SettingOutlined />, label: 'Settings' },
     ];
 

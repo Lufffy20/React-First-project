@@ -29,7 +29,10 @@ const TourHeader = ({ tour, displayImages }) => {
                         <div className="tour-detail-header1-title">
                             <p>{tour.title}</p>
                             <div className="tour-detail-info">
-                                <p>{tour.rating || "New"}/5</p>
+                                <p>
+                                    <span className="rating-star">★ {(tour.rating && tour.rating > 0) ? tour.rating : "New"}</span>
+                                    <span className="rating-reviews">({tour.reviews_count || 0})</span>
+                                </p>
                                 <p>{tour.location}</p>
                                 <p>{tour.reviews_count || 0} reviews</p>
                             </div>

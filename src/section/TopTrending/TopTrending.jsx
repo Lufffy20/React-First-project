@@ -22,7 +22,7 @@ const TopTrending = () => {
         name: tour.title,
         location: tour.location,
         description: tour.description,
-        rating: `${tour.rating}(${tour.reviews}+)`,
+        rating: tour.rating > 0 ? `${tour.rating} (${tour.reviews || 0}+)` : "New",
         days: tour.duration,
         from: `$${tour.price}`,
         image: tour.image
