@@ -178,3 +178,8 @@ export const submitReviewReplyAxiosCall = (reviewId, data) => {
     return apiClient.post(`/review/${reviewId}/reply`, data);
 };
 
+// Booking APIs
+export const createBookingAxiosCall = (data) => {
+    return apiClient.post('/booking', data);
+};
+
