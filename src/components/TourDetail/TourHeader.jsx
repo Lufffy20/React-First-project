@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Modal, Row, Col } from 'antd';
+import { Button, Modal, Row, Col, message } from 'antd';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
+import { HeartOutlined, HeartFilled, ShareAltOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleFavorite } from '../../redux/favorites/favoritesSlice';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -9,6 +12,44 @@ import 'swiper/css/pagination';
 
 const TourHeader = ({ tour, displayImages }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const dispatch = useDispatch();
+    const { items: favorites } = useSelector((state) => state.favorites);
+    const { isAuthenticated } = useSelector((state) => state.auth);
+
+    const isFavorite = favorites.some((fav) => String(fav.id) === String(tour.id) || String(fav.tour_id) === String(tour.id));
+
+    const handleFavoriteClick = (e) => {
+        e.preventDefault();
+        if (!isAuthenticated) {
+            message.warning("Please login to add to favorites");
+            return;
+        }
+        dispatch(toggleFavorite({ tourId: tour.id, isFavorite }));
+    };
+
+    const handleShareClick = async (e) => {
+        e.preventDefault();
+        const shareData = {
+            title: tour.title,
+            text: `Check out this tour: ${tour.title}`,
+            url: window.location.href,
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(window.location.href);
+                message.success("Link copied to clipboard!");
+            }
+        } catch (err) {
+            console.error("Error sharing:", err);
+            // Don't show error if user cancelled
+            if (err.name !== 'AbortError') {
+                message.error("Failed to share link");
+            }
+        }
+    };
 
     return (
         <>
@@ -39,8 +80,22 @@ const TourHeader = ({ tour, displayImages }) => {
                         </div>
                     </div>
                     <div className="tour-detail-tag">
-                        <a href="">Share</a>
-                        <a href="">wishlist</a>
+                        <a
+                            href=""
+                            onClick={handleShareClick}
+                            style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+                        >
+                            <ShareAltOutlined />
+                            Share
+                        </a>
+                        <a
+                            href=""
+                            onClick={handleFavoriteClick}
+                            style={{ display: 'flex', alignItems: 'center', gap: '5px', color: isFavorite ? '#ff4d4f' : 'inherit' }}
+                        >
+                            {isFavorite ? <HeartFilled /> : <HeartOutlined />}
+                            wishlist
+                        </a>
                     </div>
                 </div>
 

@@ -230,6 +230,15 @@
     height: 16px;
 }
 
+.card-heart-btn.active {
+    color: #ff4d4f;
+}
+
+.card-heart-btn:hover {
+    transform: scale(1.1);
+    background: #f8f8f8;
+}
+
 .card-info-middle {
     flex: 1;
     padding: 0 24px;
