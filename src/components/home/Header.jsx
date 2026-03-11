@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./Header.css";
 import { Button, Drawer, Select } from "antd";
-import { MenuOutlined, GlobalOutlined, SearchOutlined } from "@ant-design/icons";
+import { MenuOutlined, GlobalOutlined, SearchOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
+import { Badge } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/auth/authSlice";
@@ -12,7 +13,15 @@ const Header = () => {
     const navigate = useNavigate();
     const { handleLogout } = useLogout();
     const { isAuthenticated, user } = useSelector((state) => state.auth);
+    const { items: favorites } = useSelector((state) => state.favorites);
     const [visible, setVisible] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearch = (e) => {
+        if (e.key === 'Enter') {
+            navigate(`/all-tours-details?location=${searchTerm}`);
+        }
+    };
 
     const showDrawer = () => {
         setVisible(true);
@@ -31,10 +40,13 @@ const Header = () => {
                 </div>
 
                 <div className="search-box">
-                    <SearchOutlined className="search-icon" />
+                    <SearchOutlined className="search-icon" onClick={() => navigate(`/all-tours-details?location=${searchTerm}`)} />
                     <input
                         type="text"
                         placeholder="Search destinations or activities"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onKeyPress={handleSearch}
                     />
                 </div>
 
@@ -88,6 +100,13 @@ const Header = () => {
                             ]}
                         />
 
+                        {/* Favorites Icon */}
+                        <div className="nav-favorites" onClick={() => navigate("/favorites")} style={{ cursor: 'pointer', marginRight: '20px', display: 'flex', alignItems: 'center' }}>
+                            <Badge count={favorites.length} size="small" offset={[5, 0]}>
+                                <HeartOutlined style={{ fontSize: '22px', color: '#05073C' }} />
+                            </Badge>
+                        </div>
+
                         {/* Sign Up Text Button */}
                         {!isAuthenticated ? (
                             <>
@@ -139,10 +158,21 @@ const Header = () => {
                     >
                         <div className="mobile-nav-links">
                             <div className="search-box-mobile">
-                                <SearchOutlined className="search-icon-mobile" />
+                                <SearchOutlined className="search-icon-mobile" onClick={() => {
+                                    navigate(`/all-tours-details?location=${searchTerm}`);
+                                    onClose();
+                                }} />
                                 <input
                                     type="text"
                                     placeholder="Search..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onKeyPress={(e) => {
+                                        if (e.key === 'Enter') {
+                                            navigate(`/all-tours-details?location=${searchTerm}`);
+                                            onClose();
+                                        }
+                                    }}
                                 />
                             </div>
                             <Select
@@ -181,6 +211,18 @@ const Header = () => {
                                     { value: 'JPY', label: 'JPY' },
                                 ]}
                             />
+
+                            <Button
+                                type="text"
+                                style={{ width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center' }}
+                                onClick={() => {
+                                    navigate("/favorites");
+                                    onClose();
+                                }}
+                            >
+                                <HeartOutlined style={{ marginRight: '8px' }} />
+                                Favorites ({favorites.length})
+                            </Button>
 
                             {!isAuthenticated ? (
                                 <>

@@ -25,8 +25,21 @@ import ManageReviews from "../pages/admin/reviews/ManageReviews";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import CheckoutPage from "../pages/checkout/CheckoutPage";
 import ThankYouPage from "../pages/thankyou/ThankYouPage";
+import FavoritesPage from "../pages/favorites/FavoritesPage";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFavorites } from "../redux/favorites/favoritesSlice";
 
 function AppRoutes() {
+    const dispatch = useDispatch();
+    const { isAuthenticated } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            dispatch(fetchFavorites());
+        }
+    }, [isAuthenticated, dispatch]);
+
     return (
         <BrowserRouter>
             <Routes>
@@ -62,6 +75,7 @@ function AppRoutes() {
                 <Route path="/tour-detail/:id" element={<ProtectedRoute><TourDetail /></ProtectedRoute>} />
                 <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
                 <Route path="/thank-you" element={<ProtectedRoute><ThankYouPage /></ProtectedRoute>} />
+                <Route path="/favorites" element={<ProtectedRoute><FavoritesPage /></ProtectedRoute>} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Routes>
         </BrowserRouter>

@@ -55,6 +55,17 @@ const AllToursDetails = () => {
 
     const [filters, setFilters] = useState(initialFilters);
 
+    // Dynamic logic for breadcrumbs and title
+    const location = searchParams.get('location');
+    const displayLocation = location || 'All Destinations';
+    const tourTypeLabel = filters.tourTypes.length > 0 ? filters.tourTypes.join(' & ') : '';
+
+    const breadcrumbLinks = location ? `Home > Tours > ${location}` : 'Home > Tours';
+    const breadcrumbInfo = `THE ${totalTours} BEST ${location ? location : ''} Tours & Excursions`;
+    const pageTitle = tourTypeLabel
+        ? `Explore ${tourTypeLabel} ${location ? `in ${location}` : ''}`
+        : `Explore all things to do ${location ? `in ${location}` : ''}`;
+
     // Fetch tours from backend whenever filters, sort, or pagination changes
     React.useEffect(() => {
         const params = {
@@ -63,6 +74,7 @@ const AllToursDetails = () => {
             sortBy: sortBy
         };
 
+        if (location) params.location = location;
         if (filters.tourTypes.length > 0) params.tourType = filters.tourTypes.join(',');
         if (filters.priceRange) {
             params.minPrice = filters.priceRange[0];
@@ -91,7 +103,7 @@ const AllToursDetails = () => {
         // usually days is enough, but can be added if backend supports it.
 
         fetchTours({ params });
-    }, [filters, sortBy, currentPage, pageSize]);
+    }, [filters, sortBy, currentPage, pageSize, location]);
 
     const handleFilterChange = useCallback((filterName, value) => {
         setFilters(prev => ({
@@ -113,6 +125,7 @@ const AllToursDetails = () => {
         setSearchParams(prev => {
             const newParams = new URLSearchParams(prev);
             newParams.set('page', '1');
+            // If we want to clear location too, we could, but maybe keep it if it was a search
             return newParams;
         });
     }, [initialFilters, setSearchParams]);
@@ -120,8 +133,9 @@ const AllToursDetails = () => {
     const handlePageChange = (page, size) => {
         setCurrentPage(page);
         setSearchParams(prev => {
-            prev.set('page', page);
-            return prev;
+            const newParams = new URLSearchParams(prev);
+            newParams.set('page', page);
+            return newParams;
         });
         if (size !== pageSize) {
             setPageSize(size);
@@ -141,10 +155,10 @@ const AllToursDetails = () => {
                     {/* Header Section */}
                     <div className="details-header-section">
                         <div className="details-breadcrumbs">
-                            <span className="breadcrumb-links">Home&gt;Tours&gt;Phuket</span>
-                            <span className="breadcrumb-info">THE 10 BEST Phuket Tours & Excursions</span>
+                            <span className="breadcrumb-links">{breadcrumbLinks}</span>
+                            <span className="breadcrumb-info">{breadcrumbInfo}</span>
                         </div>
-                        <h1 className="details-page-title">Explore all things to do in Phuket</h1>
+                        <h1 className="details-page-title">{pageTitle}</h1>
                     </div>
 
                     {/* Main Content Layout */}

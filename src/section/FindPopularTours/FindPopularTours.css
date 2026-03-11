@@ -47,6 +47,7 @@
     overflow: hidden;
     padding: 10px;
     box-sizing: border-box;
+    position: relative;
 }
 
 .find-popular-tours-image-container img {
@@ -55,6 +56,34 @@
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 5;
+    color: #05073C;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.favorite-icon:hover {
+    transform: scale(1.1);
+    background: #fff;
+}
+
+.favorite-icon.active {
+    color: #ff4d4f;
 }
 
 .find-popular-tours-header .view-all {

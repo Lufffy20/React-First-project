@@ -187,3 +187,16 @@ export const fetchBookedDatesAxiosCall = (tourId) => {
     return apiClient.get(`/tours/${tourId}/booked-dates`);
 };
 
+// Favorites APIs
+export const fetchFavoritesAxiosCall = () => {
+    return apiClient.get('/favorites');
+};
+
+export const addFavoriteAxiosCall = (data) => {
+    return apiClient.post('/favorites', data);
+};
+
+export const removeFavoriteAxiosCall = (tourId) => {
+    return apiClient.delete(`/favorites/${tourId}`);
+};
+
