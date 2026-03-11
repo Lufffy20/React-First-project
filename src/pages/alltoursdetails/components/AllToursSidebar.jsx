@@ -38,7 +38,8 @@ const tourTypesOptions = [
     "Cultural Tours",
     "Food Tours",
     "City Tours",
-    "Cruises Tours"
+    "Cruises Tours",
+    "Wildlife Tours"
 ];
 
 const daysOptions = [

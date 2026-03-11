@@ -211,6 +211,7 @@ const EditTour = () => {
                                                 <Option value="City Tours">City Tours</Option>
                                                 <Option value="Cruises Tours">Cruises Tours</Option>
                                                 <Option value="Beach Tours">Beach Tours</Option>
+                                                <Option value="Wildlife Tours">Wildlife Tours</Option>
                                             </Select>
                                         </Form.Item>
                                     </Col>
