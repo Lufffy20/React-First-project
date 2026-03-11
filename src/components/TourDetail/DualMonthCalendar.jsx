@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { getBookedDatesApi } from '../../helper/functionapi';
 import './DualMonthCalendar.css';
 
-const DualMonthCalendar = () => {
+const DualMonthCalendar = ({ tourId }) => {
     // Start from the current month
     const [currentMonth, setCurrentMonth] = useState(dayjs().startOf('month'));
     const [selectedDate, setSelectedDate] = useState(dayjs()); // Default to today
+    const [bookedDates, setBookedDates] = useState([]);
+
+    useEffect(() => {
+        const fetchBookedDates = async () => {
+            if (!tourId) return;
+            try {
+                const response = await getBookedDatesApi(tourId);
+                if (response.data && response.data.success) {
+                    setBookedDates(response.data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching booked dates:", error);
+            }
+        };
+
+        fetchBookedDates();
+    }, [tourId]);
 
     const handlePrev = () => setCurrentMonth(currentMonth.subtract(1, 'month'));
     const handleNext = () => setCurrentMonth(currentMonth.add(1, 'month'));
@@ -49,14 +67,17 @@ const DualMonthCalendar = () => {
                     {days.map((date, index) => {
                         if (!date) return <div key={`empty-${monthDate.format('MM')}-${index}`} className="dual-calendar-cell empty"></div>;
 
+                        const dateStr = date.format('YYYY-MM-DD');
                         const isSelected = selectedDate && date.isSame(selectedDate, 'day');
                         const isPast = date.isBefore(dayjs().startOf('day'));
+                        const isBooked = bookedDates.includes(dateStr);
 
                         return (
                             <div
-                                key={date.format('YYYY-MM-DD')}
-                                className={`dual-calendar-cell ${isSelected ? 'selected' : ''} ${isPast ? 'disabled' : ''}`}
-                                onClick={() => !isPast && setSelectedDate(date)}
+                                key={dateStr}
+                                className={`dual-calendar-cell ${isSelected ? 'selected' : ''} ${isPast ? 'disabled' : ''} ${isBooked ? 'booked' : ''}`}
+                                onClick={() => !isPast && !isBooked && setSelectedDate(date)}
+                                title={isBooked ? 'Sold Out' : ''}
                             >
                                 <span className="cell-content">{date.date()}</span>
                             </div>
@@ -68,9 +89,26 @@ const DualMonthCalendar = () => {
     };
 
     return (
-        <div className="dual-calendar-container">
-            {renderMonth(currentMonth, true)}
-            {renderMonth(nextMonth, false)}
+        <div className="dual-calendar-wrapper">
+            <div className="dual-calendar-container">
+                {renderMonth(currentMonth, true)}
+                {renderMonth(nextMonth, false)}
+            </div>
+
+            <div className="calendar-legend">
+                <div className="legend-item">
+                    <div className="legend-color available"></div>
+                    <span>Available</span>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color selected"></div>
+                    <span>Selected</span>
+                </div>
+                <div className="legend-item">
+                    <div className="legend-color booked"></div>
+                    <span>Sold Out</span>
+                </div>
+            </div>
         </div>
     );
 };

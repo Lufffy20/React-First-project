@@ -17,11 +17,13 @@ const BookingSidebar = ({ tour }) => {
     const [selectedDates, setSelectedDates] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
 
-    const [totalPrice, setTotalPrice] = useState(tour?.current_price || 0);
+    const [totalPrice, setTotalPrice] = useState(0);
 
-    const adultPrice = 282.00;
-    const youthPrice = 168.00;
-    const childPrice = 80.00;
+    // Dynamic ticket prices based on tour.current_price
+    const basePrice = tour?.current_price || 0;
+    const adultPrice = basePrice;
+    const youthPrice = basePrice * 0.6;
+    const childPrice = basePrice * 0.3;
 
     const extraBookingPrice = 40.00;
     const extraAdultPrice = 17.00;
@@ -42,13 +44,8 @@ const BookingSidebar = ({ tour }) => {
             total += (adultCount * extraAdultPrice) + (youthCount * extraYouthPrice);
         }
 
-        // If no tickets selected, default to base price or 0
-        if (total === 0 && !extraServiceBooking && !extraServicePerson) {
-            total = tour?.current_price || 0;
-        }
-
         setTotalPrice(total);
-    }, [adultCount, youthCount, childrenCount, extraServiceBooking, extraServicePerson, tour]);
+    }, [adultCount, youthCount, childrenCount, extraServiceBooking, extraServicePerson, adultPrice, youthPrice, childPrice]);
 
     const handleBookNow = () => {
         if (adultCount === 0 && youthCount === 0 && childrenCount === 0) {

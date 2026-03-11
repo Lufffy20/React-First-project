@@ -10,7 +10,8 @@ import {
     createExclusionAxiosCall, fetchExclusionAxiosCall, updateExclusionAxiosCall, deleteExclusionAxiosCall,
     fetchItineraryAxiosCall,
     createReviewAxiosCall, fetchReviewAxiosCall, updateReviewAxiosCall, deleteReviewAxiosCall,
-    fetchPublicReviewsAxiosCall, submitPublicReviewAxiosCall, submitReviewReplyAxiosCall
+    fetchPublicReviewsAxiosCall, submitPublicReviewAxiosCall, submitReviewReplyAxiosCall,
+    fetchBookedDatesAxiosCall
 } from './helperapi';
 
 
@@ -206,5 +207,9 @@ export const submitPublicReviewApi = async (tourId, data) => {
 
 export const submitReviewReplyApi = async (reviewId, data) => {
     return await submitReviewReplyAxiosCall(reviewId, data);
+};
+
+export const getBookedDatesApi = async (tourId) => {
+    return await fetchBookedDatesAxiosCall(tourId);
 };
 

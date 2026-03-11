@@ -117,7 +117,7 @@ const TourContent = ({ tour }) => {
             <div className="tour-detail-availability-calendar-section">
                 <h2>Availability Calendar</h2>
                 <div className="tour-detail-availability-calendar-content">
-                    <DualMonthCalendar />
+                    <DualMonthCalendar tourId={tour.id} />
                 </div>
             </div>
 

@@ -183,3 +183,7 @@ export const createBookingAxiosCall = (data) => {
     return apiClient.post('/booking', data);
 };
 
+export const fetchBookedDatesAxiosCall = (tourId) => {
+    return apiClient.get(`/tours/${tourId}/booked-dates`);
+};
+
