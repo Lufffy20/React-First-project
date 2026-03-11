@@ -23,6 +23,8 @@ import ManageItineraries from "../pages/admin/itineraries/ManageItineraries";
 import ManageGallery from "../pages/admin/gallery/ManageGallery";
 import ManageReviews from "../pages/admin/reviews/ManageReviews";
 import ProtectedRoute from "../components/common/ProtectedRoute";
+import CheckoutPage from "../pages/checkout/CheckoutPage";
+import ThankYouPage from "../pages/thankyou/ThankYouPage";
 
 function AppRoutes() {
     return (
@@ -38,7 +40,7 @@ function AppRoutes() {
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
                 {/* Protected Admin Routes with Nested Layout */}
-                <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+                <Route path="/admin" element={<ProtectedRoute adminOnly={true}><AdminLayout /></ProtectedRoute>}>
                     <Route index element={<Navigate to="/admin/dashboard" replace />} />
                     <Route path="dashboard" element={<AdminHome />} />
                     <Route path="users" element={<AdminUsers />} />
@@ -58,6 +60,8 @@ function AppRoutes() {
                 <Route path="*" element={<NotFoundPage />} />
                 <Route path="/all-tours-details" element={<ProtectedRoute><AllToursDetails /></ProtectedRoute>} />
                 <Route path="/tour-detail/:id" element={<ProtectedRoute><TourDetail /></ProtectedRoute>} />
+                <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+                <Route path="/thank-you" element={<ProtectedRoute><ThankYouPage /></ProtectedRoute>} />
                 <Route path="/reset-password" element={<ResetPasswordPage />} />
             </Routes>
         </BrowserRouter>
