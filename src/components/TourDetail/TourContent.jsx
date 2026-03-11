@@ -1,3 +1,24 @@
+/**
+ * TourContent Component
+ *
+ * Purpose:
+ * Displays the detailed content of a tour including overview,
+ * features, inclusions, exclusions, itinerary, map, and availability calendar.
+ *
+ * Features:
+ * - Shows tour meta information such as duration, group size, ages, and languages
+ * - Displays tour overview/description
+ * - Lists inclusions and exclusions dynamically
+ * - Renders itinerary using Ant Design Steps component
+ * - Embeds Google Maps for tour location reference
+ * - Shows availability calendar using DualMonthCalendar component
+ *
+ * Notes:
+ * - The component expects a "tour" object as a prop
+ * - Safely handles missing or undefined tour data
+ * - Uses conditional rendering when certain fields are unavailable
+ */
+
 import React from 'react';
 import { Flex, Steps, Row, Col } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
@@ -9,99 +30,170 @@ import DualMonthCalendar from './DualMonthCalendar';
 const TourContent = ({ tour }) => {
     return (
         <div className="tour-detail-left-column-content">
+
+            {/* ========================================
+               Tour Key Information Section
+               Displays core tour attributes
+            ======================================== */}
             <div className="tour-detail-right-column">
+
+                {/* Tour Duration */}
                 <div className="tour-detail-feature">
-                    <div className="tour-detail-search-icon1"><CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} /></div>
+                    <div className="tour-detail-search-icon1">
+                        <CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} />
+                    </div>
                     <div className="tour-detail-duration">
                         <p>Duration</p>
                         <span>{tour.days || 0} Days {tour.nights || 0} Nights</span>
                     </div>
                 </div>
 
+                {/* Group Size */}
                 <div className="tour-detail-feature">
-                    <div className="tour-detail-search-icon1"><CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} /></div>
+                    <div className="tour-detail-search-icon1">
+                        <CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} />
+                    </div>
                     <div className="tour-detail-group-size">
                         <p>Group Size</p>
                         <span>{tour.group_size || '10 people'}</span>
                     </div>
                 </div>
 
+                {/* Age Range */}
                 <div className="tour-detail-feature">
-                    <div className="tour-detail-search-icon1"><CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} /></div>
+                    <div className="tour-detail-search-icon1">
+                        <CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} />
+                    </div>
                     <div className="tour-detail-ages">
                         <p>Ages</p>
                         <span>{tour.ages || '18-99 yrs'}</span>
                     </div>
                 </div>
 
+                {/* Languages */}
                 <div className="tour-detail-feature">
-                    <div className="tour-detail-search-icon1"><CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} /></div>
+                    <div className="tour-detail-search-icon1">
+                        <CalendarOutlined style={{ fontSize: '20px', color: '#05073C' }} />
+                    </div>
                     <div className="tour-detail-languages">
                         <p>Languages</p>
-                        <span>{Array.isArray(tour.tour_language) ? tour.tour_language.join(', ') : tour.tour_language || 'English'}</span>
+                        <span>
+                            {Array.isArray(tour.tour_language)
+                                ? tour.tour_language.join(', ')
+                                : tour.tour_language || 'English'}
+                        </span>
                     </div>
                 </div>
+
             </div>
 
+            {/* ========================================
+               Tour Overview Section
+               Displays main description of the tour
+            ======================================== */}
             <div className="tour-detail-overview-section">
                 <h2>Tour Overview</h2>
                 <p>{tour.description}</p>
             </div>
 
-            {/* Inclusions and Exclusions */}
+            {/* ========================================
+               Inclusions & Exclusions Section
+               Displays what is included and excluded
+            ======================================== */}
             <hr />
+
             <div className="tour-detail-included-section">
                 <Row gutter={32}>
+
+                    {/* Included Items */}
                     <Col xs={24} md={12}>
                         <h2>What's included</h2>
-                        <ul className="tour-detail-included-list-left-column" style={{ listStyleType: 'disc', paddingLeft: '20px' }}>
+                        <ul
+                            className="tour-detail-included-list-left-column"
+                            style={{ listStyleType: 'disc', paddingLeft: '20px' }}
+                        >
                             {tour.inclusions && tour.inclusions.length > 0 ? (
-                                tour.inclusions.map((inc, i) => <li key={inc.id || i}>{inc.item}</li>)
+                                tour.inclusions.map((inc, i) => (
+                                    <li key={inc.id || i}>
+                                        {inc.item}
+                                    </li>
+                                ))
                             ) : (
                                 <li>Standard Inclusions</li>
                             )}
                         </ul>
                     </Col>
+
+                    {/* Excluded Items */}
                     <Col xs={24} md={12}>
                         <h2>What's excluded</h2>
-                        <ul className="tour-detail-included-list-right-column" style={{ listStyleType: 'circle', paddingLeft: '20px', color: '#666' }}>
+                        <ul
+                            className="tour-detail-included-list-right-column"
+                            style={{
+                                listStyleType: 'circle',
+                                paddingLeft: '20px',
+                                color: '#666'
+                            }}
+                        >
                             {tour.exclusions && tour.exclusions.length > 0 ? (
-                                tour.exclusions.map((exc, i) => <li key={exc.id || i}>{exc.item}</li>)
+                                tour.exclusions.map((exc, i) => (
+                                    <li key={exc.id || i}>
+                                        {exc.item}
+                                    </li>
+                                ))
                             ) : (
                                 <li>Standard Exclusions</li>
                             )}
                         </ul>
                     </Col>
+
                 </Row>
             </div>
 
             <hr />
 
+            {/* ========================================
+               Tour Itinerary Section
+               Displays daily itinerary using Steps
+            ======================================== */}
             <div className="tour-detail-itinerary-section">
                 <h2>Tour Itinerary</h2>
+
                 <div className="tour-detail-itinerary-content">
+
                     {tour.itineraries && tour.itineraries.length > 0 ? (
+
                         <Flex vertical gap="middle">
+
                             <Steps
                                 direction="vertical"
                                 current={-1}
-                                items={tour.itineraries
-                                    .sort((a, b) => a.day_number - b.day_number)
-                                    .map(item => ({
-                                        title: `Day ${item.day_number}: ${item.title}`,
-                                        description: item.description
-                                    }))
+                                items={
+                                    tour.itineraries
+                                        .sort((a, b) => a.day_number - b.day_number)
+                                        .map(item => ({
+                                            title: `Day ${item.day_number}: ${item.title}`,
+                                            description: item.description
+                                        }))
                                 }
                             />
+
                         </Flex>
+
                     ) : (
                         <p>Itinerary details coming soon.</p>
                     )}
+
                 </div>
             </div>
 
+            {/* ========================================
+               Tour Map Section
+               Displays Google Maps embed
+            ======================================== */}
             <div className="tour-detail-map-section">
                 <h2>Tour Map</h2>
+
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.999706602396!2d2.292292615674315!3d48.85837307928756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66fdebfbf6f59%3A0x4e3c0a3d1b6c8b8!2sEiffel%20Tower!5e0!3m2!1sen!2sin!4v1700000000000"
                     width="100%"
@@ -110,18 +202,26 @@ const TourContent = ({ tour }) => {
                     allowFullScreen=""
                     title="Tour Map"
                 ></iframe>
+
             </div>
 
             <hr />
 
+            {/* ========================================
+               Availability Calendar Section
+               Displays booking availability
+            ======================================== */}
             <div className="tour-detail-availability-calendar-section">
                 <h2>Availability Calendar</h2>
+
                 <div className="tour-detail-availability-calendar-content">
                     <DualMonthCalendar tourId={tour.id} />
                 </div>
+
             </div>
 
             <hr />
+
         </div>
     );
 };

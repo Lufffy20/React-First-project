@@ -1,7 +1,38 @@
+/**
+ * Header Component
+ *
+ * Purpose:
+ * This component renders the main navigation header of the application.
+ * It includes:
+ * - Logo / Home navigation
+ * - Search bar for tours and destinations
+ * - Navigation dropdowns (Destinations, Activities, Currency)
+ * - Favorites shortcut
+ * - Authentication buttons (Sign up / Log in / Log out)
+ * - Mobile responsive drawer menu
+ *
+ * Features:
+ * - Integrates with React Router for navigation
+ * - Uses Redux store for authentication state and favorites list
+ * - Provides responsive design with a mobile drawer menu
+ * - Supports searching tours by location
+ *
+ * Notes:
+ * - Favorites count is displayed using Ant Design Badge
+ * - Authenticated users see their name and logout button
+ * - Mobile layout uses Ant Design Drawer component
+ */
+
 import React, { useState } from "react";
 import "./Header.css";
 import { Button, Drawer, Select } from "antd";
-import { MenuOutlined, GlobalOutlined, SearchOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons";
+import {
+    MenuOutlined,
+    GlobalOutlined,
+    SearchOutlined,
+    HeartOutlined,
+    HeartFilled
+} from "@ant-design/icons";
 import { Badge } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,37 +41,82 @@ import { useLogout } from "../../hooks/useAuth";
 
 const Header = () => {
 
+    /**
+     * React Router navigation
+     */
     const navigate = useNavigate();
+
+    /**
+     * Custom logout hook
+     */
     const { handleLogout } = useLogout();
+
+    /**
+     * Access authentication state from Redux
+     */
     const { isAuthenticated, user } = useSelector((state) => state.auth);
+
+    /**
+     * Access favorites list from Redux
+     */
     const { items: favorites } = useSelector((state) => state.favorites);
+
+    /**
+     * Local UI state
+     */
     const [visible, setVisible] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
 
+    /**
+     * Search handler
+     * Navigates to tours page with location query
+     */
     const handleSearch = (e) => {
         if (e.key === 'Enter') {
             navigate(`/all-tours-details?location=${searchTerm}`);
         }
     };
 
+    /**
+     * Drawer open handler
+     */
     const showDrawer = () => {
         setVisible(true);
     };
 
+    /**
+     * Drawer close handler
+     */
     const onClose = () => {
         setVisible(false);
     };
 
     return (
         <header className="main-header">
+
             <div className="header-container">
 
-                <div className="logo" onClick={() => navigate("/")}>
+                {/* =========================
+                   Logo Section
+                ========================= */}
+                <div
+                    className="logo"
+                    onClick={() => navigate("/")}
+                >
                     <h2>TravelSite</h2>
                 </div>
 
+                {/* =========================
+                   Search Box
+                ========================= */}
                 <div className="search-box">
-                    <SearchOutlined className="search-icon" onClick={() => navigate(`/all-tours-details?location=${searchTerm}`)} />
+                    <SearchOutlined
+                        className="search-icon"
+                        onClick={() =>
+                            navigate(`/all-tours-details?location=${searchTerm}`)
+                        }
+                    />
+
                     <input
                         type="text"
                         placeholder="Search destinations or activities"
@@ -50,10 +126,14 @@ const Header = () => {
                     />
                 </div>
 
-
+                {/* =========================
+                   Desktop Navigation
+                ========================= */}
                 <div className="mobile-hidden">
+
                     <nav className="nav-links">
 
+                        {/* Destinations Dropdown */}
                         <Select
                             defaultValue="Destinations"
                             style={{ width: 140 }}
@@ -70,6 +150,7 @@ const Header = () => {
                             ]}
                         />
 
+                        {/* Activities Dropdown */}
                         <Select
                             defaultValue="Activities"
                             style={{ width: 120 }}
@@ -86,6 +167,7 @@ const Header = () => {
                             ]}
                         />
 
+                        {/* Currency Dropdown */}
                         <Select
                             defaultValue="USD"
                             style={{ width: 80 }}
@@ -101,13 +183,31 @@ const Header = () => {
                         />
 
                         {/* Favorites Icon */}
-                        <div className="nav-favorites" onClick={() => navigate("/favorites")} style={{ cursor: 'pointer', marginRight: '20px', display: 'flex', alignItems: 'center' }}>
-                            <Badge count={favorites.length} size="small" offset={[5, 0]}>
-                                <HeartOutlined style={{ fontSize: '22px', color: '#05073C' }} />
+                        <div
+                            className="nav-favorites"
+                            onClick={() => navigate("/favorites")}
+                            style={{
+                                cursor: 'pointer',
+                                marginRight: '20px',
+                                display: 'flex',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <Badge
+                                count={favorites.length}
+                                size="small"
+                                offset={[5, 0]}
+                            >
+                                <HeartOutlined
+                                    style={{
+                                        fontSize: '22px',
+                                        color: '#05073C'
+                                    }}
+                                />
                             </Badge>
                         </div>
 
-                        {/* Sign Up Text Button */}
+                        {/* Authentication Buttons */}
                         {!isAuthenticated ? (
                             <>
                                 <Button
@@ -116,6 +216,7 @@ const Header = () => {
                                 >
                                     Sign up
                                 </Button>
+
                                 <Button
                                     type="primary"
                                     shape="round"
@@ -127,15 +228,25 @@ const Header = () => {
                             </>
                         ) : (
                             <>
-                                <span style={{ marginRight: '15px', fontWeight: '500', color: '#101828' }}>
+                                <span
+                                    style={{
+                                        marginRight: '15px',
+                                        fontWeight: '500',
+                                        color: '#101828'
+                                    }}
+                                >
                                     {user?.firstName}
                                 </span>
+
                                 <Button
                                     type="primary"
                                     shape="round"
                                     onClick={handleLogout}
                                     className="login-btn"
-                                    style={{ backgroundColor: '#dc2626', borderColor: '#dc2626' }}
+                                    style={{
+                                        backgroundColor: '#dc2626',
+                                        borderColor: '#dc2626'
+                                    }}
                                 >
                                     Log out
                                 </Button>
@@ -143,12 +254,22 @@ const Header = () => {
                         )}
 
                     </nav>
+
                 </div>
 
+                {/* =========================
+                   Mobile Navigation
+                ========================= */}
+
                 <div className="mobile-visible">
-                    <Button type="primary" onClick={showDrawer}>
+
+                    <Button
+                        type="primary"
+                        onClick={showDrawer}
+                    >
                         <MenuOutlined />
                     </Button>
+
                     <Drawer
                         title="Menu"
                         placement="right"
@@ -156,12 +277,19 @@ const Header = () => {
                         open={visible}
                         className="mobile-drawer"
                     >
+
                         <div className="mobile-nav-links">
+
+                            {/* Mobile Search */}
                             <div className="search-box-mobile">
-                                <SearchOutlined className="search-icon-mobile" onClick={() => {
-                                    navigate(`/all-tours-details?location=${searchTerm}`);
-                                    onClose();
-                                }} />
+                                <SearchOutlined
+                                    className="search-icon-mobile"
+                                    onClick={() => {
+                                        navigate(`/all-tours-details?location=${searchTerm}`);
+                                        onClose();
+                                    }}
+                                />
+
                                 <input
                                     type="text"
                                     placeholder="Search..."
@@ -175,6 +303,8 @@ const Header = () => {
                                     }}
                                 />
                             </div>
+
+                            {/* Mobile Selects */}
                             <Select
                                 defaultValue="Destinations"
                                 style={{ width: '100%' }}
@@ -187,6 +317,7 @@ const Header = () => {
                                     { value: 'japan', label: 'Japan' },
                                 ]}
                             />
+
                             <Select
                                 defaultValue="Activities"
                                 style={{ width: '100%' }}
@@ -199,6 +330,7 @@ const Header = () => {
                                     { value: 'food', label: 'Food & Drink' },
                                 ]}
                             />
+
                             <Select
                                 defaultValue="USD"
                                 style={{ width: '100%' }}
@@ -212,9 +344,15 @@ const Header = () => {
                                 ]}
                             />
 
+                            {/* Mobile Favorites */}
                             <Button
                                 type="text"
-                                style={{ width: '100%', textAlign: 'left', display: 'flex', alignItems: 'center' }}
+                                style={{
+                                    width: '100%',
+                                    textAlign: 'left',
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
                                 onClick={() => {
                                     navigate("/favorites");
                                     onClose();
@@ -224,6 +362,7 @@ const Header = () => {
                                 Favorites ({favorites.length})
                             </Button>
 
+                            {/* Mobile Auth */}
                             {!isAuthenticated ? (
                                 <>
                                     <Button
@@ -235,6 +374,7 @@ const Header = () => {
                                     >
                                         Sign up
                                     </Button>
+
                                     <Button
                                         type="primary"
                                         shape="round"
@@ -249,9 +389,17 @@ const Header = () => {
                                 </>
                             ) : (
                                 <>
-                                    <div style={{ textAlign: 'center', marginBottom: '10px', fontWeight: '500', color: '#101828' }}>
+                                    <div
+                                        style={{
+                                            textAlign: 'center',
+                                            marginBottom: '10px',
+                                            fontWeight: '500',
+                                            color: '#101828'
+                                        }}
+                                    >
                                         {user?.firstName}
                                     </div>
+
                                     <Button
                                         type="primary"
                                         shape="round"
@@ -260,17 +408,24 @@ const Header = () => {
                                             onClose();
                                         }}
                                         className="login-btn"
-                                        style={{ backgroundColor: '#dc2626', borderColor: '#dc2626' }}
+                                        style={{
+                                            backgroundColor: '#dc2626',
+                                            borderColor: '#dc2626'
+                                        }}
                                     >
                                         Log out
                                     </Button>
                                 </>
                             )}
+
                         </div>
+
                     </Drawer>
+
                 </div>
 
             </div>
+
         </header>
     );
 };

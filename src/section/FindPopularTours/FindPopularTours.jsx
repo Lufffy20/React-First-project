@@ -1,3 +1,32 @@
+/**
+ * FindPopularTours Section
+ *
+ * Purpose:
+ * Displays the most popular tours on the homepage.
+ *
+ * Features:
+ * - Fetches tours from Redux store
+ * - Sorts tours based on number of reviews (most reviewed first)
+ * - Displays top 8 popular tours
+ * - Uses reusable TourCard component
+ * - Provides navigation to "View All Tours"
+ *
+ * Flow:
+ * Dashboard loads
+ *        ↓
+ * useTours hook fetches tours from API
+ *        ↓
+ * Tours stored in Redux store
+ *        ↓
+ * FindPopularTours reads tours from Redux
+ *        ↓
+ * Sort by reviews and select top 8
+ *        ↓
+ * Map data to TourCard format
+ *        ↓
+ * Render popular tour cards
+ */
+
 import React from "react";
 import { useSelector } from "react-redux";
 import "./FindPopularTours.css";

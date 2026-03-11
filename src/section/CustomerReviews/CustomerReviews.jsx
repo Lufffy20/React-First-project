@@ -1,3 +1,26 @@
+/**
+ * CustomerReviews Section
+ *
+ * Purpose:
+ * Displays customer testimonials on the homepage using a carousel slider.
+ *
+ * Features:
+ * - Autoplay carousel using Ant Design Carousel
+ * - Displays customer image, review title, description, and location
+ * - Background image for visual design
+ * - Lazy loading for images (performance optimization)
+ * - Swipe and drag support for mobile devices
+ *
+ * Flow:
+ * Homepage loads
+ *        ↓
+ * CustomerReviews component renders
+ *        ↓
+ * customerreviews array is mapped into carousel slides
+ *        ↓
+ * Users can view testimonials via autoplay or swipe navigation
+ */
+
 import React from "react";
 import "./CustomerReviews.css";
 import sectionImage from "../../assets/img/customerreviews.png";

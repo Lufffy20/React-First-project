@@ -1,4 +1,39 @@
+/**
+ * Axios Helper API Layer
+ *
+ * Purpose:
+ * This file contains **all raw Axios API request functions**.
+ * Each function directly communicates with the backend API using
+ * the configured axios instance (`apiClient`).
+ *
+ * Architecture Flow:
+ *
+ * UI Components
+ *      ↓
+ * Service Layer (functionapi.js)
+ *      ↓
+ * Axios Helper Layer (this file)
+ *      ↓
+ * axiosInstance.js (token + interceptors)
+ *      ↓
+ * Backend API
+ *
+ * Advantages:
+ * - Keeps API calls centralized
+ * - Easier to maintain endpoints
+ * - Cleaner service layer
+ * - Reusable request logic
+ */
+
 import apiClient from './axiosInstance';
+
+
+
+/**
+ * ==========================================
+ * Authentication APIs
+ * ==========================================
+ */
 
 export const signupAxiosCall = (userData) => {
     return apiClient.post('/auth/signup', userData);
@@ -15,6 +50,14 @@ export const forgotPasswordAxiosCall = (data) => {
 export const resetPasswordAxiosCall = (data) => {
     return apiClient.post('/auth/reset-password', data);
 };
+
+
+
+/**
+ * ==========================================
+ * Tours APIs (Public & Admin)
+ * ==========================================
+ */
 
 export const fetchToursAxiosCall = (params = {}) => {
     return apiClient.get('/tours', { params });
@@ -52,6 +95,14 @@ export const deleteAdminTourAxiosCall = (id) => {
     return apiClient.delete(`/admin/tours/${id}`);
 };
 
+
+
+/**
+ * ==========================================
+ * User Management APIs (Admin)
+ * ==========================================
+ */
+
 export const fetchUsersAxiosCall = () => {
     return apiClient.get('/admin/users');
 };
@@ -68,7 +119,14 @@ export const deleteUserAxiosCall = (id) => {
     return apiClient.delete(`/admin/users/${id}`);
 };
 
-// Itinerary APIs
+
+
+/**
+ * ==========================================
+ * Itinerary APIs
+ * ==========================================
+ */
+
 export const createItineraryAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/itinerary`, data);
 };
@@ -81,7 +139,18 @@ export const deleteItineraryAxiosCall = (id) => {
     return apiClient.delete(`/admin/itinerary/${id}`);
 };
 
-// FAQ APIs
+export const fetchItineraryAxiosCall = (id) => {
+    return apiClient.get(`/admin/itinerary/${id}`);
+};
+
+
+
+/**
+ * ==========================================
+ * FAQ APIs
+ * ==========================================
+ */
+
 export const createFaqAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/faq`, data);
 };
@@ -98,7 +167,14 @@ export const fetchFaqAxiosCall = (id) => {
     return apiClient.get(`/admin/faq/${id}`);
 };
 
-// Image Gallery APIs
+
+
+/**
+ * ==========================================
+ * Image Gallery APIs
+ * ==========================================
+ */
+
 export const createImageAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/image`, data);
 };
@@ -111,7 +187,14 @@ export const patchPrimaryImageAxiosCall = (id) => {
     return apiClient.patch(`/admin/image/${id}/primary`);
 };
 
-// Inclusions/Exclusions APIs
+
+
+/**
+ * ==========================================
+ * Tour Inclusions APIs
+ * ==========================================
+ */
+
 export const createInclusionAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/inclusion`, data);
 };
@@ -127,6 +210,14 @@ export const updateInclusionAxiosCall = (id, data) => {
 export const deleteInclusionAxiosCall = (id) => {
     return apiClient.delete(`/admin/inclusion/${id}`);
 };
+
+
+
+/**
+ * ==========================================
+ * Tour Exclusions APIs
+ * ==========================================
+ */
 
 export const createExclusionAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/exclusion`, data);
@@ -144,11 +235,14 @@ export const deleteExclusionAxiosCall = (id) => {
     return apiClient.delete(`/admin/exclusion/${id}`);
 };
 
-export const fetchItineraryAxiosCall = (id) => {
-    return apiClient.get(`/admin/itinerary/${id}`);
-};
 
-// Review APIs (Admin)
+
+/**
+ * ==========================================
+ * Review APIs (Admin)
+ * ==========================================
+ */
+
 export const createReviewAxiosCall = (tourId, data) => {
     return apiClient.post(`/admin/tours/${tourId}/review`, data);
 };
@@ -165,7 +259,14 @@ export const deleteReviewAxiosCall = (id) => {
     return apiClient.delete(`/admin/review/${id}`);
 };
 
-// Review APIs (Public)
+
+
+/**
+ * ==========================================
+ * Public Review APIs
+ * ==========================================
+ */
+
 export const fetchPublicReviewsAxiosCall = (tourId) => {
     return apiClient.get(`/tour/${tourId}/reviews`);
 };
@@ -178,7 +279,14 @@ export const submitReviewReplyAxiosCall = (reviewId, data) => {
     return apiClient.post(`/review/${reviewId}/reply`, data);
 };
 
-// Booking APIs
+
+
+/**
+ * ==========================================
+ * Booking APIs
+ * ==========================================
+ */
+
 export const createBookingAxiosCall = (data) => {
     return apiClient.post('/booking', data);
 };
@@ -187,7 +295,14 @@ export const fetchBookedDatesAxiosCall = (tourId) => {
     return apiClient.get(`/tours/${tourId}/booked-dates`);
 };
 
-// Favorites APIs
+
+
+/**
+ * ==========================================
+ * Favorites APIs
+ * ==========================================
+ */
+
 export const fetchFavoritesAxiosCall = () => {
     return apiClient.get('/favorites');
 };
@@ -199,4 +314,3 @@ export const addFavoriteAxiosCall = (data) => {
 export const removeFavoriteAxiosCall = (tourId) => {
     return apiClient.delete(`/favorites/${tourId}`);
 };
-

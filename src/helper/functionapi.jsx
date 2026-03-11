@@ -1,55 +1,139 @@
+/**
+ * API Service Layer
+ *
+ * Purpose:
+ * This file acts as a **service layer between UI components and Axios API calls**.
+ * UI components (LoginPage, SignupPage, Admin panels, etc.) import functions from here
+ * instead of directly calling Axios.
+ *
+ * Advantages:
+ * - Centralized API structure
+ * - Easier maintenance and debugging
+ * - Allows client-side validation before API requests
+ * - Clean separation between UI logic and API logic
+ *
+ * Architecture:
+ * UI Components
+ *        ↓
+ *   API Service Layer (this file)
+ *        ↓
+ * Axios Helper Layer (helperapi.js)
+ *        ↓
+ * Backend API
+ */
+
 import {
-    signupAxiosCall, loginAxiosCall, forgotPasswordAxiosCall, resetPasswordAxiosCall,
-    fetchToursAxiosCall, fetchAdminToursAxiosCall, createTourAxiosCall, createAdminTourAxiosCall,
-    fetchTourAxiosCall, updateTourAxiosCall, updateAdminTourAxiosCall, deleteTourAxiosCall, deleteAdminTourAxiosCall,
-    fetchUsersAxiosCall, createUserAxiosCall, updateUserAxiosCall, deleteUserAxiosCall,
-    createItineraryAxiosCall, updateItineraryAxiosCall, deleteItineraryAxiosCall,
-    createFaqAxiosCall, updateFaqAxiosCall, deleteFaqAxiosCall, fetchFaqAxiosCall,
-    createImageAxiosCall, deleteImageAxiosCall, patchPrimaryImageAxiosCall,
-    createInclusionAxiosCall, fetchInclusionAxiosCall, updateInclusionAxiosCall, deleteInclusionAxiosCall,
-    createExclusionAxiosCall, fetchExclusionAxiosCall, updateExclusionAxiosCall, deleteExclusionAxiosCall,
+    signupAxiosCall,
+    loginAxiosCall,
+    forgotPasswordAxiosCall,
+    resetPasswordAxiosCall,
+
+    fetchToursAxiosCall,
+    fetchAdminToursAxiosCall,
+    createTourAxiosCall,
+    createAdminTourAxiosCall,
+    fetchTourAxiosCall,
+    updateTourAxiosCall,
+    updateAdminTourAxiosCall,
+    deleteTourAxiosCall,
+    deleteAdminTourAxiosCall,
+
+    fetchUsersAxiosCall,
+    createUserAxiosCall,
+    updateUserAxiosCall,
+    deleteUserAxiosCall,
+
+    createItineraryAxiosCall,
+    updateItineraryAxiosCall,
+    deleteItineraryAxiosCall,
     fetchItineraryAxiosCall,
-    createReviewAxiosCall, fetchReviewAxiosCall, updateReviewAxiosCall, deleteReviewAxiosCall,
-    fetchPublicReviewsAxiosCall, submitPublicReviewAxiosCall, submitReviewReplyAxiosCall,
+
+    createFaqAxiosCall,
+    updateFaqAxiosCall,
+    deleteFaqAxiosCall,
+    fetchFaqAxiosCall,
+
+    createImageAxiosCall,
+    deleteImageAxiosCall,
+    patchPrimaryImageAxiosCall,
+
+    createInclusionAxiosCall,
+    fetchInclusionAxiosCall,
+    updateInclusionAxiosCall,
+    deleteInclusionAxiosCall,
+
+    createExclusionAxiosCall,
+    fetchExclusionAxiosCall,
+    updateExclusionAxiosCall,
+    deleteExclusionAxiosCall,
+
+    createReviewAxiosCall,
+    fetchReviewAxiosCall,
+    updateReviewAxiosCall,
+    deleteReviewAxiosCall,
+
+    fetchPublicReviewsAxiosCall,
+    submitPublicReviewAxiosCall,
+    submitReviewReplyAxiosCall,
+
     fetchBookedDatesAxiosCall
 } from './helperapi';
 
 
-// Yahan se aap UI Component (LoginPage, SignupPage) mei functions import karenge
+
+/**
+ * ============================
+ * Authentication APIs
+ * ============================
+ */
 
 export const signupApi = async (userData) => {
-    // Improvement: Client-Side Safety Check
+
+    // Client-side validation
     if (!userData.email || !userData.password || !userData.firstName) {
         throw new Error("Missing required fields. Please fill all inputs properly.");
     }
 
-    // Ye function aage 'helperapi.jsx' ke axios function ko call karega
     return await signupAxiosCall(userData);
 };
 
+
 export const loginApi = async (credentials) => {
-    // Improvement: Client-Side Safety Check
+
     if (!credentials.email || !credentials.password) {
         throw new Error("Email and password are required to login.");
     }
 
-    // Ye function aage 'helperapi.jsx' ke axios function ko call karega
     return await loginAxiosCall(credentials);
 };
 
+
 export const forgotPasswordApi = async (data) => {
+
     if (!data.email) {
         throw new Error("Email is required to reset password.");
     }
+
     return await forgotPasswordAxiosCall(data);
 };
 
+
 export const resetPasswordApi = async (data) => {
+
     if (!data.password || !data.token) {
         throw new Error("Password and reset token are required.");
     }
+
     return await resetPasswordAxiosCall(data);
 };
+
+
+
+/**
+ * ============================
+ * Tour APIs
+ * ============================
+ */
 
 export const getToursApi = async (params = {}) => {
     return await fetchToursAxiosCall(params);
@@ -87,6 +171,14 @@ export const deleteAdminTourApi = async (id) => {
     return await deleteAdminTourAxiosCall(id);
 };
 
+
+
+/**
+ * ============================
+ * User Management APIs
+ * ============================
+ */
+
 export const getUsersApi = async () => {
     return await fetchUsersAxiosCall();
 };
@@ -102,6 +194,14 @@ export const updateUserApi = async (id, userData) => {
 export const deleteUserApi = async (id) => {
     return await deleteUserAxiosCall(id);
 };
+
+
+
+/**
+ * ============================
+ * Tour Itinerary APIs
+ * ============================
+ */
 
 export const createItineraryApi = async (tourId, data) => {
     return await createItineraryAxiosCall(tourId, data);
@@ -119,6 +219,14 @@ export const deleteItineraryApi = async (id) => {
     return await deleteItineraryAxiosCall(id);
 };
 
+
+
+/**
+ * ============================
+ * FAQ APIs
+ * ============================
+ */
+
 export const createFaqApi = async (tourId, data) => {
     return await createFaqAxiosCall(tourId, data);
 };
@@ -135,6 +243,14 @@ export const getFaqApi = async (id) => {
     return await fetchFaqAxiosCall(id);
 };
 
+
+
+/**
+ * ============================
+ * Image Management APIs
+ * ============================
+ */
+
 export const createImageApi = async (tourId, data) => {
     return await createImageAxiosCall(tourId, data);
 };
@@ -146,6 +262,14 @@ export const deleteImageApi = async (id) => {
 export const setPrimaryImageApi = async (id) => {
     return await patchPrimaryImageAxiosCall(id);
 };
+
+
+
+/**
+ * ============================
+ * Tour Inclusions APIs
+ * ============================
+ */
 
 export const createInclusionApi = async (tourId, data) => {
     return await createInclusionAxiosCall(tourId, data);
@@ -163,6 +287,14 @@ export const deleteInclusionApi = async (id) => {
     return await deleteInclusionAxiosCall(id);
 };
 
+
+
+/**
+ * ============================
+ * Tour Exclusions APIs
+ * ============================
+ */
+
 export const createExclusionApi = async (tourId, data) => {
     return await createExclusionAxiosCall(tourId, data);
 };
@@ -179,7 +311,14 @@ export const deleteExclusionApi = async (id) => {
     return await deleteExclusionAxiosCall(id);
 };
 
-// Review APIs (Admin)
+
+
+/**
+ * ============================
+ * Admin Review APIs
+ * ============================
+ */
+
 export const createReviewApi = async (tourId, data) => {
     return await createReviewAxiosCall(tourId, data);
 };
@@ -196,7 +335,14 @@ export const deleteReviewApi = async (id) => {
     return await deleteReviewAxiosCall(id);
 };
 
-// Review APIs (Public)
+
+
+/**
+ * ============================
+ * Public Review APIs
+ * ============================
+ */
+
 export const getPublicReviewsApi = async (tourId) => {
     return await fetchPublicReviewsAxiosCall(tourId);
 };
@@ -209,7 +355,14 @@ export const submitReviewReplyApi = async (reviewId, data) => {
     return await submitReviewReplyAxiosCall(reviewId, data);
 };
 
+
+
+/**
+ * ============================
+ * Booking Calendar APIs
+ * ============================
+ */
+
 export const getBookedDatesApi = async (tourId) => {
     return await fetchBookedDatesAxiosCall(tourId);
 };
-

@@ -1,3 +1,29 @@
+/**
+ * LoginPage
+ *
+ * Purpose:
+ * Allows users to log in to the Annaizu platform using their email and password.
+ *
+ * Features:
+ * - Login form with validation
+ * - Uses custom hook `useLogin` for authentication
+ * - Displays success message if user has just verified their email
+ * - "Remember me" option
+ * - Forgot password navigation
+ * - Signup navigation
+ * - Privacy policy and terms links
+ * - Responsive layout with SideDesign animation panel
+ *
+ * Flow:
+ * User enters email + password
+ *        ↓
+ * handleLogin() from useLogin hook
+ *        ↓
+ * API authentication
+ *        ↓
+ * On success → redirect to dashboard
+ */
+
 import React from 'react';
 import { Button, Checkbox, Form, Input, message, Row, Col } from 'antd';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -14,7 +40,8 @@ const App = () => {
     React.useEffect(() => {
         if (searchParams.get('verified') === 'true') {
             message.success("Email verified successfully! You can now login. 🎉");
-            // URL se verified parameter hata dete hain taaki refresh hone par message wapas na aaye
+
+            // Remove verified parameter so message does not repeat on refresh
             searchParams.delete('verified');
             setSearchParams(searchParams);
         }
@@ -38,7 +65,6 @@ const App = () => {
                     <SideDesign />
                 </Col>
 
-
                 <Col xs={24} sm={24} md={18} lg={12} xl={10} className='login-col'>
                     <div className="card">
                         <div className="content">
@@ -52,7 +78,10 @@ const App = () => {
                             >
 
                                 <h2>Hello 👋, Welcome Back!</h2>
-                                <p>Enter your credentials and click <strong>'Sign In'</strong> to access the Annaizu Dashboard.</p>
+                                <p>
+                                    Enter your credentials and click <strong>'Sign In'</strong>
+                                    to access the Annaizu Dashboard.
+                                </p>
 
                                 <Form.Item
                                     label="Email"
@@ -73,7 +102,9 @@ const App = () => {
                                 <Form.Item>
                                     <div className="remember-forgot">
                                         <Checkbox>Remember me</Checkbox>
-                                        <Link style={{ textDecoration: 'underline' }} to="/forgot-password">Forgot Password?</Link>
+                                        <Link style={{ textDecoration: 'underline' }} to="/forgot-password">
+                                            Forgot Password?
+                                        </Link>
                                     </div>
                                 </Form.Item>
 
@@ -107,7 +138,8 @@ const App = () => {
 
                                 <Form.Item>
                                     <div style={{ textAlign: 'center' }}>
-                                        <Link to="/privacy-policy">Privacy Policy</Link> · <Link to="/terms-of-service">Terms of Service</Link>
+                                        <Link to="/privacy-policy">Privacy Policy</Link> ·
+                                        <Link to="/terms-of-service">Terms of Service</Link>
                                     </div>
                                 </Form.Item>
 

@@ -48,7 +48,6 @@ const AddTour = () => {
     useEffect(() => {
         form.setFieldsValue({
             tour_type: 'Nature Tours',
-            rating: 4.5,
             features: {
                 best_price: true,
                 free_cancel: true,
@@ -85,7 +84,6 @@ const AddTour = () => {
             formData.append('nights', values.nights || 0);
             formData.append('group_size', values.group_size);
             formData.append('ages', values.ages);
-            formData.append('rating', values.rating);
             formData.append('reviews_count', 0);
 
             if (values.old_price) formData.append('old_price', values.old_price);
@@ -207,11 +205,6 @@ const AddTour = () => {
                         <Col span={8}>
                             <Form.Item name="old_price" label={<b>Old Price ($)</b>}>
                                 <InputNumber min={0} style={{ width: '100%' }} placeholder="1200" />
-                            </Form.Item>
-                        </Col>
-                        <Col span={8}>
-                            <Form.Item name="rating" label={<b>Default Rating</b>} rules={[{ required: true }]}>
-                                <InputNumber min={0} max={5} step={0.1} style={{ width: '100%' }} />
                             </Form.Item>
                         </Col>
                         <Col span={12}>

@@ -1,3 +1,43 @@
+/**
+ * Dashboard / Home Page
+ *
+ * Purpose:
+ * This is the main landing page of the tour application where users
+ * can explore destinations, trending tours, and promotional sections.
+ *
+ * Features:
+ * - Hero section with search UI
+ * - Fetch tours data using useTours hook
+ * - Multiple dynamic sections like:
+ *      • WhyChoose
+ *      • Trending Destinations
+ *      • Popular Tours
+ *      • Discounts
+ *      • Customer Reviews
+ *      • Articles
+ *
+ * Layout Flow:
+ * Header
+ *   ↓
+ * Hero Section (Search Area)
+ *   ↓
+ * Why Choose Us
+ *   ↓
+ * Trending Destinations
+ *   ↓
+ * Popular Tours
+ *   ↓
+ * Discounts & Offers
+ *   ↓
+ * Activities / Top Trending
+ *   ↓
+ * Customer Reviews
+ *   ↓
+ * Articles
+ *   ↓
+ * Footer
+ */
+
 import Header from "../../components/home/Header";
 import Discount from "../../section/Others/Discount";
 import "./dashboard.css";
@@ -62,6 +102,7 @@ function App() {
                     </div>
                 </div>
             </div>
+
             {/* Why Choose Section */}
             <WhyChoose />
 

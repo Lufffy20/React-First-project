@@ -1,3 +1,36 @@
+/**
+ * App Component (Redux Demo)
+ *
+ * Purpose:
+ * Demonstrates a simple Redux integration with a counter example.
+ *
+ * Technologies Used:
+ * - React
+ * - Redux Toolkit
+ * - React-Redux Hooks
+ * - Ant Design (UI Button)
+ * - Vite (build tool)
+ *
+ * Features:
+ * - Displays React and Vite logos
+ * - Reads state from Redux store using useSelector
+ * - Updates state using dispatch and Redux action
+ * - Shows current counter value
+ *
+ * Redux Flow:
+ * User clicks button
+ *        ↓
+ * dispatch(increment())
+ *        ↓
+ * counterSlice reducer updates state
+ *        ↓
+ * Redux store updates
+ *        ↓
+ * useSelector detects change
+ *        ↓
+ * UI re-renders with new count
+ */
+
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
