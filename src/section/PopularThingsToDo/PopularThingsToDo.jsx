@@ -1,6 +1,34 @@
+/**
+ * PopularThingsToDo Section
+ *
+ * Purpose:
+ * Displays a grid of popular travel activities that users can explore.
+ *
+ * Features:
+ * - Visual cards with background images
+ * - Highlights different travel activities
+ * - Quick inspiration for users browsing the homepage
+ *
+ * Activities Displayed:
+ * - Cruises
+ * - Beach Tours
+ * - City Tours
+ * - Museum Tours
+ * - Food Experiences
+ * - Hiking Adventures
+ *
+ * Flow:
+ * Homepage loads
+ *        ↓
+ * PopularThingsToDo component renders
+ *        ↓
+ * User sees popular travel categories
+ *        ↓
+ * (Future feature) Clicking a category could navigate to filtered tours
+ */
+
 import React, { useState } from "react";
 import "./PopularThingsToDo.css";
-
 
 const Popularthingstodo = () => {
     return (

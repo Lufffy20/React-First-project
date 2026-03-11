@@ -1,3 +1,27 @@
+/**
+ * SignupPage
+ *
+ * Purpose:
+ * Allows new users to create an Annaizu account.
+ *
+ * Features:
+ * - Registration form with validation
+ * - First name, last name, phone, email, password inputs
+ * - Terms & conditions agreement validation
+ * - Uses custom hook `useSignup` for API signup request
+ * - Responsive layout with SideDesign illustration panel
+ * - Redirect option to login page for existing users
+ *
+ * Flow:
+ * User fills registration form
+ *        ↓
+ * handleSignup() from useSignup hook
+ *        ↓
+ * API call to backend signup endpoint
+ *        ↓
+ * Account created → redirect to login page
+ */
+
 import React from 'react';
 import { Button, Form, Input, Checkbox, Row, Col, Space, message } from 'antd';
 import { Link } from 'react-router-dom';
@@ -56,8 +80,6 @@ const App = () => {
                                     </Col>
                                 </Row>
 
-
-
                                 <Form.Item
                                     label="Phone Number"
                                     style={{ marginBottom: 0 }}
@@ -115,7 +137,13 @@ const App = () => {
                                 </Form.Item>
 
                                 <Form.Item>
-                                    <Button type="primary" htmlType="submit" size="large" style={{ width: '100%' }} loading={loading}>
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        size="large"
+                                        style={{ width: '100%' }}
+                                        loading={loading}
+                                    >
                                         Sign Up
                                     </Button>
                                 </Form.Item>

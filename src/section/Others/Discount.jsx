@@ -1,3 +1,24 @@
+/**
+ * Discount Section
+ *
+ * Purpose:
+ * Displays a promotional banner offering a limited-time discount on tours.
+ *
+ * Features:
+ * - Static promotional banner with background slider
+ * - Highlighted discount percentage
+ * - Call-to-action button to encourage booking
+ *
+ * Flow:
+ * Homepage loads
+ *        ↓
+ * Discount component renders
+ *        ↓
+ * User sees promotional offer
+ *        ↓
+ * User can click "Book Now" to proceed with booking flow (future navigation integration)
+ */
+
 import "./Discount.css";
 
 function Discount() {

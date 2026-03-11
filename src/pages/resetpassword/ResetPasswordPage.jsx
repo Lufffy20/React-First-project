@@ -1,3 +1,31 @@
+/**
+ * ResetPasswordPage
+ *
+ * Purpose:
+ * Allows users to set a new password after clicking the reset link
+ * received in their email.
+ *
+ * Features:
+ * - Extracts reset token from URL query parameter
+ * - Validates token presence before rendering form
+ * - Uses `useResetPassword` hook to call backend API
+ * - Password confirmation validation
+ * - Responsive layout with SideDesign animation
+ *
+ * Flow:
+ * User clicks reset link from email
+ *        ↓
+ * URL contains ?token=XXXX
+ *        ↓
+ * Token extracted using useSearchParams()
+ *        ↓
+ * User enters new password
+ *        ↓
+ * handleResetPassword() API call
+ *        ↓
+ * Password updated → redirect to login
+ */
+
 import React, { useEffect } from 'react';
 import { Button, Form, Input, Row, Col, message } from 'antd';
 import { useNavigate, useSearchParams } from 'react-router-dom';

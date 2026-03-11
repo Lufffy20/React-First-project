@@ -1,3 +1,60 @@
+/**
+ * AppRoutes
+ *
+ * Purpose:
+ * Defines all application routes using React Router.
+ * Handles public routes, protected user routes, and protected admin routes.
+ *
+ * Features:
+ * - Authentication based route protection using ProtectedRoute
+ * - Admin-only route access
+ * - Nested admin routes with AdminLayout
+ * - Auto-fetch favorites when user logs in
+ * - Fallback NotFoundPage for unknown routes
+ *
+ * Route Types:
+ *
+ * Public Routes:
+ *   /login
+ *   /signup
+ *   /forgot-password
+ *   /reset-password
+ *
+ * User Protected Routes:
+ *   /
+ *   /dashboard
+ *   /all-tours-details
+ *   /tour-detail/:id
+ *   /checkout
+ *   /thank-you
+ *   /favorites
+ *
+ * Admin Protected Routes:
+ *   /admin/dashboard
+ *   /admin/users
+ *   /admin/tours
+ *   /admin/tours/add
+ *   /admin/tours/edit/:id
+ *   /admin/tours/view/:id
+ *   /admin/inclusions
+ *   /admin/exclusions
+ *   /admin/faqs
+ *   /admin/itinerary
+ *   /admin/gallery
+ *   /admin/reviews
+ *
+ * Flow:
+ * User opens app
+ *        ↓
+ * Router checks route
+ *        ↓
+ * ProtectedRoute verifies authentication
+ *        ↓
+ * Admin routes check role === 1
+ *        ↓
+ * Render page component
+ */
+
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import App from "../App";
 import LoginPage from "../pages/login/LoginPage";
@@ -9,9 +66,9 @@ import NotFoundPage from "../components/login/NotFoundPage";
 import AllToursDetails from "../pages/alltoursdetails/alltoursdetails";
 import TourDetail from "../pages/tourdetailforone/tourdetail";
 import ResetPasswordPage from "../pages/resetpassword/ResetPasswordPage";
-import AdminLayout from "../pages/admin/AdminLayout";
-import AdminHome from "../pages/admin/AdminHome";
-import AdminUsers from "../pages/admin/AdminUsers";
+import AdminLayout from "../pages/adminlayout/AdminLayout";
+import AdminHome from "../pages/adminlayout/AdminHome";
+import AdminUsers from "../pages/admin/user/AdminUsers";
 import AdminTours from "../pages/admin/tours/AdminTours";
 import AddTour from "../pages/admin/tours/AddTour";
 import EditTour from "../pages/admin/tours/EditTour";

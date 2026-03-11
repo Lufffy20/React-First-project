@@ -1,3 +1,35 @@
+/**
+ * TourDetail Page
+ *
+ * Purpose:
+ * Displays complete details of a selected tour including images,
+ * itinerary, inclusions, FAQs, reviews, booking options, and related tours.
+ *
+ * Features:
+ * - Fetch tour details dynamically using tour ID
+ * - Image gallery with primary image priority
+ * - Tour overview, inclusions, exclusions, itinerary
+ * - FAQ section
+ * - Customer reviews with replies
+ * - Booking sidebar for reservations
+ * - Related tours suggestions
+ *
+ * Flow:
+ * User clicks "View Details" on tour card
+ *        ↓
+ * Route → /tour-detail/:id
+ *        ↓
+ * getTourApi(id) fetches tour data
+ *        ↓
+ * Tour data passed into:
+ *      • TourHeader
+ *      • TourContent
+ *      • TourFAQ
+ *      • CustomerReviewsSection
+ *      • BookingSidebar
+ *      • RelatedTours
+ */
+
 import React, { useState, useEffect } from "react";
 import "./tourdetail.css";
 import { useParams, useNavigate } from 'react-router-dom';

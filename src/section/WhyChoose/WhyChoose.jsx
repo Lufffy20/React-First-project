@@ -1,3 +1,32 @@
+/**
+ * WhyChoose Section
+ *
+ * Purpose:
+ * Displays the key benefits of using the Tourz platform
+ * to build user trust and highlight service quality.
+ *
+ * Features:
+ * - Grid layout of platform advantages
+ * - Icons using react-icons library
+ * - Clear titles and short descriptions
+ * - Responsive feature cards
+ *
+ * Benefits Highlighted:
+ * - Ultimate flexibility (free cancellation & payment options)
+ * - Memorable travel experiences
+ * - High quality standards and trusted reviews
+ * - 24/7 award-winning customer support
+ *
+ * Flow:
+ * Homepage loads
+ *        ↓
+ * WhyChoose component renders
+ *        ↓
+ * Features array mapped to UI cards
+ *        ↓
+ * Each card displays icon, title, and description
+ */
+
 import { FaTicketAlt, FaGlobe, FaGem, FaHeadset } from "react-icons/fa";
 import "./WhyChoose.css";
 

@@ -69,7 +69,6 @@ const EditTour = () => {
                         current_price: tourData.current_price,
                         old_price: tourData.old_price,
                         badge_text: tourData.badge_text,
-                        rating: tourData.rating || 4.5,
                         days: tourData.days || 0,
                         nights: tourData.nights || 0,
                         group_size: tourData.group_size || '',
@@ -130,7 +129,6 @@ const EditTour = () => {
             formData.append('nights', values.nights || 0);
             formData.append('group_size', values.group_size);
             formData.append('ages', values.ages);
-            formData.append('rating', values.rating);
 
             if (values.old_price) formData.append('old_price', values.old_price);
             if (values.badge_text) formData.append('badge_text', values.badge_text);
@@ -249,11 +247,6 @@ const EditTour = () => {
                                     <Col span={8}>
                                         <Form.Item name="old_price" label={<b>Old Price ($)</b>}>
                                             <InputNumber min={0} style={{ width: '100%' }} placeholder="1200" />
-                                        </Form.Item>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Form.Item name="rating" label={<b>Rating</b>} rules={[{ required: true }]}>
-                                            <InputNumber min={0} max={5} step={0.1} style={{ width: '100%' }} />
                                         </Form.Item>
                                     </Col>
                                     <Col span={12}>

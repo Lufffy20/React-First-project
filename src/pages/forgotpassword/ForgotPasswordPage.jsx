@@ -1,3 +1,30 @@
+/**
+ * ForgotPasswordPage
+ *
+ * Purpose:
+ * Allows users to request a password reset link by entering their email.
+ *
+ * Features:
+ * - Email input with validation
+ * - Sends reset link using useForgotPassword hook
+ * - Shows success screen after submission
+ * - Option to return to login page
+ * - Option to retry if email not received
+ *
+ * UI Structure:
+ * - Left side: animated SideDesign panel
+ * - Right side: Forgot password form
+ *
+ * Flow:
+ * User enters email
+ *        ↓
+ * handleForgotPassword() API call
+ *        ↓
+ * Backend sends reset link to email
+ *        ↓
+ * UI switches to "Check your email" message
+ */
+
 import React from 'react';
 import { Button, Form, Input, Row, Col } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
@@ -51,7 +78,9 @@ const App = () => {
                                             </lord-icon>
                                         </div>
                                         <div className="text-box">
-                                            <p style={{ textAlign: 'left', margin: '0' }}>Enter your email and instructions will be sent to you!</p>
+                                            <p style={{ textAlign: 'left', margin: '0' }}>
+                                                Enter your email and instructions will be sent to you!
+                                            </p>
                                         </div>
                                     </div>
 
@@ -74,9 +103,20 @@ const App = () => {
                                             Send Reset Link
                                         </Button>
                                     </Form.Item>
+
                                     <Form.Item>
                                         <div style={{ textAlign: 'center' }}>
-                                            Remembered your password? <Link to="/login" style={{ textDecoration: 'underline', color: '#1a237e', fontWeight: 'bold' }}>Login here</Link>
+                                            Remembered your password?
+                                            <Link
+                                                to="/login"
+                                                style={{
+                                                    textDecoration: 'underline',
+                                                    color: '#1a237e',
+                                                    fontWeight: 'bold'
+                                                }}
+                                            >
+                                                Login here
+                                            </Link>
                                         </div>
                                     </Form.Item>
                                 </Form>
@@ -90,18 +130,39 @@ const App = () => {
                                             style={{ width: '100px', height: '100px' }}>
                                         </lord-icon>
                                     </div>
+
                                     <h3>Check Your Email</h3>
-                                    <p>We've sent a password reset link to your email address. Please check your inbox (and spam folder) for further instructions.</p>
+
+                                    <p>
+                                        We've sent a password reset link to your email address.
+                                        Please check your inbox (and spam folder) for further instructions.
+                                    </p>
+
                                     <Button
                                         type="primary"
                                         size="large"
-                                        style={{ width: '100%', borderRadius: '50px', marginTop: '20px' }}
+                                        style={{
+                                            width: '100%',
+                                            borderRadius: '50px',
+                                            marginTop: '20px'
+                                        }}
                                         onClick={() => navigate('/login')}
                                     >
                                         Return to Login
                                     </Button>
+
                                     <p style={{ marginTop: '20px' }}>
-                                        Didn't receive the email? <span style={{ color: '#1a237e', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setSubmitted(false)}>Try again</span>
+                                        Didn't receive the email?
+                                        <span
+                                            style={{
+                                                color: '#1a237e',
+                                                fontWeight: 'bold',
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={() => setSubmitted(false)}
+                                        >
+                                            Try again
+                                        </span>
                                     </p>
                                 </div>
                             )}
@@ -112,4 +173,5 @@ const App = () => {
         </div>
     );
 };
+
 export default App;
